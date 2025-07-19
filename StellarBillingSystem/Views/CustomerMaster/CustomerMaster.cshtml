@@ -109,7 +109,7 @@
                         <div class="col-sm-1 col-md-1 col-lg-1"></div>
                         <div class="col-sm-4 col-md-4 col-lg-4">
                             <div class="form-floating form-floating-outline mb-4">
-                                <input type="tel" maxlength="10" asp-for="MobileNumber" value="@Model.MobileNumber" id="MobileNumber" class="form-control" placeholder="Mobile Number" required pattern="\d{10}" title="Mobile Number should must contain 10 Digit" />
+                                <input type="tel" maxlength="10" asp-for="MobileNumber" value="@Model.MobileNumber" id="MobileNumber" class="form-control" placeholder="Mobile Number" required pattern="\d{10}" title="Mobile Number should must contain 10 Digit" oninput="allowOnlyDigits(this)" />
                                 <label asp-for="MobileNumber" class="control-label">Mobile Number</label>
                                 <span asp-validation-for="MobileNumber" class="text-danger"></span>
                             </div>
@@ -239,7 +239,7 @@
                         <div class="col-sm-4 col-md-4 col-lg-4">
 
                             <div class="form-floating form-floating-outline mb-4">
-                                <input asp-for="Pincode" class="form-control" placeholder="Pincode" value="@Model.Pincode" pattern="^\d{6}$" title="Pincode Number should be in correct format" />
+                                <input asp-for="Pincode" class="form-control" placeholder="Pincode" value="@Model.Pincode" maxlength="6" pattern="^\d{6}$" title="Pincode Number should be in correct format" oninput="allowOnlyDigits(this)"/>
                                 <label asp-for="Pincode" class="control-label"></label>
                                 <span asp-validation-for="Pincode" class="text-danger"></span>
                             </div>
@@ -452,4 +452,10 @@
 
         updateViewButtonVisibility(); // On first load (if existing images)
     });
+</script>
+
+<script>
+    function allowOnlyDigits(input) {
+        input.value = input.value.replace(/[^0-9]/g, '');
+    }
 </script>

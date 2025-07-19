@@ -120,7 +120,7 @@
                     </div>
                     <div class="col-sm-3 col-md-3 col-lg-3">
                         <div class="form-floating form-floating-outline mb-3">
-                            <input type="PhoneNumber" class="form-control" name="PhoneNumber" id="PhoneNumber" placeholder="Phone Number" />
+                            <input type="PhoneNumber" class="form-control" name="PhoneNumber" id="PhoneNumber" maxlength="10" placeholder="Phone Number" oninput="allowOnlyDigits(this)" />
                             <label for="PhoneNumber" class="control-label">Phone Number</label>
                         </div>
 
@@ -132,8 +132,9 @@
                     <div class="col-sm-1 col-md-1 col-lg-1"></div>
                     <div class="col-sm-3 col-md-3 col-lg-3">
                         <div class="form-floating form-floating-outline mb-3">
-                            <input type="number" class="form-control" name="TotalAmount" id="TotalAmount" placeholder="Total Amount" />
+                            <input type="TotalAmount" class="form-control" name="TotalAmount" id="TotalAmount" placeholder="Total Amount" />
                             <label for="TotalAmount" class="control-label">Total Amount</label>
+                            <span id="TotalAmountError" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="col-sm-3 col-md-3 col-lg-3">
@@ -182,7 +183,24 @@
             </div>
 
 
+          
             <script>
+
+                function getBasePath() {
+                    // Only apply when NOT on localhost
+                    if (window.location.hostname !== "localhost") {
+                        var segments = window.location.pathname.split('/');
+                        if (segments.length > 1 && segments[1]) {
+                            return '/' + segments[1];
+                        }
+                    }
+                    return '';
+                }
+
+                function getUrl(relativePath) {
+                    return getBasePath() + relativePath;
+                }
+
                 let selectedArticles = {}; // { billID: Set(articleID) }
                 let articleNamesMap = {};  // { articleID: articleName }
                 let lastLoadedRepledgeID = null; // track previously loaded RepledgeID
@@ -220,7 +238,7 @@
                         selectedArticles[billID] = new Set();
                     }
 
-                    fetch('/RepledgeMaster/GetArticlesAjax', {
+                    fetch(getUrl('/RepledgeMaster/GetArticlesAjax'), {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ BillID: billID })
@@ -276,7 +294,7 @@
                         document.getElementById("Tenure").value = "";
                     }
 
-                    fetch('/RepledgeMaster/GetArticlesAjax', {
+                    fetch(getUrl('/RepledgeMaster/GetArticlesAjax'), {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ RepledgeID: repledgeID }) // ✅ Only RepledgeID
@@ -431,7 +449,7 @@
                         articles: articlesToSave
                     };
 
-                    fetch("/RepledgeMaster/SaveRepledgeAjax", {
+                    fetch(getUrl("/RepledgeMaster/SaveRepledgeAjax"), {
                         method: "POST",
                         headers: { "Content-Type": "application/json" },
                         body: JSON.stringify(payload)
@@ -455,7 +473,7 @@
                         return;
                     }
 
-                    fetch("/RepledgeMaster/GetDeletAjax", {
+                    fetch(getUrl("/RepledgeMaster/GetDeletAjax"), {
                         method: "POST",
                         headers: {
                             "Content-Type": "application/json"
@@ -476,7 +494,57 @@
                 }
             </script>
 
+           @*  <script>
+                function allowOnlyDigits(input) {
+                    input.value = input.value.replace(/[^0-9]/g, '');
+                }
+            </script>
+
+            <script>
+                const moneyInput = document.getElementById('TotalAmount');
+                const moneyError = document.getElementById('TotalAmountError');
+
+                // Function to format number in Indian format (e.g., 1,23,456.78)
+                function formatToIndianCurrency(value) {
+                    // Split the integer and decimal parts
+                    let parts = value.split('.');
+                    let integerPart = parts[0];
+
+                    // Apply Indian numbering system formatting for the integer part
+                    let lastThree = integerPart.substring(integerPart.length - 3);
+                    let otherNumbers = integerPart.substring(0, integerPart.length - 3);
+
+                    if (otherNumbers !== '') {
+                        lastThree = ',' + lastThree;
+                    }
+
+                    let formattedInteger = otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ',') + lastThree;
+
+                    // Return formatted number with decimal part (if exists)
+                    return parts.length > 1 ? formattedInteger + '.' + parts[1].substring(0, 2) : formattedInteger;
+                }
+
+                moneyInput.addEventListener('input', function (e) {
+                    // Remove any characters that are not digits or periods
+                    let value = this.value.replace(/[^0-9.]/g, '');
+
+                    // Format the value to Indian currency format
+                    this.value = formatToIndianCurrency(value);
+
+                    // Check if the format is valid (integer part only or with 1-2 decimal places)
+                    const indianMoneyFormat = /^\d{1,3}(,\d{2})*(\.\d{0,2})?$/;
+
+                    // Show or hide the error message
+                    if (!indianMoneyFormat.test(this.value)) {
+                        moneyError.style.display = 'inline';
+                    } else {
+                        moneyError.style.display = 'none';
+                    }
+                });
+
+
+            </script>
 
 
 
-
+ *@

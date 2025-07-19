@@ -50,6 +50,9 @@
     @RenderSection("PageScripts", required: false)
 }
 
+<script src="~/js/site-ajax.js"></script>
+
+
 @{
     bool isMenu = ViewData["isMenu"] != null && Convert.ToBoolean(ViewData["isMenu"]);
 }

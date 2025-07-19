@@ -182,7 +182,7 @@
                     <div class="row">
                         <div class="col-sm-4 col-md-4 col-lg-4">
                             <label>Initial Interest</label>
-                            <input type="text" id="InitialInterest" class="form-control" />
+                            <input type="number" id="InitialInterest" class="form-control" />
                         </div>
                         <div class="col-sm-4 col-md-4 col-lg-4">
                             <label>Total Repay Value</label>
@@ -190,7 +190,7 @@
                         </div>
                         <div class="col-sm-4 col-md-4 col-lg-4">
                             <label>Post Tenure Interest</label>
-                            <input type="text" id="PostTenureInterest" class="form-control" />
+                            <input type="number" id="PostTenureInterest" class="form-control" />
                         </div>
                     </div>
                     <div class="row">
@@ -258,7 +258,7 @@
                 <div class="modal-header"><h5 class="modal-title">Add Article</h5></div>
                 <div class="modal-body">
                     <input type="text" id="ArticleName" class="form-control mb-2" placeholder="Article Name" />
-                    <input type="text" id="WeightOfArticle" class="form-control mb-2" placeholder="Weight" />
+                    <input type="number" id="WeightOfArticle" class="form-control mb-2" placeholder="Weight" />
                     <!-- Gold Type Dropdown -->
                     <select id="GoldType" class="form-control mb-2" name="CategoryID" onchange="fillMarketRate(this)">
                         <option value="">-- Select Gold Type --</option>
@@ -271,9 +271,9 @@
                     <input type="hidden" id="MarketRate" name="MarketRate" />
 
 
-                    <input type="text" id="NetWeight" class="form-control mb-2" placeholder="Net Weight" />
+                    <input type="number" id="NetWeight" class="form-control mb-2" placeholder="Net Weight" />
                     <input type="text" id="AppraiseValuePerGram" class="form-control mb-2" placeholder="Appraise Value Per Gram" />
-                    <input type="text" id="Quantity" class="form-control mb-2" placeholder="Quantity" />
+                    <input type="number" id="Quantity" class="form-control mb-2" placeholder="Quantity" />
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
@@ -321,6 +321,8 @@
         </div>
     </div>
 
+
+    <script src="~/js/site-ajax.js"></script>
     <script>
         let articles = [];
         let billDetails = [];
@@ -364,8 +366,8 @@
                 const weight = parseFloat($('#WeightOfArticle').val());
                 const netWeight = parseFloat($('#NetWeight').val());
                 const goldType = $('#GoldType').val();
-                const appraisePerGram = parseFloat($('#AppraiseValuePerGram').val());
-                const marketRate = parseFloat($('#MarketRate').val()) || 5800;
+                const appraisePerGram = parseFloat($('#AppraiseValuePerGram').val().replace(/,/g, '')) || 0;
+                const marketRate = parseFloat($('#MarketRate').val().replace(/,/g, ''));
                 const BranchID = $('#BranchID').val();
                 const quantity = parseInt($('#Quantity').val());
 
@@ -429,6 +431,8 @@
                 const article = articles[index];
                 overallWeight += detail.Netweight;
                 totalValue += detail.Apprisenetvalue;
+                console.log("Netmarketprice raw:", detail.Netmarketprice);
+
 
                 tbody.append(`
                                                 <tr>
@@ -438,7 +442,7 @@
                                                     <td>${detail.Netweight}</td>
                                                     <td>${detail.Apprisevaluepergram}</td>
                                                     <td>${detail.Reducedweight}</td>
-                                                    <td>${detail.Netmarketprice}</td>
+                                                    <td>${detail.Netmarketprice.toFixed(2)}</td>
                                                     <td>${detail.Apprisenetvalue}</td>
                                                      <td>${detail.Quantity}</td>
                                                     <td><button class="btn btn-danger btn-sm" onclick="removeArticle(${index})">Remove</button></td>
@@ -495,11 +499,11 @@
                     CustomerID: $('#productID').val(),
                     BillDate: $('#BillDate').val(),
                     BranchID: branchID,
-                    OverallWeight: parseFloat($('#OverallWeight').val()) || 0,
-                    TotalValue: parseFloat($('#TotalValue').val()) || 0,
-                    LoanValue: parseFloat($('#LoanValue').val()) || 0,
-                    InitialInterest: parseFloat($('#InitialInterest').val()) || 0,
-                    TotalRepayValue: parseFloat($('#TotalRepayValue').val()) || 0,
+                    OverallWeight: parseFloat($('#OverallWeight').val().replace(/,/g, '')) || 0,
+                    TotalValue: parseFloat($('#TotalValue').val().replace(/,/g, '')) || 0,
+                    LoanValue: parseFloat($('#LoanValue').val().replace(/,/g, '')) || 0,
+                    InitialInterest: parseFloat($('#InitialInterest').val().replace(/,/g, '')) || 0,
+                    TotalRepayValue: parseFloat($('#TotalRepayValue').val().replace(/,/g, '')) || 0,
                     PostTenureInterest: $('#PostTenureInterest').val(),
                     Tenure: $('#Tenure').val(),
                     NoOfItem: billDetails.length.toString(),
@@ -673,11 +677,29 @@
 
         $(document).ready(function () {
             $('#LoanValue, #InitialInterest').on('input', function () {
-                const loan = parseFloat($('#LoanValue').val()) || 0;
-                const interest = parseFloat($('#InitialInterest').val()) || 0;
+                const rawLoan = $('#LoanValue').val().replace(/,/g, '') || '0';
+                const rawInterest = $('#InitialInterest').val().replace(/,/g, '') || '0';
+
+                const loan = parseFloat(rawLoan);
+                const interest = parseFloat(rawInterest);
                 const total = loan + ((interest / 100) * loan);
-                $('#TotalRepayValue').val(total.toFixed(2));
+
+                $('#TotalRepayValue').val(formatToIndianCurrency(total.toFixed(2)));
             });
+
+            $('#LoanValue').on('blur', function () {
+                const rawLoan = $(this).val().replace(/,/g, '') || '0';
+                const loanValue = parseFloat(rawLoan);
+
+                const totalAppraiseValue = billDetails.reduce((sum, item) => sum + item.Apprisenetvalue, 0);
+
+                if (loanValue > totalAppraiseValue) {
+                    showPopup("Loan Value cannot be greater than Total  Value.");
+                    $(this).focus();
+                }
+            });
+
+
 
             const fileInput = document.getElementById('fileInput');
             const keptField = document.getElementById('KeptImages');
@@ -848,6 +870,59 @@
             const target = event.target;
             if (!dropdown.contains(target) && target !== input) {
                 dropdown.style.display = 'none';
+            }
+        });
+    });
+</script>
+
+
+<script>
+    // Utility to format numbers to Indian currency
+    function formatToIndianCurrency(value) {
+        // Clean input - only allow digits and a single decimal point
+        value = value.replace(/[^0-9.]/g, '');
+
+        // Avoid multiple decimals
+        const decimalParts = value.split('.');
+        if (decimalParts.length > 2) {
+            return decimalParts[0]; // Invalid input
+        }
+
+        let integerPart = decimalParts[0];
+        let decimalPart = decimalParts[1] ? '.' + decimalParts[1].substring(0, 2) : '';
+
+        let lastThree = integerPart.slice(-3);
+        let otherNumbers = integerPart.slice(0, -3);
+
+        if (otherNumbers !== '') {
+            lastThree = ',' + lastThree;
+        }
+
+        const formattedInteger = otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ',') + lastThree;
+        return formattedInteger + decimalPart;
+    }
+
+    // Fields to apply the formatting to
+    const moneyFields = [
+        { id: 'AppraiseValuePerGram', errorId: 'TotalAmountError' },
+        { id: 'LoanValue', errorId: 'TotalAmountError' },
+        { id: 'TotalRepayValue', errorId: 'TotalAmountError' }
+    ];
+
+    moneyFields.forEach(field => {
+        const input = document.getElementById(field.id);
+        const error = document.getElementById(field.errorId);
+
+        input.addEventListener('input', function () {
+            let raw = this.value.replace(/[^0-9.]/g, '');
+            this.value = formatToIndianCurrency(raw);
+
+            // Validate formatted value
+            const regex = /^\d{1,3}(,\d{2})*(\.\d{0,2})?$/;
+            if (!regex.test(this.value)) {
+                error.style.display = 'inline';
+            } else {
+                error.style.display = 'none';
             }
         });
     });
