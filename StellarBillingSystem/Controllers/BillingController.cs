@@ -229,10 +229,16 @@ namespace StellarBillingSystem_skj.Controllers
                     return Ok(new { message = "Bill not found or could not be deleted." });
                 }
 
-                var checkbillrepleldge = _billingsoftware.Shrepledgeartcile.FirstOrDefault(x => x.BillID == billId && x.BranchID == branchId);
+                var checkbillrepleldge = _billingsoftware.Shrepledgeartcile.FirstOrDefault(x => x.BillID == billId && x.BranchID == branchId && x.IsDelete == false);
                 if(checkbillrepleldge!=null)
                 {
                     return Ok(new { message = "Cannot Delete Bill!! Delete Repledge First" });
+                }
+
+                var checkbillpayment = _billingsoftware.SHPaymentMaster.FirstOrDefault(x => x.BillId == billId && x.BranchID == branchId && x.IsDelete == false);
+                if (checkbillpayment != null)
+                {
+                    return Ok(new { message = "Cannot Delete Bill!! Delete Payment First" });
                 }
 
                 var getbilldetails = _billingsoftware.Shbilldetailsskj

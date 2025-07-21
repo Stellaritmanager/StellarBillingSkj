@@ -1,0 +1,12 @@
+INSERT [dbo].[SHScreenName] ([Id], [ScreenName]) VALUES (N'21', N'Billing')
+INSERT [dbo].[SHScreenName] ([Id], [ScreenName]) VALUES (N'22', N'RepledgeMaster')
+INSERT [dbo].[SHScreenName] ([Id], [ScreenName]) VALUES (N'23', N'PaymentBilling')
+
+
+
+
+
+INSERT [dbo].[SHRoleaccessModel] ([RollID], [ScreenID], [BranchID], [Access], [Authorized], [lastUpdatedDate], [lastUpdatedUser], [lastUpdatedMachine], [Isdelete]) VALUES (N'Roll_Stellar_1', N'Billing', N'Lee_Mobile', N'true', N'1', N'21/07/2025 16:16:19', N'mk', N'::1', 0)
+INSERT [dbo].[SHRoleaccessModel] ([RollID], [ScreenID], [BranchID], [Access], [Authorized], [lastUpdatedDate], [lastUpdatedUser], [lastUpdatedMachine], [Isdelete]) VALUES (N'Roll_Stellar_1', N'PaymentBilling', N'Lee_Mobile', N'true', N'1', N'21/07/2025 16:16:09', N'mk', N'::1', 0)
+INSERT [dbo].[SHRoleaccessModel] ([RollID], [ScreenID], [BranchID], [Access], [Authorized], [lastUpdatedDate], [lastUpdatedUser], [lastUpdatedMachine], [Isdelete]) VALUES (N'Roll_Stellar_1', N'RepledgeMaster', N'Lee_Mobile', N'true', N'1', N'21/07/2025 16:16:00', N'mk', N'::1', 0)
+
