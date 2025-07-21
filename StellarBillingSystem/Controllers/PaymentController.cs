@@ -144,7 +144,9 @@ namespace StellarBillingSystem_skj.Controllers
                                              {
                                                  b.BillID,
                                                  b.BillDate,
-                                                 b.TotalRepayValue
+                                                 b.TotalRepayValue,
+                                                 b.closedBy,
+                                                 b.ClosedDate
                                              })
                                              .FirstOrDefault();
 
@@ -170,6 +172,8 @@ namespace StellarBillingSystem_skj.Controllers
                     obj.BillId = billDetails.BillID;
                     obj.BillDate = billDetails.BillDate;
                     obj.StrBillvalue = billDetails.TotalRepayValue.ToString();
+                    obj.ClosedDate = billDetails.ClosedDate;
+                    obj.closedBy = billDetails.closedBy;
                 }
                 else
                 {
@@ -210,6 +214,8 @@ namespace StellarBillingSystem_skj.Controllers
 
                 ViewBag.Balance = model.StrBillvalue;
                  ViewBag.Total = obj.StrBillvalue;
+                ViewBag.CloseBy = obj.closedBy;
+                ViewBag.CloseDate = obj.ClosedDate;
 
                 return View("PaymentBilling", obj);
             }
@@ -362,28 +368,7 @@ namespace StellarBillingSystem_skj.Controllers
             if (buttonType == "Save")
             {
 
-                if(CloseBy!=null & CloseDate!=null)
-                {
-                    var updpayment = _billingsoftware.Shbillmasterskj.FirstOrDefault(x=>x.BillID == billId && x.BranchID == model.BranchID);
-                    if(updpayment != null)
-                    {
-                        updpayment.closedBy = CloseBy;
-                        updpayment.ClosedDate = CloseDate;
-
-                        _billingsoftware.SaveChanges();
-                        ViewBag.Message = "Payment Completed";
-                    }
-                    else
-                    {
-                        ViewBag.Message = "Bill Not Found";
-                    }
-
-                    PaymentTableViewModel objnew = new PaymentTableViewModel();
-
-                    model = objnew;
-                    return View("PaymentBilling", model);
-                }
-
+                
 
                 // Check if no radio button is selected
                 if (string.IsNullOrEmpty(selectedSlotId))
@@ -511,6 +496,15 @@ namespace StellarBillingSystem_skj.Controllers
                 if (exbilltotal != null)
                     model.Balance = exbilltotal.TotalRepayValue.ToString();
 
+                var updpayment = _billingsoftware.Shbillmasterskj.FirstOrDefault(x => x.BillID == billId && x.BranchID == model.BranchID);
+                if (updpayment != null)
+                {
+                    updpayment.closedBy = CloseBy;
+                    updpayment.ClosedDate = CloseDate;
+
+                    _billingsoftware.SaveChanges();
+                   
+                }
 
                 ViewBag.Message = "Payment Saved Successfully";
 

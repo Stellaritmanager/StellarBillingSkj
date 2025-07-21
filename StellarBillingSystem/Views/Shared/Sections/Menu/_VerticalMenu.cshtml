@@ -299,12 +299,7 @@
                     }
                 }
 
-                <li class='menu-item@(currentPage == "/CustomerMaster/RepledgeMaster" ? " active" : "")'>
-                    <a asp-controller="RepledgeMaster" asp-action="RepledgeMaster" class="menu-link">
-
-                        <div>Repledge Master </div>
-                    </a>
-                </li>
+                
 
                 @if (rollAccessList != null)
                 {
@@ -352,26 +347,50 @@
                     }
                 }
 
+                 @if (rollAccessList != null)
+                {
+                    @if (rollAccessList.Contains("Billing"))
+                    {
+
                 <li class='menu-item@(currentPage == "/Billing/Billing" ? " active" : "")'>
                     <a asp-controller="Billing" asp-action="Billing" class="menu-link">
 
                         <div> Billing</div>
                     </a>
                 </li>
-
+                    }
+                }
                 
-
+                 @if (rollAccessList != null)
+                {
+                    @if (rollAccessList.Contains("PaymentBilling"))
+                    {
 
 
                         <li class='menu-item@(currentPage == "/Payment/PaymentBilling" ? " active" : "")'>
-                    <a asp-controller="Payment" asp-action="PaymentBilling" class="menu-link">
+                            <a asp-controller="Payment" asp-action="PaymentBilling" class="menu-link">
 
                                 <div>Payment Screen</div>
                             </a>
                         </li>
 
-                    
-                
+                    }
+                }
+
+                @if (rollAccessList != null)
+                {
+                    @if (rollAccessList.Contains("RepledgeMaster"))
+                    {
+
+                        <li class='menu-item@(currentPage == "/CustomerMaster/RepledgeMaster" ? " active" : "")'>
+                            <a asp-controller="RepledgeMaster" asp-action="RepledgeMaster" class="menu-link">
+
+                                <div>Repledge Master </div>
+                            </a>
+                        </li>
+                    }
+                }
+
             </ul>
 
         </li>
