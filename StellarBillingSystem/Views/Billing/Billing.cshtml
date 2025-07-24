@@ -142,6 +142,7 @@
                                         <th class="text-center">Net Market Price</th>
                                         <th class="text-center">Appraise Net Value</th>
                                         <th class="text-center">Quantity</th>
+                                        <th class="text-center">Remarks</th>
                                         <th class="text-center">Actions</th>
                                     </tr>
                                 </thead>
@@ -274,6 +275,7 @@
                     <input type="number" id="NetWeight" class="form-control mb-2" placeholder="Net Weight" />
                     <input type="text" id="AppraiseValuePerGram" class="form-control mb-2" placeholder="Appraise Value Per Gram" />
                     <input type="number" id="Quantity" class="form-control mb-2" placeholder="Quantity" />
+                    <input type="text" id="Remarks" class="form-control mb-2" placeholder="Remarks" />
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
@@ -369,6 +371,7 @@
                 const marketRate = parseFloat($('#MarketRate').val().replace(/,/g, ''));
                 const BranchID = $('#BranchID').val();
                 const quantity = parseInt($('#Quantity').val());
+                const remarks = $('#Remarks').val();
 
                 if (!name || isNaN(weight) || isNaN(netWeight) || !goldType || isNaN(appraisePerGram) || isNaN(quantity)) {
                     showPopup("Please fill all fields correctly.",false);
@@ -385,6 +388,7 @@
                     GoldType: goldType,
                     Netweight: netWeight,
                     Appraisevaluepergram: appraisePerGram,
+                    Remarks: remarks,
                     BranchID: BranchID,
                     LastUpdatedUser: 'admin',
                     LastUpdatedDate: new Date().toISOString(),
@@ -414,7 +418,7 @@
                 $('.modal-backdrop').remove();
                 $('body').removeClass('modal-open').css('padding-right', '');
 
-                $('#ArticleName, #WeightOfArticle, #GoldType, #MarketRate, #NetWeight, #AppraiseValuePerGram').val('');
+                $('#ArticleName, #WeightOfArticle, #GoldType, #MarketRate, #NetWeight, #AppraiseValuePerGram','#Remarks').val('');
             } catch (e) {
                 showPopup("Error adding article: " + e.message,false);
             }
