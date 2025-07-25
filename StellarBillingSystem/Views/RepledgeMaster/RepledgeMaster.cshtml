@@ -108,22 +108,39 @@
                     <div class="col-sm-3 col-md-3 col-lg-3">
 
                         <div class="form-floating form-floating-outline mb-3">
-                            <input type="text" class="form-control" name="BuyerName" id="BuyerName" placeholder="Buyer Name" />
-                            <label for="BuyerName" class="control-label">Buyer Name</label>
-                        </div>
-                    </div>
-                    <div class="col-sm-3 col-md-3 col-lg-3">
-                        <div class="form-floating form-floating-outline mb-3">
-                            <input type="text" class="form-control" name="Address" id="Address" placeholder="Address" />
-                            <label for="Address" class="control-label">Address</label>
-                        </div>
-                    </div>
-                    <div class="col-sm-3 col-md-3 col-lg-3">
-                        <div class="form-floating form-floating-outline mb-3">
-                            <input type="PhoneNumber" class="form-control" name="PhoneNumber" id="PhoneNumber" maxlength="10" placeholder="Phone Number" oninput="allowOnlyDigits(this)" />
-                            <label for="PhoneNumber" class="control-label">Phone Number</label>
-                        </div>
+                            <div class="col-sm-4 col-md-4 col-lg-4">
 
+                                @{
+                                    var CustomerID = ((IEnumerable<StellarBillingSystem_skj.Models.RepledgerModel>)ViewData["repledgerid"])
+                                    .Select(m => new SelectListItem
+            {
+                Value = m.RepledgerID.ToString(), // Assuming ProductID is of type int
+                Text = $"{m.RepledgerPhoneNumber1}-{m.RepledgerName}"
+            });
+                                }
+
+                                <label>Repleger Number</label>
+                                <input type="text" id="productDropdownInput" class="form-control" placeholder="Repleger Number" onkeyup="filterDropdown(event, 'productDropdownInput', 'productDropdown')" onclick="showDropdown('productDropdown')">
+                                <span class="text-danger"></span>
+
+                                <ul id="productDropdown" class="list-group mt-2"
+                                    style="display: none; position: absolute; top: 100%; left: 0; width: 100%; max-height: 200px; overflow-y: auto; background-color: white; border: 1px solid #ddd; border-radius: .25rem; box-shadow: 0 0 .5rem rgba(0, 0, 0, .1); z-index: 1000; padding: 0; margin: 0; list-style-type: none;">
+                                    @foreach (var item in CustomerID)
+                                    {
+                                        <li class="list-group-item" data-value="@item.Value" onclick="selectDropdownItem('productDropdownInput', 'BuyerName', '@item.Text', '@item.Value')"
+                                            style="padding: .5rem 1rem; cursor: pointer; background-color: white; border: none; list-style-type: none;">
+                                            @item.Text
+                                        </li>
+                                    }
+                                </ul>
+
+
+                                <input type="hidden" name="BuyerName" id="BuyerName"  />
+
+                            </div>
+
+                        </div>
+                    </div>
                        
                     </div>
                     <div class="col-sm-1 col-md-1 col-lg-1"></div>
@@ -149,7 +166,27 @@
                             <label for="Tenure">Tenure</label>
                         </div>
                     </div>
-                    <div class="col-sm-1 col-md-1 col-lg-1"></div>
+               
+                <div class="col-sm-3 col-md-3 col-lg-3">
+                    <div class="form-floating form-floating-outline mb-3">
+                        <input type="date" class="form-control" name="CloseDate" id="CloseDate" placeholder="CloseDate" />
+                        <label for="CloseDate">CloseDate</label>
+                    </div>
+                </div>
+                <div class="col-sm-3 col-md-3 col-lg-3">
+                    <div class="form-floating form-floating-outline mb-3">
+                        <input type="LoanHolderName" class="form-control" name="LoanHolderName" id="LoanHolderName" placeholder="LoanHolderName" />
+                        <label for="LoanHolderName">LoanHolderName</label>
+                    </div>
+                </div>
+                <div class="col-sm-3 col-md-3 col-lg-3">
+                    <div class="form-floating form-floating-outline mb-3">
+                        <input type="date" class="form-control" name="RepledgeDate" id="RepledgeDate" placeholder="RepledgeDate" />
+                        <label for="RepledgeDate">RepledgeDate</label>
+                    </div>
+                </div>
+
+                <div class="col-sm-1 col-md-1 col-lg-1"></div>
                 </div>
                 <br/>
                 <div class="row gy-4">
@@ -159,6 +196,9 @@
                     </div>
                             <div class="col-sm-3 col-md-3 col-lg-3">
                         <button class="btn btn-danger" onclick="deleteRepledge()">Delete Repledge</button>
+                    </div>
+                    <div class="col-sm-3 col-md-3 col-lg-3">
+                        <button class="btn btn-danger" onclick="closeRepledge()">Close Repledge</button>
                     </div>
                     <div class="col-sm-3 col-md-3 col-lg-3"> </div>
                 </div>
@@ -287,8 +327,6 @@
 
                         document.getElementById("selected-articles-box").innerHTML = "<em>No articles selected</em>";
                         document.getElementById("BuyerName").value = "";
-                        document.getElementById("Address").value = "";
-                        document.getElementById("PhoneNumber").value = "";
                         document.getElementById("TotalAmount").value = "";
                         document.getElementById("Interest").value = "";
                         document.getElementById("Tenure").value = "";
@@ -323,18 +361,32 @@
                             renderSelectedArticles();
 
                             const buyer = data.buyerInfo;
+                        document.getElementById("productDropdownInput").value = buyer?.buyerName || "";
                             document.getElementById("BuyerName").value = buyer?.buyerName || "";
-                            document.getElementById("Address").value = buyer?.address || "";
-                            document.getElementById("PhoneNumber").value = buyer?.phoneNumber || "";
                             document.getElementById("TotalAmount").value = buyer?.totalAmount || "";
                             document.getElementById("Interest").value = buyer?.interest || "";
                             document.getElementById("Tenure").value = buyer?.tenure || "";
-                        })
-                        .catch(error => {
-                            console.error("Error loading repledge info:", error);
-                            showPopup("Error loading repledge information.");
-                        });
-                }
+                        document.getElementById("LoanHolderName").value = buyer?.loanHolderName || "";
+                        document.getElementById("RepledgeDate").value = buyer?.repledgeDate?.split("T")[0] || ""; // optional: remove time part
+                        document.getElementById("CloseDate").value = buyer?.closeDate?.split("T")[0] || "";
+
+
+                            // ✅ Set visible buyer name (from dropdown) by matching buyer ID
+                                const buyerID = buyer?.buyerName || ""; // This is actually the ID
+                                const dropdownItems = document.querySelectorAll("#productDropdown li");
+
+                                dropdownItems.forEach(item => {
+                                    if (item.getAttribute("data-value") === buyerID) {
+                                        document.getElementById("productDropdownInput").value = item.textContent.trim();
+                                    }
+                                });
+
+                                                        })
+                                                        .catch(error => {
+                                                            console.error("Error loading repledge info:", error);
+                                                            showPopup("Error loading repledge information.");
+                                                        });
+                                                }
 
 
 
@@ -413,13 +465,13 @@
                     const billID = document.getElementById("BillID").value.trim();
                     const repledgeID = document.getElementById("RepledgeID").value.trim();
                     const buyerName = document.getElementById("BuyerName").value.trim();
-                    const address = document.getElementById("Address").value.trim();
-                    const phoneNumber = document.getElementById("PhoneNumber").value.trim();
                     const totalAmount = document.getElementById("TotalAmount").value.trim();
                     const interest = document.getElementById("Interest").value.trim();
                     const tenure = document.getElementById("Tenure").value.trim();
+                    const loanHolderName = document.getElementById("LoanHolderName").value.trim();
+                    const repledgeDate = document.getElementById("RepledgeDate").value.trim();
 
-                    if (!repledgeID || !buyerName || !address || !phoneNumber || !totalAmount || !interest || !tenure) {
+                    if (!repledgeID || !buyerName || !totalAmount || !interest || !tenure || !loanHolderName || !repledgeDate) {
                         showPopup("Please fill in all the fields.");
                         return;
                     }
@@ -441,11 +493,11 @@
                         billID,
                         repledgeID,
                         buyerName,
-                        address,
-                        phoneNumber,
                         totalAmount,
                         interest,
                         tenure,
+                    loanHolderName,
+                    repledgeDate,
                         articles: articlesToSave
                     };
 
@@ -492,7 +544,163 @@
                             showPopup("Failed to delete repledge.");
                         });
                 }
+
+                function closeRepledge() {
+                    const repledgeID = document.getElementById("RepledgeID").value.trim();
+                const closeDate = document.getElementById("CloseDate").value.trim();
+
+
+
+                    if (!repledgeID) {
+                        showPopup("Please enter a Repledge ID to Close.");
+                        return;
+                    }
+
+                    if (!closeDate) {
+                                showPopup("Please select a Close Date.");
+                                return;
+                            }
+
+                    fetch(getUrl("/RepledgeMaster/CloseRepledgeAjax"), {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({
+                            RepledgeID: repledgeID,
+                            CloseDate: closeDate
+                        })
+                    })
+                        .then(response => response.ok ? response.text() : Promise.reject("Server error"))
+                        .then(data => {
+                            showPopup("Repledge Closed successfully.", true);
+
+                        })
+                        .catch(error => {
+                            console.error("Close failed:", error);
+                            showPopup("Failed to Close");
+                        });
+                }
+
             </script>
+
+        <script>
+            let suppressInputEvent = false;
+
+            function filterDropdown(event, inputId, dropdownId) {
+                if (suppressInputEvent) return; // Prevent filtering if input event is suppressed
+
+                const input = document.getElementById(inputId);
+                const dropdown = document.getElementById(dropdownId);
+                const filter = input.value.toLowerCase();
+                const items = dropdown.querySelectorAll('li');
+
+                items.forEach(item => {
+                    const text = item.textContent.toLowerCase();
+                    item.style.display = text.includes(filter) ? '' : 'none';
+                });
+
+                if (filter) {
+                    dropdown.style.display = 'block'; // Show dropdown when filtering
+                }
+            }
+
+            function showDropdown(dropdownId) {
+                const dropdown = document.getElementById(dropdownId);
+                dropdown.style.display = 'block';
+            }
+
+            function selectDropdownItem(inputId, hiddenId, text, value) {
+                const input = document.getElementById(inputId);
+                const hidden = document.getElementById(hiddenId);
+                const dropdown = document.getElementById('productDropdown');
+
+                // Trim whitespace from the selected text
+                const trimmedText = text.trim();
+
+                // Set the selected value in the input and hidden input
+                input.value = trimmedText;
+                hidden.value = value;
+
+                // Hide the dropdown after selection
+                dropdown.style.display = 'none';
+
+                // Set the flag to suppress the input event momentarily
+                suppressInputEvent = true;
+
+                // Remove suppression after a short delay to allow normal input behavior again
+                setTimeout(() => {
+                    suppressInputEvent = false;
+                }, 200);
+            }
+
+            document.addEventListener('DOMContentLoaded', () => {
+                const input = document.getElementById('productDropdownInput');
+                const dropdown = document.getElementById('productDropdown');
+
+                let highlightedIndex = -1;
+
+                function getVisibleItems() {
+                    return Array.from(dropdown.querySelectorAll('li')).filter(item => item.style.display !== 'none');
+                }
+
+                input.addEventListener('input', (event) => {
+                    filterDropdown(event, 'productDropdownInput', 'productDropdown');
+                    highlightedIndex = -1; // Reset highlight when input changes
+                });
+
+                input.addEventListener('keydown', (event) => {
+                    const visibleItems = getVisibleItems();
+
+                    switch (event.key) {
+                        case 'ArrowDown':
+                            if (highlightedIndex < visibleItems.length - 1) {
+                                highlightedIndex++;
+                                updateHighlight(visibleItems);
+                                event.preventDefault(); // Prevent default behavior
+                            }
+                            break;
+                        case 'ArrowUp':
+                            if (highlightedIndex > 0) {
+                                highlightedIndex--;
+                                updateHighlight(visibleItems);
+                                event.preventDefault(); // Prevent default behavior
+                            }
+                            break;
+                        case 'Enter':
+                            if (highlightedIndex >= 0) {
+                                const item = visibleItems[highlightedIndex];
+                                selectDropdownItem('productDropdownInput', 'productID', item.textContent, item.getAttribute('data-value'));
+                                highlightedIndex = -1;
+                                event.preventDefault(); // Prevent default behavior
+                            }
+                            break;
+                        case 'Escape':
+                            dropdown.style.display = 'none'; // Close dropdown on escape
+                            highlightedIndex = -1;
+                            break;
+                    }
+                });
+
+                function updateHighlight(visibleItems) {
+                    visibleItems.forEach((item, index) => {
+                        item.style.backgroundColor = (index === highlightedIndex) ? '#000000' : 'white';
+                        item.style.color = (index === highlightedIndex) ? 'white' : 'black'; // Ensure text color contrasts with background
+                    });
+                    visibleItems[highlightedIndex]?.scrollIntoView({ block: 'nearest' });
+                }
+
+                // Click event to close dropdown when clicking outside
+                document.addEventListener('click', (event) => {
+                    const target = event.target;
+                    if (!dropdown.contains(target) && target !== input) {
+                        dropdown.style.display = 'none';
+                    }
+                });
+            });
+        </script>
+
+
 
            @*  <script>
                 function allowOnlyDigits(input) {

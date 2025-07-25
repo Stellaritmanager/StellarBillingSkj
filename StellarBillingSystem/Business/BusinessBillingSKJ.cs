@@ -5,6 +5,7 @@ using Xceed.Words.NET;
 using Spire.Doc;
 using System.IO;
 using Spire.Pdf;
+using StellarBillingSystem_skj.Models;
 
 namespace StellarBillingSystem_skj.Business
 {
@@ -34,6 +35,22 @@ namespace StellarBillingSystem_skj.Business
                 ).ToList();
 
             return customerid;
+        }
+
+        public List<RepledgerModel> getrepledgerID()
+        {
+            var repledgerid = (
+                    from pr in _billingContext.Shrepledgermodel
+                    where pr.IsDelete == false
+                    select new RepledgerModel
+                    {
+                        RepledgerID = pr.RepledgerID,
+                        RepledgerName = pr.RepledgerName,
+                        RepledgerPhoneNumber1 = pr.RepledgerPhoneNumber1
+                    }
+                ).ToList();
+
+            return repledgerid;
         }
 
         public List<CategoryMasterModel> getGoldtype(string BranchID)

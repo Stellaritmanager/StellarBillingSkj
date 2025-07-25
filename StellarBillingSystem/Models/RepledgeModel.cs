@@ -6,23 +6,32 @@ namespace StellarBillingSystem_skj.Models
     {
         public RepledgeModel() { }
 
-        [MaxLength(100)]
-        public string RepledgeID {  get; set; }
-        [MaxLength(100)]
-        public string? Description { get; set; }
+        public int BuyerID { get; set; } // Auto-generated, NOT a primary key
 
-        public string TotalAmount {  get; set; }
+        [Key]
+        public string RepledgeID { get; set; } // Primary Key (string, manually set)
 
-        public string Intrerest {  get; set; }
+        public string BuyerName { get; set; }
+        public string? Address { get; set; }
+        public string? PhoneNumber { get; set; }
 
-        public string Tenure { get; set; }
+        public decimal TotalAmount { get; set; }
+        public decimal Interest { get; set; }
+        public int Tenure { get; set; }
 
-        public string IsDelete { get; set; }
-        [MaxLength(50)]
-        public string? LastUpdatedUser { get; set; }
-        [MaxLength(50)]
-        public string? LastUpdatedmachine { get; set; }
-        [MaxLength(50)]
+        public string BranchID { get; set; }
+
+        public bool IsDelete { get; set; }
         public string? LastUpdatedDate { get; set; }
+        public string? LastUpdatedUser { get; set; }
+        public string? LastUpdatedMachine { get; set; }
+
+        public bool IsClosed {  get; set; }
+
+        public string? CloseDate {  get; set; }
+
+        public string? RepledgeDate { get; set;}
+
+        public string? LoanHolderName { get; set; }
     }
 }

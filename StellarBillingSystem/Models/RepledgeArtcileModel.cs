@@ -16,5 +16,7 @@
         public string? LastUpdatedMachine { get; set; }
 
         public bool IsDelete { get; set; }  
+
+        
     }
 }

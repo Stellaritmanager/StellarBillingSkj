@@ -37,24 +37,31 @@ namespace StellarBillingSystem_skj.Controllers
 
         public IActionResult Billing()
         {
-
-            string BranchID = null;
-
-            if (TempData["BranchID"] != null)
+            try
             {
-                BranchID = TempData["BranchID"].ToString();
-                TempData.Keep("BranchID");
+
+                string BranchID = null;
+
+                if (TempData["BranchID"] != null)
+                {
+                    BranchID = TempData["BranchID"].ToString();
+                    TempData.Keep("BranchID");
+                }
+
+                BusinessBillingSKJ Busbill = new BusinessBillingSKJ(_billingsoftware, _configuration);
+                ViewData["customerid"] = Busbill.getCustomerID(BranchID);
+                var goldTypes = Busbill.getGoldtype(BranchID);
+
+                ViewBag.GoldTypeList = goldTypes;
+                ViewBag.BranchID = BranchID;
+
+
             }
-
-            BusinessBillingSKJ Busbill = new BusinessBillingSKJ(_billingsoftware, _configuration);
-            ViewData["customerid"] = Busbill.getCustomerID(BranchID);
-            var goldTypes = Busbill.getGoldtype(BranchID);
-
-            ViewBag.GoldTypeList = goldTypes;
-            ViewBag.BranchID = BranchID;
-
-
-            return View();
+            catch (Exception ex)
+            {
+                ViewBag.message = ex.Message;
+            }
+            return View("Billing");
         }
 
         [HttpPost]
