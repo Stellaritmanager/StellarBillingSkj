@@ -418,6 +418,13 @@ namespace StellarBillingSystem_skj.Controllers
             if (buttonType == "Save")
             {
 
+              /*  if(model.Viewpayment==null && model.Viewpayment.Any())
+                {
+                        ViewBag.Message = "Add Payment Cannot be Empty";
+
+                        return View("PaymentBilling", model);  
+                }*/
+
                 double totalpayamount = 0.0;
                 if (model.Viewpayment != null && model.Viewpayment.Any())
                 {
@@ -516,7 +523,7 @@ namespace StellarBillingSystem_skj.Controllers
 
                     _billingsoftware.SaveChanges(); // Only call if we added or modified records
                 }
-
+               
 
 
                 model.StrBillvalue = BusinessBillingSKJ.getbalance(_billingsoftware, paymentid, billId, model.BranchID, totalpayamount.ToString());

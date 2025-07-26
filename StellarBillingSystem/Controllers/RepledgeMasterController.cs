@@ -85,7 +85,8 @@ public class RepledgeMasterController : Controller
                                   {
                                       billID = ra.BillID,
                                       articleID = a.ArticleID,
-                                      articleName = a.ArticleName
+                                      articleName = a.ArticleName,
+                                      isClosed = bu.IsClosed
                                   }).ToList<object>();
 
             buyerInfo = (from bu in _billingsoftware.Shbuyerrepledge
@@ -98,7 +99,8 @@ public class RepledgeMasterController : Controller
                              tenure = bu.Tenure,
                              loanHolderName = bu.LoanHolderName,
                              repledgeDate = bu.RepledgeDate,
-                             closeDate = bu.CloseDate
+                             closeDate = bu.CloseDate,
+                             isClosed = bu.IsClosed
 
                          }).FirstOrDefault();
 

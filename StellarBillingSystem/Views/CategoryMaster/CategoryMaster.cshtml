@@ -86,7 +86,7 @@
                             </div> *@
 
                              <div class="form-floating form-floating-outline mb-4">
-                                <select id="goldtypeSelect" name="CategoryName" class="form-control">
+                                <select id="goldtypeSelect" name="CategoryName" class="form-control" required>
                                     @if (string.IsNullOrEmpty(Model.CategoryName))
                                     {
                                         <option value="" selected>-- Select GoldType --</option>
@@ -125,7 +125,7 @@
                                 </select>
 
                                 <label for="goldtypeSelect">GoldType</label>
-                                <span asp-validation-for="CategoryName" class="text-danger"></span>
+                                <span id="CategoryNameError" class="text-danger"></span>
                             </div>
 
                         </div>
@@ -145,7 +145,7 @@
                         <div class="row gy-4">
                             <div class="col-sm-4 col-md-4 col-lg-4"></div>
                         <div class="col-sm-1 col-md-1 col-lg-1">
-                            <button type="submit" asp-action="AddCategory" value="save" name="buttonType" formmethod="post" class="btn btn-success">Save</button>
+                            <button type="submit" asp-action="AddCategory" value="save" name="buttonType" formmethod="post" class="btn btn-success" onclick="return validateSave()">Save</button>
                            </div>
                         <div class="col-sm-4 col-md-4 col-lg-4">
                           <button type="submit" asp-action="AddCategory" value="Delete" name="buttonType" class="btn btn-danger">Delete</button>
@@ -348,3 +348,22 @@
 
 </form>
 
+<script>
+    function clearErrors() {
+        document.getElementById("MarketRateError").innerText = "";
+        document.getElementById("CategoryNameError").innerText = "";
+    }
+
+    
+
+    function validateSave() {
+        clearErrors();
+        const categoryName = document.getElementById("MarketRate").value.trim();
+        if (!categoryName) {
+            document.getElementById("MarketRateError").innerText = "Market Rate cannot be empty.";
+            return false;
+        }
+        return true;
+    }
+
+</script>

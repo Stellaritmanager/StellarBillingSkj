@@ -76,7 +76,7 @@ namespace StellarBillingSystem_skj.Controllers
                 else
                 {
                     CategoryMasterModel par = new CategoryMasterModel();
-                    ViewBag.ErrorMessage = "No value for this Category ID";
+                    ViewBag.ErrorMessage = "No value for this GoldType";
                     var dataTable = await AdditionalCategoryMasterFun(model.BranchID);
 
                     // Store the DataTable in ViewData for access in the view
@@ -121,7 +121,7 @@ namespace StellarBillingSystem_skj.Controllers
                 else
                 {
                     CategoryMasterModel par = new CategoryMasterModel();
-                    ViewBag.ErrorMessage = "No value for this Category ID";
+                    ViewBag.ErrorMessage = "No value for this GoldType";
                     var dataTable2 = await AdditionalCategoryMasterFun(model.BranchID);
 
                     // Store the DataTable in ViewData for access in the view
@@ -138,7 +138,7 @@ namespace StellarBillingSystem_skj.Controllers
                     categorytodelete.IsDelete = true;
                     await _billingsoftware.SaveChangesAsync();
 
-                    ViewBag.Message = "Category deleted successfully";
+                    ViewBag.Message = "GoldType deleted successfully";
 
                     var dataTable3 = await AdditionalCategoryMasterFun(model.BranchID);
 
@@ -151,7 +151,7 @@ namespace StellarBillingSystem_skj.Controllers
                 }
                 else
                 {
-                    ViewBag.ErrorMessage = "Category not found";
+                    ViewBag.ErrorMessage = "GoldType not found";
                     var dataTable4 = await AdditionalCategoryMasterFun(model.BranchID);
 
                     // Store the DataTable in ViewData for access in the view
@@ -174,7 +174,7 @@ namespace StellarBillingSystem_skj.Controllers
                 {
                     if (existingCategory.IsDelete)
                     {
-                        ViewBag.ErrorMessage = "Cannot Save or Update. Category is marked as deleted.";
+                        ViewBag.ErrorMessage = "Cannot Save or Update. GoldType is marked as deleted.";
                         var dataTable6 = await AdditionalCategoryMasterFun(model.BranchID);
 
                         // Store the DataTable in ViewData for access in the view
@@ -203,7 +203,7 @@ namespace StellarBillingSystem_skj.Controllers
 
                 await _billingsoftware.SaveChangesAsync();
 
-                ViewBag.Message = "Saved Successfully";
+                ViewBag.Message = "GoldType Saved Successfully";
             }
             var dataTable = await AdditionalCategoryMasterFun(model.BranchID);
 

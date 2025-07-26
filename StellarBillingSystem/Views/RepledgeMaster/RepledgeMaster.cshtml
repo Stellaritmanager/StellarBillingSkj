@@ -246,6 +246,9 @@
                 let lastLoadedRepledgeID = null; // track previously loaded RepledgeID
                 let lastRepledgeUsedForArticles = null;
                 let shouldReloadOnClose = false;
+                let repledgeIsClosed = false;
+               let selectedArticleIDs = [];
+
 
                 function showPopup(message, reload = false) {
                     shouldReloadOnClose = reload;
@@ -361,6 +364,9 @@
                             renderSelectedArticles();
 
                             const buyer = data.buyerInfo;
+
+                        repledgeIsClosed = buyer?.isClosed === true;
+
                         document.getElementById("productDropdownInput").value = buyer?.buyerName || "";
                             document.getElementById("BuyerName").value = buyer?.buyerName || "";
                             document.getElementById("TotalAmount").value = buyer?.totalAmount || "";
@@ -391,36 +397,55 @@
 
 
 
-                function renderAvailableArticles(articles, billID, markSelected = true) {
-                    const box = document.getElementById("articleList");
-                    box.innerHTML = "";
+            function renderAvailableArticles(articles, billID, markSelected = true) {
+                const box = document.getElementById("articleList");
+                box.innerHTML = "";
 
-                    if (!articles || articles.length === 0) {
-                        box.innerHTML = "<em>No articles loaded</em>";
-                        return;
+                if (!articles || articles.length === 0) {
+                    box.innerHTML = "<em>No articles found</em>";
+                    return;
+                }
+
+                selectedArticles[billID] = selectedArticles[billID] || new Set();
+
+                articles.forEach(article => {
+                    const aID = article.articleID;
+                    const aName = article.articleName;
+                    articleNamesMap[aID] = aName;
+
+                    const div = document.createElement("div");
+                    const checkbox = document.createElement("input");
+                    checkbox.type = "checkbox";
+                    checkbox.value = aID;
+                    checkbox.dataset.billid = billID;
+
+                    // ✅ Mark checkbox as checked if it’s already selected
+                    checkbox.checked = markSelected && selectedArticles[billID].has(aID);
+
+                    // ✅ If Repledge is closed, disable checkbox so user can’t select anything
+                    if (repledgeIsClosed) {
+                        checkbox.disabled = true;
+                        checkbox.title = "Cannot select articles. Repledge is already closed.";
                     }
 
-                    selectedArticles[billID] = selectedArticles[billID] || new Set();
+                    // ✅ Only allow changing selection if not closed
+                    checkbox.onchange = () => {
+                        if (repledgeIsClosed) {
+                            checkbox.checked = false;
+                            showPopup("Cannot select articles. Repledge is closed.");
+                            return;
+                        }
+                        updateSelectedArticles(checkbox);
+                    };
 
-                    articles.forEach(article => {
-                        const aID = article.articleID;
-                        const aName = article.articleName;
+                    div.appendChild(checkbox);
+                    div.append(" " + aName);
+                    box.appendChild(div);
+                });
+            }
 
-                        articleNamesMap[aID] = aName;
 
-                        const div = document.createElement("div");
-                        const checkbox = document.createElement("input");
-                        checkbox.type = "checkbox";
-                        checkbox.value = aID;
-                        checkbox.dataset.billid = billID;
-                        checkbox.checked = markSelected && selectedArticles[billID].has(aID);
-                        checkbox.onchange = () => updateSelectedArticles(checkbox);
 
-                        div.appendChild(checkbox);
-                        div.append(" " + aName);
-                        box.appendChild(div);
-                    });
-                }
 
 
                 function renderSelectedArticles() {

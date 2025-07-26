@@ -329,10 +329,9 @@ namespace StellarBillingSystem_skj.Controllers
 
             if (checkbillavailable == null)
             {
-                ViewBag.Getnotfound = "BillID Not Found";
-
-                return View("Billing");
+                return BadRequest(new { message = "BillID Not Found" });
             }
+
 
 
             String Query = "SELECT \r\n    SD.BillID,\r\n    CONVERT(VARCHAR(10), SB.BillDate, 101) AS BillDate,\r\n    SD.ArticleID,\r\n    SP.ArticleName,\r\n    FORMAT(TRY_CAST(REPLACE(SB.TotalRepayValue, ',', '') AS DECIMAL(18, 2)), 'N2') AS TotalRepayValue,\r\n    SD.Quantity,\r\n\r\n\r\n    -- Customer Name\r\n    (SELECT CM.CustomerName \r\n     FROM SHCustomerMaster CM \r\n     WHERE CM.CustomerID = SB.CustomerID AND CM.BranchID = SB.BranchID) AS CustomerName,\r\n\r\n    CS.MobileNumber,\r\n    CS.Address,\r\n    CM.CategoryName AS GoldType,\r\n\r\n    FORMAT(TRY_CAST(SD.Grossweight AS DECIMAL(18, 2)), 'N2') AS Grossweight,\r\n    FORMAT(TRY_CAST(SD.Netweight AS DECIMAL(18, 2)), 'N2') AS Netweight,\r\n    FORMAT(TRY_CAST(SD.Reducedweight AS DECIMAL(18, 2)), 'N2') AS Reducedweight,\r\n\r\n    SB.OverallWeight,\r\n    SB.InitialInterest,\r\n    SB.PostTenureInterest,\r\n\tSB.TotalvalueinWords\r\n\r\nFROM \r\n    Shbilldetailsskj SD\r\nINNER JOIN \r\n    Shbillmasterskj SB ON SD.BillID = SB.BillID\r\nINNER JOIN \r\n    SHArticleMaster SP ON SD.ArticleID = SP.ArticleID\r\nINNER JOIN \r\n    SHCategoryMaster CM ON SP.GoldType = CM.CategoryID\r\nINNER JOIN \r\n    SHCustomerMaster CS ON SB.CustomerID = CS.CustomerID\r\nINNER JOIN \r\n    SHBranchMaster CB ON SB.BranchID = CB.BracnchID\r\n\r\nWHERE \r\n    SD.IsDelete = 0\r\n    AND SD.BillID = '" + billId + "'\r\n    AND SD.BranchID = '" + branchId + "' \r\n    AND SP.BranchID = '" + branchId + "' \r\n    AND CS.BranchID = '" + branchId + "' \r\n    AND CB.BracnchID = '" + branchId + "' \r\n    AND SB.BranchID = '" + branchId + "' \r\n    AND CM.BranchID = '" + branchId + "' \r\n";
@@ -345,9 +344,9 @@ namespace StellarBillingSystem_skj.Controllers
             var currentDateTime = busbil.GetFormattedDateTime();
 
             // Create filename with BillID and current datetime
-            var fileName = $"{billId}_{currentDateTime}.pdf";
+            var fileName = $"{billId}_{busbil.GetFormattedDateTime()}.pdf";
+            return File(busbil.PrintBillDetails(Table, branchId), "application/pdf", fileName);
 
-            return File(busbil.PrintBillDetails(Table,branchId), "application/vnd.openxmlformats-officedocument.wordprocessingml.document", fileName);
 
 
         }

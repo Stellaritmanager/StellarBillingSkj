@@ -89,7 +89,7 @@ namespace StellarBillingSystem_skj.Business
         public string GetFormattedDateTime()
         {
             DateTime currentDateTime = GetCurrentDateTime();
-            return currentDateTime.ToString("dd/MM/yyyy HH:mm:ss");
+            return currentDateTime.ToString("dd_MM_yyyy_HH_mm_ss");
         }
 
         public static String getbalance(BillingContext billing, string strPayID, string pBillID, string strBranchid, string pPaymentAmount)
