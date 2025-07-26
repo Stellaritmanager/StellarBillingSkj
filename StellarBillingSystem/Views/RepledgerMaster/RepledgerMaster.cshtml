@@ -1,0 +1,311 @@
+﻿@model StellarBillingSystem_skj.Models.RepledgerModel
+
+@{
+    ViewData["Title"] = "RepledgerMaster";
+    Layout = "~/Views/Shared/_ContentNavbarLayout.cshtml";
+ 
+}
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    function showPopup(message) {
+        var popup = document.getElementById("popupMessage");
+        var popupText = document.getElementById("popupMessageText");
+        var popupOKButton = document.getElementById("popupOKButton");
+
+        popupText.textContent = message; // Set the message text
+        popup.style.display = "block";
+
+        // Close popup when OK button is clicked
+        popupOKButton.addEventListener("click", function () {
+            closePopup();
+        });
+
+        // Close popup when clicking outside of the message box
+        document.addEventListener("click", function (event) {
+            if (!popup.contains(event.target) && !popupOKButton.contains(event.target)) {
+                closePopup();
+            }
+        });
+    }
+
+    function closePopup() {
+        var popup = document.getElementById("popupMessage");
+        popup.style.display = "none"; // Hide the popup
+    }
+
+    function handleMessages(message) {
+        showPopup(message);
+    }
+
+    $(document).ready(function () {
+        var message = "@ViewBag.Message";
+        if (message) {
+            showPopup(message);
+        }
+
+        var errorMessage = "@ViewBag.ErrorMessage";
+        if (errorMessage) {
+            showPopup(errorMessage);
+        }
+
+        var delMessage = "@ViewBag.delMessage";
+        if (delMessage) {
+            showPopup(delMessage);
+        }
+
+        var delRetrieve = "@ViewBag.DelRetrieve";
+        if (delRetrieve) {
+            showPopup(delRetrieve);
+        }
+    });
+
+</script>
+
+<div id="popupMessage" style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); color:black; padding: 30px; border: 1px solid #000000; border-radius: 10px; z-index: 1000; display: none; text-align: center;">
+    <span id="popupMessageText" style="display: block; margin-bottom: 10px;"></span>
+    <button id="popupOKButton" style="padding: 10px 20px; background-color: rgba(255, 255, 255, 0.2); color: black; border: none; border-radius: 5px; cursor: pointer;">OK</button>
+</div>
+
+<style>
+    .popborder {
+        border: 10px solid #fff;
+    }
+</style>
+
+<form asp-controller="RepledgerMaster" autocomplete="off">
+
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <div class="row" style="margin-top:10px">
+        <div class="col-md-12 col-lg-0"></div>
+        <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+            <div class="card">
+                <div class="card-body dividerblack">
+                    <div class="row gy-4">
+                        <div class="col-sm-12 col-md-12 col-lg-12">
+                            <h2 class="centered text-white" style="font-family:'Lucida Bright';text-align: center; margin: 0;">
+                                Repledger Master
+                            </h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <br />
+    <div class="row" style="height:8%"></div>
+
+    <div class="row" style="margin-top:30px">
+        <div class="col-md-12 col-lg-0"></div>
+        <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+            <div class="card">
+                <div class="card-body dividerblack">
+                    <div class="row gy-4">
+                        <div class="col-sm-1 col-md-1 col-lg-1"></div>
+                        <div class="col-sm-4 col-md-4 col-lg-4">
+
+                            <div class="form-floating form-floating-outline mb-4">
+                                <input type="tel" maxlength="10" asp-for="RepledgerPhoneNumber1" value="@Model.RepledgerPhoneNumber1" id="RepledgerPhoneNumber1" class="form-control" placeholder="Mobile Number1" required pattern="\d{10}" title="Mobile Number should must contain 10 Digit" oninput="allowOnlyDigits(this)" />
+                                <label asp-for="RepledgerPhoneNumber1" class="control-label">Mobile Number1</label>
+                                <span id="RepledgerPhoneNumber1Error" class="text-danger"></span>
+                            </div>
+
+                            <div class="form-floating form-floating-outline mb-4">
+                                <input asp-for="RepledgerName" id="RepledgerName" class="form-control" placeholder="Repledger Name" value="@Model.RepledgerName" pattern="^[A-Za-z\s]+$" title="Repledger Name should contain only letters and spaces" />
+                                <label asp-for="RepledgerName" class="control-label">Repledger Name</label>
+                                <span id="RepledgerNameError" class="text-danger"></span>
+                            </div>
+                        </div>
+                       
+                        <div class="col-sm-1 col-md-1 col-lg-1">
+                            <button type="submit" style="width:95px; height:50px;" value="Create" asp-action="GetRepledger" class="btn btn-primaryellow" onclick="return validateGet()">Get</button>
+
+                        </div>
+                    </div>
+
+                    <br />
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row" style="margin-top:30px">
+        <div class="col-md-12 col-lg-0"></div>
+        <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+            <div class="card">
+                <div class="card-body dividerblack">
+                    <div class="row">
+                        <div class="col-sm-4 col-md-4 col-lg-4">
+                            <div class="form-floating form-floating-outline mb-4">
+                                <input asp-for="RepledgerPhoneNumber2" class="form-control" placeholder="Mobile Number2" value="@Model.RepledgerPhoneNumber2" pattern="\d{10}" title="Mobile Number should must contain 10 Digit" oninput="allowOnlyDigits(this)" />
+                                <label asp-for="RepledgerPhoneNumber2" class="control-label">Mobile Number2</label>
+                                <span asp-validation-for="RepledgerPhoneNumber2" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-sm-4 col-md-4 col-lg-4">
+                            <div class="form-floating form-floating-outline mb-4 custom-date-picker">
+                                <input asp-for="RepledgerAddress" value="@Model.RepledgerAddress" class="form-control" placeholder="RepledgerAddress" />
+                                <label asp-for="RepledgerAddress" class="control-label">RepledgerAddress</label>
+                                <span id="RepledgerAddressError" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                      
+                        <div class="col-sm-4 col-md-4 col-lg-4">
+                            <div class="form-floating form-floating-outline mb-4">
+                                <input asp-for="City" class="form-control" placeholder="City" value="@Model.City" pattern="^[A-Za-z\s]+$" title="City Name should contain only letters and spaces" />
+                                <label asp-for="City" class="control-label"></label>
+                                <span id="CityError" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-4 col-md-4 col-lg-4">
+                            <div class="form-floating form-floating-outline mb-4">
+                                <input asp-for="State" class="form-control" placeholder="State" value="@Model.State" pattern="^[A-Za-z\s]+$" title="State Name should contain only letters and spaces" />
+                                <label asp-for="State" class="control-label"></label>
+                                <span id="StateError" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-4 col-md-4 col-lg-4">
+                            <div class="form-floating form-floating-outline mb-4">
+                                <input asp-for="Country" class="form-control" placeholder="Country" value="@Model.Country" pattern="^[A-Za-z\s]+$" title="Country Name should contain only letters and spaces" />
+                                <label asp-for="Country" class="control-label"></label>
+                                <span id="CountryError" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-sm-4 col-md-4 col-lg-4">
+
+                            <div class="form-floating form-floating-outline mb-4">
+                                <input asp-for="Pincode" class="form-control" placeholder="Pincode" value="@Model.Pincode" maxlength="6" pattern="^\d{6}$" title="Pincode Number should be in correct format" oninput="allowOnlyDigits(this)" />
+                                <label asp-for="Pincode" class="control-label"></label>
+                                <span id="PincodeError" class="text-danger"></span>
+                            </div>
+                        </div>
+                       
+
+
+                    </div>
+
+                    <div class="row gy-4" style="margin-top:30px">
+                        <div class="col-sm-5 col-md-5 col-lg-5"> </div>
+                        <div class="col-sm-1 col-md-1 col-lg-1">
+                            <button type="submit" id="save" value="save" asp-action="AddRepledger" class="btn btn-success" onclick="return validateSave()">Save</button>
+                        </div>
+                        <div class="col-sm-3 col-md-3 col-lg-3">
+                            <button type="submit" value="Create" asp-action="DeleteRepledger" class="btn btn-danger" onclick="return validateDelete()">Delete</button>
+                        </div>
+                        <div class="col-sm-3 col-md-3 col-lg-3"> </div>
+                    </div>
+                </div>
+
+            </div>
+
+
+
+
+            @*  <button type="submit"  value="Create" asp-action="GetDeleteRetrieve" class="btn btn-primaryellow mx-2">DeleteRetrieve</button> *@
+
+
+        </div>
+
+    </div>
+
+
+</form>
+
+
+
+<script>
+    function clearErrors() {
+        document.getElementById("RepledgerPhoneNumber1Error").innerText = "";
+        document.getElementById("RepledgerNameError").innerText = "";
+        document.getElementById("RepledgerAddressError").innerText = "";
+        document.getElementById("CityError").innerText = "";
+        document.getElementById("StateError").innerText = "";
+        document.getElementById("CountryError").innerText = "";
+        document.getElementById("PincodeError").innerText = "";
+    }
+
+    function validateGet() {
+        clearErrors();
+        const phone1 = document.getElementById("RepledgerPhoneNumber1").value.trim();
+        if (!phone1) {
+            document.getElementById("RepledgerPhoneNumber1Error").innerText = "Mobile Number1 is required to fetch data.";
+            return false;
+        }
+        return true;
+    }
+
+    function validateSave() {
+        clearErrors();
+        let valid = true;
+
+        const phone1 = document.getElementById("RepledgerPhoneNumber1").value.trim();
+        const name = document.getElementById("RepledgerName").value.trim();
+        const address = document.getElementById("RepledgerAddress").value.trim();
+        const city = document.getElementById("City").value.trim();
+        const state = document.getElementById("State").value.trim();
+        const country = document.getElementById("Country").value.trim();
+        const pincode = document.getElementById("Pincode").value.trim();
+
+        if (!phone1) {
+            document.getElementById("RepledgerPhoneNumber1Error").innerText = "Mobile Number1 cannot be empty.";
+            valid = false;
+        }
+        if (!name) {
+            document.getElementById("RepledgerNameError").innerText = "Repledger Name cannot be empty.";
+            valid = false;
+        }
+        if (!address) {
+            document.getElementById("RepledgerAddressError").innerText = "Address cannot be empty.";
+            valid = false;
+        }
+        if (!city) {
+            document.getElementById("CityError").innerText = "City cannot be empty.";
+            valid = false;
+        }
+        if (!state) {
+            document.getElementById("StateError").innerText = "State cannot be empty.";
+            valid = false;
+        }
+        if (!country) {
+            document.getElementById("CountryError").innerText = "Country cannot be empty.";
+            valid = false;
+        }
+        if (!pincode) {
+            document.getElementById("PincodeError").innerText = "Pincode cannot be empty.";
+            valid = false;
+        }
+
+        return valid;
+    }
+
+    function validateDelete() {
+        clearErrors();
+        const phone1 = document.getElementById("RepledgerPhoneNumber1").value.trim();
+        if (!phone1) {
+            document.getElementById("RepledgerPhoneNumber1Error").innerText = "Mobile Number1 is required to delete data.";
+            return false;
+        }
+        return true;
+    }
+</script>
+
+
+
+
+
+<script>
+    function allowOnlyDigits(input) {
+        input.value = input.value.replace(/[^0-9]/g, '');
+    }
+</script>

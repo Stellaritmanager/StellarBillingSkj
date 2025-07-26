@@ -138,6 +138,30 @@
                             </div>
                         </div>
 
+                        <div id="salesFields" style="display:none;">
+                        <div class="row gy-4">
+                            <div class="col-sm-1 col-md-1 col-lg-1"></div>
+                            <div class="col-sm-4 col-md-4 col-lg-4">
+                                <div class="form-floating form-floating-outline mb-4">
+                                    <input type="text" class="form-control" placeholder="SalePayment" id="SalePayment" name="SalePayment" value="@ViewBag.SalePayment" />
+                                    <label for="SalePayment" class="control-label">SalePayment</label>
+                                </div>
+                            </div>
+                            <div class="col-sm-4 col-md-4 col-lg-4">
+                                <div class="form-floating form-floating-outline mb-4">
+                                    <input type="date" class="form-control" placeholder="SaleDate" id="SaleDate" name="SaleDate" value="@ViewBag.SaleDate" />
+                                    <label for="SaleDate" class="control-label">SaleDate</label>
+                                </div>
+                            </div>
+                            <div class="col-sm-4 col-md-4 col-lg-4">
+                                <div class="form-floating form-floating-outline mb-4">
+                                    <input type="text" class="form-control" placeholder="SaleRemark" id="SaleRemark" name="SaleRemark" value="@ViewBag.SaleRemark" />
+                                    <label for="SaleRemark" class="control-label">SaleRemark</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                         <div class="col-sm-2 col-md-2 col-lg-2"></div>
                     </div>
                 </div>
@@ -259,6 +283,9 @@
                 <button type="submit" class="btn btn-success" name="buttonType" value="Save">SavePayment</button>
                 <button type="submit" class="btn btn-warning" name="buttonType" value="DeletePaymentDetail">DeletePaymentDetail</button>
                 <button type="submit" class="btn btn-danger" name="buttonType" value="DeletePayment">DeletePayment</button>
+                <button type="submit" class="btn btn-danger" name="buttonType" value="CompletelyClosing">CompletelyClosing</button>
+                <button type="submit" class="btn btn-danger" name="buttonType" value="TopUp">TopUp</button>
+                <button type="submit" class="btn btn-danger" name="buttonType" value="Sales">Sales</button>
             </div>
         </div>
     </center>
@@ -288,3 +315,15 @@
 
 
 </form>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const salesButton = document.querySelector('button[name="buttonType"][value="Sales"]');
+        const salesFields = document.getElementById("salesFields");
+
+        salesButton.addEventListener("click", function (e) {
+            e.preventDefault(); // prevent form submission for now
+            salesFields.style.display = "block";
+        });
+    });
+</script>

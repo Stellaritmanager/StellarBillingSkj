@@ -15,6 +15,14 @@
         public decimal Interest { get; set; }
         public int Tenure { get; set; }
 
+        public bool IsClosed { get; set; }
+
+        public string? CloseDate {  get; set; }
+
+        public string? LoanHolderName { get; set; }
+
+        public string? RepledgeDate { get; set; }
+
         public string? BranchID { get; set; }
     }
 
