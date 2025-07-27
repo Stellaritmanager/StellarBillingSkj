@@ -147,8 +147,11 @@ namespace StellarBillingSystem_skj.Business
                 document.ReplaceText("<<ininterest>>", pbillData.Rows[0]["InitialInterest"].ToString());
                 document.ReplaceText("<<posttenure>>", pbillData.Rows[0]["PostTenureInterest"].ToString());
                 document.ReplaceText("<<totalinword>>", pbillData.Rows[0]["TotalvalueinWords"].ToString());
+                document.ReplaceText("<<tenure>>", pbillData.Rows[0]["Tenure"].ToString());
 
-
+                int tenureInMonths = Convert.ToInt32(pbillData.Rows[0]["Tenure"]);
+                int tenureInDays = tenureInMonths * 30;
+                document.ReplaceText("<<tenureinday>>", tenureInDays.ToString());
 
                 document.ReplaceText("{Placeholder2}", "Dynamic Value 2");
 
