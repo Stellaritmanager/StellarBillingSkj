@@ -29,5 +29,13 @@
         public string? ClosedDate { get; set; }
 
         public string? closedBy { get; set; }
+
+        public string? ClosingStatus { get; set; }
+
+        public string? SaleDate { get; set; }
+
+        public string? SalePayment { get; set; }
+
+        public string? SaleRemark { get; set; }
     }
 }

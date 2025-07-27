@@ -695,7 +695,7 @@
                         case 'Enter':
                             if (highlightedIndex >= 0) {
                                 const item = visibleItems[highlightedIndex];
-                                selectDropdownItem('productDropdownInput', 'productID', item.textContent, item.getAttribute('data-value'));
+                                selectDropdownItem('productDropdownInput', 'BuyerName', item.textContent, item.getAttribute('data-value'));
                                 highlightedIndex = -1;
                                 event.preventDefault(); // Prevent default behavior
                             }

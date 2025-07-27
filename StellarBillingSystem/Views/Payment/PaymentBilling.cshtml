@@ -108,17 +108,21 @@
                             <div class="form-floating form-floating-outline mb-4">
                                 <input type="text" class="form-control" placeholder="Total" id="Total" name="Total" readonly value="@ViewBag.Total" />
                                 <label for="Total" class="control-label">Total</label>
+                                <span id="fieldErrorMessage" style="color: red; font-weight: bold;"></span>
+
                             </div>
                         </div>
                         <div class="col-sm-4 col-md-4 col-lg-4">
                             <div class="form-floating form-floating-outline mb-4">
                                 <input type="text" class="form-control" placeholder="Balance" id="Balance" name="Balance" value="@ViewBag.Balance" readonly />
                                 <label for="Balance" class="control-label">Balance</label>
+                                <span id="fieldErrorMessage" style="color: red; font-weight: bold;"></span>
+
                             </div>
                         </div>
 
                         <div class="col-sm-1 col-md-1 col-lg-1">
-                            <button type="submit" style="background-color: #4fdd52; color: white; padding: 10px 10px; border: none; border-radius: 4px;" name="buttonType" value="AddPayment">AddPayment</button>
+                            <button type="submit" style="background-color: #4fdd52; color: white; padding: 10px 10px; border: none; border-radius: 4px;" name="buttonType" value="AddPayment" onclick="return validateFields()">AddPayment</button>
                         </div>
                         <div class="col-sm-1 col-md-1 col-lg-1"></div>
 
@@ -135,6 +139,25 @@
                             <div class="form-floating form-floating-outline mb-4">
                                 <input type="date" class="form-control" placeholder="CloseDate" id="CloseDate" name="CloseDate" value="@ViewBag.CloseDate" />
                                 <label for="CloseDate" class="control-label">CloseDate</label>
+                            </div>
+                        </div>
+                        <div class="col-sm-4 col-md-4 col-lg-4">
+                            <div class="form-floating form-floating-outline mb-4">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="actionType" id="completelyClosing" value="CompletelyClosing">
+                            <label class="form-check-label" for="completelyClosing">Completely Closing</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="actionType" id="topUp" value="TopUp">
+                            <label class="form-check-label" for="topUp">TopUp</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="actionType" id="sales" value="Sales">
+                            <label class="form-check-label" for="sales">Sales</label>
+                        </div>
+
+                                <input type="hidden" id="ClosingStatus" name="ClosingStatus" value="@ViewBag.ClosingStatus" />
+
                             </div>
                         </div>
 
@@ -280,12 +303,10 @@
     <center>
         <div class="row mt-4">
             <div class="col-md-12">
-                <button type="submit" class="btn btn-success" name="buttonType" value="Save">SavePayment</button>
-                <button type="submit" class="btn btn-warning" name="buttonType" value="DeletePaymentDetail">DeletePaymentDetail</button>
-                <button type="submit" class="btn btn-danger" name="buttonType" value="DeletePayment">DeletePayment</button>
-                <button type="submit" class="btn btn-danger" name="buttonType" value="CompletelyClosing">CompletelyClosing</button>
-                <button type="submit" class="btn btn-danger" name="buttonType" value="TopUp">TopUp</button>
-                <button type="submit" class="btn btn-danger" name="buttonType" value="Sales">Sales</button>
+                <button type="submit" class="btn btn-success" name="buttonType" value="Save" onclick="return validateFields()">SavePayment</button>
+                <button type="submit" class="btn btn-warning" name="buttonType" value="DeletePaymentDetail" onclick="return validateFields()">DeletePaymentDetail</button>
+                <button type="submit" class="btn btn-danger" name="buttonType" value="DeletePayment" onclick="return validateFields()">DeletePayment</button>
+               
             </div>
         </div>
     </center>
@@ -318,12 +339,55 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-        const salesButton = document.querySelector('button[name="buttonType"][value="Sales"]');
+        const radios = document.querySelectorAll('input[name="actionType"]');
+        const hiddenStatus = document.getElementById("ClosingStatus");
         const salesFields = document.getElementById("salesFields");
 
-        salesButton.addEventListener("click", function (e) {
-            e.preventDefault(); // prevent form submission for now
-            salesFields.style.display = "block";
+        // ✅ Pre-select the saved radio if ClosingStatus has value
+        if (hiddenStatus.value) {
+            const selectedRadio = document.querySelector(`input[name="actionType"][value="${hiddenStatus.value}"]`);
+            if (selectedRadio) {
+                selectedRadio.checked = true;
+                if (hiddenStatus.value === "Sales") {
+                    salesFields.style.display = "block";
+                } else {
+                    salesFields.style.display = "none";
+                }
+            }
+        } else {
+            salesFields.style.display = "none"; // default hide if nothing selected
+        }
+
+        // ✅ Attach event listeners for real-time selection
+        radios.forEach(radio => {
+            radio.addEventListener("change", function () {
+                hiddenStatus.value = this.value;
+
+                if (this.value === "Sales") {
+                    salesFields.style.display = "block";
+                } else {
+                    salesFields.style.display = "none";
+                }
+            });
         });
     });
 </script>
+
+
+<script>
+    function validateFields() {
+        const total = document.getElementById("Total").value.trim();
+        const balance = document.getElementById("Balance").value.trim();
+        const errorSpan = document.getElementById("fieldErrorMessage");
+
+        if (!total || !balance) {
+            errorSpan.textContent = "Please fill in both 'Total' and 'Balance' fields.";
+            return false;
+        }
+
+        // Clear message if valid
+        errorSpan.textContent = "";
+        return true;
+    }
+</script>
+
