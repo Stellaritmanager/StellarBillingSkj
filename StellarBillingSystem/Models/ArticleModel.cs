@@ -23,5 +23,7 @@ namespace StellarBillingSystem_skj.Models
         public string BranchID { get; set; }
 
         public bool IsDelete { get; set; }
+
+        public string? Remarks {  get; set; }
     }
 }

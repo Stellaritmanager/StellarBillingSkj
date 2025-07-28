@@ -86,7 +86,7 @@ namespace StellarBillingSystem_skj.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> PaymentAction(PaymentTableViewModel model, string buttonType, string selectedSlotId, string billId, string branchID, string billDate, string billValue,string CloseBy,string CloseDate)
+        public async Task<IActionResult> PaymentAction(PaymentTableViewModel model, string selectedSlotId,string buttonType, string billId, string branchID, string billDate, string billValue,string CloseBy,string CloseDate,string SalePayment,string SaleDate,string SaleRemark,string completelyClosing,string topUp,string sales,string ClosingStatus)
         {
 
             BusinessBillingSKJ business = new BusinessBillingSKJ(_billingsoftware, _configuration);
@@ -134,6 +134,8 @@ namespace StellarBillingSystem_skj.Controllers
                 return View("PaymentBilling", model);
             }
 
+          
+
             if (buttonType == "GetBill")
             {
                 PaymentTableViewModel obj = new PaymentTableViewModel();
@@ -146,7 +148,11 @@ namespace StellarBillingSystem_skj.Controllers
                                                  b.BillDate,
                                                  b.TotalRepayValue,
                                                  b.closedBy,
-                                                 b.ClosedDate
+                                                 b.ClosedDate,
+                                                 b.ClosingStatus,
+                                                 b.SaleDate,
+                                                 b.SalePayment,
+                                                 b.SaleRemark
                                              })
                                              .FirstOrDefault();
 
@@ -174,6 +180,11 @@ namespace StellarBillingSystem_skj.Controllers
                     obj.StrBillvalue = billDetails.TotalRepayValue.ToString();
                     obj.ClosedDate = billDetails.ClosedDate;
                     obj.closedBy = billDetails.closedBy;
+                    obj.ClosingStatus = billDetails.ClosingStatus;
+                    obj.SaleDate = billDetails.SaleDate;
+                    obj.SalePayment = billDetails.SalePayment;
+                    obj.SaleRemark = billDetails.SaleRemark;
+
                 }
                 else
                 {
@@ -216,6 +227,10 @@ namespace StellarBillingSystem_skj.Controllers
                  ViewBag.Total = obj.StrBillvalue;
                 ViewBag.CloseBy = obj.closedBy;
                 ViewBag.CloseDate = obj.ClosedDate;
+                ViewBag.SalePayment = obj.SalePayment;
+                ViewBag.SaleDate = obj.SaleDate;
+                ViewBag.SaleRemark = obj.SaleRemark;
+                ViewBag.ClosingStatus = obj.ClosingStatus;
 
                 return View("PaymentBilling", obj);
             }
@@ -368,30 +383,63 @@ namespace StellarBillingSystem_skj.Controllers
             if (buttonType == "Save")
             {
 
-                
-
-                // Check if no radio button is selected
-                if (string.IsNullOrEmpty(selectedSlotId))
+              /*  if(model.Viewpayment==null && model.Viewpayment.Any())
                 {
-                    ViewBag.Message = "Please select a payment.";
+                        ViewBag.Message = "Add Payment Cannot be Empty";
 
-                    var getbillvalue = await _billingsoftware.Shbillmasterskj.Where(x => x.BillID == billId && x.BranchID == model.BranchID).FirstOrDefaultAsync();
-                    if (getbillvalue != null)
-                        ViewBag.Total = getbillvalue.TotalRepayValue.ToString();
-                    billValue = ViewBag.Total;
-                    var resultdel = UpdatePaymentDetails(billId, model.BranchID, formattedBillDate, billValue);
-
-                    return View("PaymentBilling", model);
-                }
-
-
-
-
+                        return View("PaymentBilling", model);  
+                }*/
 
                 double totalpayamount = 0.0;
-                foreach (var payment in model.Viewpayment)
+                if (model.Viewpayment != null && model.Viewpayment.Any())
                 {
-                    totalpayamount = totalpayamount + double.Parse(payment.PaymentAmount);
+                    foreach (var payment in model.Viewpayment)
+                    {
+                        if (!string.IsNullOrEmpty(payment.PaymentAmount))
+                        {
+                            if (double.TryParse(payment.PaymentAmount, out double amt))
+                                totalpayamount += amt;
+                        }
+                    }
+                
+
+                    
+                
+                    foreach (var objdetail in model.Viewpayment)
+                    {
+                        var obpaydet = _billingsoftware.SHPaymentDetails
+                            .Where(x => x.BranchID == model.BranchID
+                                && x.PaymentDiscription == objdetail.PaymentDiscription
+                                && x.PaymentId == paymentid)
+                            .FirstOrDefault();
+
+                        if (obpaydet != null)
+                        {
+                            obpaydet.BranchID = model.BranchID;
+                            obpaydet.Lastupdateduser = User.Claims.First().Value.ToString();
+                            obpaydet.Lastupdateddate = business.GetFormattedDateTime();
+                            obpaydet.Lastupdatedmachine = Request.HttpContext.Connection.RemoteIpAddress.ToString();
+                            obpaydet.PaymentAmount = objdetail.PaymentAmount;
+                            obpaydet.PaymentDate = objdetail.PaymentDate;
+                            obpaydet.PaymentDiscription = objdetail.PaymentDiscription;
+                            obpaydet.PaymentMode = objdetail.PaymentMode;
+                            obpaydet.PaymentTransactionNumber = objdetail.PaymentTransactionNumber;
+
+                            _billingsoftware.Entry(obpaydet).State = EntityState.Modified;
+                        }
+                        else
+                        {
+                            objdetail.PaymentId = paymentid;
+                            objdetail.BranchID = model.BranchID;
+                            objdetail.Lastupdateddate = business.GetFormattedDateTime();
+                            objdetail.Lastupdatedmachine = Request.HttpContext.Connection.RemoteIpAddress.ToString();
+                            objdetail.Lastupdateduser = User.Claims.First().Value.ToString();
+
+                            _billingsoftware.SHPaymentDetails.Add(objdetail);
+                        }
+                    }
+
+                    _billingsoftware.SaveChanges(); // Only call if we added or modified records
                 }
 
                 var billAmount = _billingsoftware.Shbillmasterskj
@@ -443,41 +491,6 @@ namespace StellarBillingSystem_skj.Controllers
 
                 _billingsoftware.SaveChanges();
 
-                foreach (var objdetail in model.Viewpayment)
-                {
-                    var obpaydet = _billingsoftware.SHPaymentDetails.Where(x => x.BranchID == model.BranchID && x.PaymentDiscription == objdetail.PaymentDiscription && x.PaymentId == paymentid).FirstOrDefault();
-
-                    if (obpaydet != null)
-                    {
-                        obpaydet.BranchID = model.BranchID;
-                        obpaydet.Lastupdateduser = User.Claims.First().Value.ToString();
-                        obpaydet.Lastupdateddate = business.GetFormattedDateTime();
-                        obpaydet.Lastupdatedmachine = Request.HttpContext.Connection.RemoteIpAddress.ToString();
-                        obpaydet.PaymentAmount = objdetail.PaymentAmount;
-                        obpaydet.PaymentDate = objdetail.PaymentDate;
-                        obpaydet.PaymentDiscription = objdetail.PaymentDiscription;
-                        obpaydet.PaymentMode = objdetail.PaymentMode;
-                        obpaydet.PaymentTransactionNumber = objdetail.PaymentTransactionNumber;
-
-                        _billingsoftware.Entry(obpaydet).State = EntityState.Modified;
-
-
-                    }
-                    else
-                    {
-                        objdetail.PaymentId = paymentid;
-                        objdetail.BranchID = model.BranchID;
-                        objdetail.Lastupdateddate = business.GetFormattedDateTime();
-                        objdetail.Lastupdatedmachine = Request.HttpContext.Connection.RemoteIpAddress.ToString();
-                        objdetail.Lastupdateduser = User.Claims.First().Value.ToString();
-                        _billingsoftware.SHPaymentDetails.Add(objdetail);
-                    }
-                }
-
-                _billingsoftware.SaveChanges();
-
-
-
 
 
                 model.StrBillvalue = BusinessBillingSKJ.getbalance(_billingsoftware, paymentid, billId, model.BranchID, totalpayamount.ToString());
@@ -501,6 +514,10 @@ namespace StellarBillingSystem_skj.Controllers
                 {
                     updpayment.closedBy = CloseBy;
                     updpayment.ClosedDate = CloseDate;
+                    updpayment.SalePayment = SalePayment;
+                    updpayment.SaleDate = SaleDate;
+                    updpayment.SaleRemark = SaleRemark;
+                    updpayment.ClosingStatus = ClosingStatus;
 
                     _billingsoftware.SaveChanges();
                    

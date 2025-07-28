@@ -103,9 +103,11 @@ namespace StellarBillingSystem.Context
 
         public DbSet<BillIDCombinationModel> Shbillcombinationskj { get; set; }
 
-        public DbSet<BuyerRepledgeModel> Shbuyerrepledge { get; set; }
+        public DbSet<RepledgeModel> Shbuyerrepledge { get; set; }
 
         public DbSet<RepledgeArtcileModel> Shrepledgeartcile { get; set; }
+
+        public DbSet<RepledgerModel> Shrepledgermodel { get; set; }
 
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -244,10 +246,10 @@ namespace StellarBillingSystem.Context
             modelBuilder.Entity<BillIDCombinationModel>().HasKey(i => i.BranchID);
 
             // BuyerModelSKJ
-            modelBuilder.Entity<BuyerRepledgeModel>()
+            modelBuilder.Entity<RepledgeModel>()
                 .HasKey(x => x.RepledgeID);
 
-            modelBuilder.Entity<BuyerRepledgeModel>()
+            modelBuilder.Entity<RepledgeModel>()
                 .Property(x => x.BuyerID)
                 .ValueGeneratedOnAdd();
 
@@ -276,10 +278,14 @@ namespace StellarBillingSystem.Context
 
             // FK to BuyerModelSKJ
             modelBuilder.Entity<RepledgeArtcileModel>()
-                .HasOne<BuyerRepledgeModel>()
+                .HasOne<RepledgeModel>()
                 .WithMany()
                 .HasForeignKey(x => x.RepledgeID)
                 .OnDelete(DeleteBehavior.Cascade);
+
+
+            modelBuilder.Entity<RepledgerModel>()
+                .HasKey(i => i.RepledgerID);
 
         }
 

@@ -274,6 +274,7 @@
                     <input type="number" id="NetWeight" class="form-control mb-2" placeholder="Net Weight" />
                     <input type="text" id="AppraiseValuePerGram" class="form-control mb-2" placeholder="Appraise Value Per Gram" />
                     <input type="number" id="Quantity" class="form-control mb-2" placeholder="Quantity" />
+                    <input type="text" id="Remarks" class="form-control mb-2" placeholder="Remarks" />
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
@@ -335,6 +336,8 @@
             document.getElementById("popupOverlay").style.display = "block";
         }
 
+
+
         function closePopup() {
             document.getElementById("popupOverlay").style.display = "none";
             if (shouldReloadOnClose) {
@@ -369,6 +372,7 @@
                 const marketRate = parseFloat($('#MarketRate').val().replace(/,/g, ''));
                 const BranchID = $('#BranchID').val();
                 const quantity = parseInt($('#Quantity').val());
+                const remarks = $('#Remarks').val();
 
                 if (!name || isNaN(weight) || isNaN(netWeight) || !goldType || isNaN(appraisePerGram) || isNaN(quantity)) {
                     showPopup("Please fill all fields correctly.",false);
@@ -385,6 +389,7 @@
                     GoldType: goldType,
                     Netweight: netWeight,
                     Appraisevaluepergram: appraisePerGram,
+                    Remarks: remarks,
                     BranchID: BranchID,
                     LastUpdatedUser: 'admin',
                     LastUpdatedDate: new Date().toISOString(),
@@ -414,7 +419,7 @@
                 $('.modal-backdrop').remove();
                 $('body').removeClass('modal-open').css('padding-right', '');
 
-                $('#ArticleName, #WeightOfArticle, #GoldType, #MarketRate, #NetWeight, #AppraiseValuePerGram').val('');
+                $('#ArticleName, #WeightOfArticle, #GoldType, #MarketRate, #NetWeight, #AppraiseValuePerGram,#Remarks').val('');
             } catch (e) {
                 showPopup("Error adding article: " + e.message,false);
             }
@@ -464,12 +469,31 @@
 
             const billID = $('#BillID').val();
             const branchID = $('#BranchID').val();
+            const customerID = $('#productID').val();
+            const totalValue = $('#TotalValue').val();
+            const totalRepayValue = $('#TotalRepayValue').val();
 
           
             if (!billID) {
                 showPopup("Please enter a Bill ID", false);
                 return;
             }
+
+            if (!customerID || customerID === "ProductID") {
+                showPopup("Please select a valid customer.");
+                return;
+            }
+
+            if (!totalValue) {
+                showPopup("Total Value cannot be empty.");
+                return;
+            }
+
+            if (!totalRepayValue) {
+                showPopup("Total Repay Value cannot be empty.");
+                return;
+            }
+
 
             const imageModels = [];
 
@@ -604,28 +628,54 @@
         }
 
         function printBill() {
-            const billId = $('#BillID').val();
-            const branchId = $('#BranchID').val();
+            const billId = $('#BillID').val().trim();
+            const branchId = $('#BranchID').val().trim();
 
             if (!billId || !branchId) {
-                showPopup("Please enter Bill ID",false);
+                showPopup("Please enter Bill ID", false);
                 return;
             }
 
-            // Create and submit a form to trigger the file download
-            const form = $('<form>', {
-                method: 'POST',
-                action: '/Billing/printBill',
-                style: 'display:none;'
+            $.ajax({
+                url: '/Billing/printBill',
+                type: 'POST',
+                data: { billId, branchId },
+                xhrFields: {
+                    responseType: 'blob'
+                },
+                success: function (blob, status, xhr) {
+                    const disposition = xhr.getResponseHeader('Content-Disposition');
+                    let fileName = "Bill.docx";
+
+                    if (disposition && disposition.indexOf('filename=') !== -1) {
+                        const matches = /filename\*?=([^;]+)/.exec(disposition);
+                        if (matches != null && matches[1]) {
+                            // Remove UTF-8'' prefix if exists and decode
+                            fileName = decodeURIComponent(matches[1].replace(/^UTF-8''/, '').trim());
+                        }
+                    }
+
+
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = fileName;
+                    document.body.appendChild(a);
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+                },
+                error: function (xhr) {
+                    try {
+                        const err = JSON.parse(xhr.responseText);
+                        showPopup(err.message || "Something went wrong", false);
+                    } catch {
+                        showPopup("Failed to generate bill", false);
+                    }
+                }
             });
-
-            form.append($('<input>', { name: 'billId', value: billId, type: 'hidden' }));
-            form.append($('<input>', { name: 'branchId', value: branchId, type: 'hidden' }));
-
-            $('body').append(form);
-            form.submit();
-            form.remove();
         }
+
+
 
         function deletebill() {
             const billId = $('#BillID').val();

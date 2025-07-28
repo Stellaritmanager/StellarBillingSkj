@@ -299,6 +299,20 @@
                     }
                 }
 
+                 @if (rollAccessList != null)
+                {
+                    @if (rollAccessList.Contains("RepledgerMaster"))
+                    {
+
+                <li class='menu-item@(currentPage == "/RepledgerMaster/RepledgerMaster" ? " active" : "")'>
+                    <a asp-controller="RepledgerMaster" asp-action="RepledgerMaster" class="menu-link">
+
+                        <div>Repledger Master </div>
+                    </a>
+                </li>
+                    }
+                }
+
                 
 
                 @if (rollAccessList != null)
