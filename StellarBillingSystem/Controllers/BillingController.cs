@@ -81,13 +81,15 @@ namespace StellarBillingSystem_skj.Controllers
                 var existingBill = _billingsoftware.Shbillmasterskj
                     .FirstOrDefault(b => b.BillID == billMaster.BillID);
 
+                // ✅ Read configured upload path (via DI or IConfiguration)
+                string rootPath = _configuration["UploadSettings:BillImagesPath"]; // Example: C:\MyUploads\BillImages
 
-                // ✅ Ensure upload folder exists
-                string uploadPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "BillImage", billMaster.BillID);
+                // ✅ Ensure bill-specific folder exists
+                string uploadPath = Path.Combine(rootPath, billMaster.BillID.ToString());
                 if (!Directory.Exists(uploadPath))
                     Directory.CreateDirectory(uploadPath);
 
-                // ✅ Save uploaded files and update their image paths
+                // ✅ Save uploaded files and update paths
                 foreach (var file in form.Files)
                 {
                     string filePath = Path.Combine(uploadPath, file.FileName);
@@ -99,10 +101,11 @@ namespace StellarBillingSystem_skj.Controllers
                     var matchingImage = vm.BillImages.FirstOrDefault(img => img.ImageName == file.FileName);
                     if (matchingImage != null)
                     {
-                        matchingImage.ImagePath = "/" + Path.Combine("BillImage", billMaster.BillID, file.FileName).Replace("\\", "/");
-
+                        // The image is not directly accessible via static path, so store just file name
+                        matchingImage.ImagePath = file.FileName;
                     }
                 }
+
 
                 // ✅ Insert or update BillMaster
                 if (existingBill != null)
@@ -199,12 +202,12 @@ namespace StellarBillingSystem_skj.Controllers
                     .ToList();
 
                 var images = _billingsoftware.Shbillimagemodelskj
-    .Where(img => img.BillID == billId)
-    .Select(img => new
-    {
-        img.ImagePath,
-        img.ImageName
-    }).ToList();
+                    .Where(img => img.BillID == billId)
+                    .Select(img => new
+                    {
+                        img.ImagePath,
+                        img.ImageName
+                    }).ToList();
 
 
                 return Json(new
@@ -308,8 +311,36 @@ namespace StellarBillingSystem_skj.Controllers
                 return Ok(new { message = "An error occurred while deleting the bill." });
             }
         }
+        public IActionResult GetBillImage(string billId, string imageName)
+        {
+            if (string.IsNullOrEmpty(billId) || string.IsNullOrEmpty(imageName))
+                return NotFound();
 
+            var root = _configuration["UploadSettings:BillImagesPath"];
+         
+            var imagePath = Path.Combine(root, billId, imageName);
 
+            if (!System.IO.File.Exists(imagePath))
+                return NotFound();
+
+            var contentType = "image/png"; // or use GetContentType(imageName)
+            return PhysicalFile(imagePath, contentType);
+        }
+        [HttpGet]
+        public IActionResult GetBillImages(string billId)
+        {
+            var root = _configuration["UploadSettings:BillImagesPath"];
+            var dir = Path.Combine(root, billId);
+
+            if (!Directory.Exists(dir))
+                return NotFound();
+
+            var files = Directory.GetFiles(dir)
+                                 .Select(Path.GetFileName)
+                                 .ToList();
+
+            return Json(files);
+        }
 
         [HttpPost]
 

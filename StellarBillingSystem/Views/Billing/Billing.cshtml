@@ -201,7 +201,7 @@
                         <div class="col-sm-4 col-md-4 col-lg-4" style="margin-top:35px">
                             <input type="file" id="fileInput" name="Images" multiple accept="image/*" />
                             <input type="hidden" name="KeptImages" id="KeptImages" />
-                            <button type="button" id="viewImagesBtn" class="btn btn-info" style="margin-top:10px; display:none;">
+                            <button class="btn btn-primary" onclick="fetchBillImagesAndOpenModal()">
                                 View Images
                             </button>
 
@@ -292,11 +292,22 @@
                     <h5 class="modal-title" id="imageModalLabel">Image Preview</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body text-center">
-                    <img id="modalImage" src="" alt="Preview" style="max-width: 100%; max-height: 500px;" />
-                    <div class="mt-3">
-                        <button class="btn btn-secondary" onclick="prevImage()">⟨</button>
-                        <button class="btn btn-secondary" onclick="nextImage()">⟩</button>
+                <div class="modal-body position-relative text-center" style="padding: 0;">
+                    <!-- Image with container -->
+                    <div style="position: relative; display: inline-block;">
+                        <img id="modalImage" src="" alt="Preview" style="max-width: 100%; max-height: 500px;" />
+
+                        <!-- Prev Button -->
+                        <button id="prevImageBtn" class="btn btn-dark position-absolute top-50 start-0 translate-middle-y"
+                                style="z-index: 10;" onclick="prevImage()">
+                            ⟨
+                        </button>
+
+                        <!-- Next Button -->
+                        <button id="ImageBtn" class="btn btn-dark position-absolute top-50 end-0 translate-middle-y"
+                                style="z-index: 10;" onclick="nextImage()">
+                            ⟩
+                        </button>
                     </div>
                 </div>
             </div>
@@ -329,6 +340,37 @@
         let filesList = [];        // [{ id, path?, file?, existing? }]
         let previewImages = [];    // All image URLs
         let currentIndex = 0;
+
+        function fetchBillImagesAndOpenModal() {
+            const billId = document.getElementById('BillID').value;
+
+            if (!billId) {
+                alert("Please enter a Bill ID");
+                return;
+            }
+
+            // Make an AJAX request to get image file names for the given bill ID
+            fetch(`/Billing/GetBillImages?billId=${encodeURIComponent(billId)}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error("Could not fetch images");
+                    }
+                    return response.json();
+                })
+                .then(imageList => {
+                    if (imageList.length === 0) {
+                        alert("No images found for this Bill ID.");
+                        return;
+                    }
+
+                    openImageModal(billId, imageList);
+                })
+                .catch(error => {
+                    console.error(error);
+                    alert("Error retrieving images.");
+                });
+            updateViewButtonVisibility();
+        }
 
         function showPopup(message, reload = false) {
             shouldReloadOnClose = reload;
@@ -702,26 +744,52 @@
             });
         }
 
+        let imageList = []; // array of image names
+        let currentImageIndex = 0;
+        let billId = ""; // current bill ID
 
-
+        function openImageModal(billIdParam, images) {
+            imageList = images;
+            currentImageIndex = 0;
+            billId = billIdParam;
+            updateModalImage();
+            var modal = new bootstrap.Modal(document.getElementById('imageModal'));
+            modal.show();
+        }
 
         function prevImage() {
-            if (currentIndex > 0) {
-                currentIndex--;
-                document.getElementById('modalImage').src = previewImages[currentIndex];
+            if (currentImageIndex > 0) {
+                currentImageIndex--;
+                updateModalImage();
             }
         }
 
         function nextImage() {
-            if (currentIndex < previewImages.length - 1) {
-                currentIndex++;
-                document.getElementById('modalImage').src = previewImages[currentIndex];
+            if (currentImageIndex < imageList.length - 1) {
+                currentImageIndex++;
+                updateModalImage();
             }
         }
 
+        function updateModalImage() {
+            if (imageList.length > 0 && currentImageIndex >= 0 && currentImageIndex < imageList.length) {
+                const imageUrl = `/Billing/GetBillImage?billId=${billId}&imageName=${encodeURIComponent(imageList[currentImageIndex])}`;
+                document.getElementById('modalImage').src = imageUrl;
+               
+            }
+        }
+
+
         function updateViewButtonVisibility() {
-            const viewImagesBtn = document.getElementById('viewImagesBtn');
-            viewImagesBtn.style.display = previewImages.length > 0 ? 'inline-block' : 'none';
+            var prevBtn = document.getElementById("prevImageBtn");
+            var nextBtn = document.getElementById("nextImageBtn");
+
+            if (prevBtn && nextBtn) {
+                prevBtn.style.display = (currentImageIndex > 0) ? "inline-block" : "none";
+                nextBtn.style.display = (currentImageIndex < imageList.length - 1) ? "inline-block" : "none";
+            } else {
+                console.warn("Navigation buttons not found in DOM");
+            }
         }
 
         $(document).ready(function () {
