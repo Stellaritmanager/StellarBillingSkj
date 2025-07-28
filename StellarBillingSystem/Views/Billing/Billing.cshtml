@@ -348,9 +348,9 @@
                 alert("Please enter a Bill ID");
                 return;
             }
-
+            const getImagesUrl = '@Url.Action("GetBillImages", "Billing")';
             // Make an AJAX request to get image file names for the given bill ID
-            fetch(`/Billing/GetBillImages?billId=${encodeURIComponent(billId)}`)
+            fetch(`${getImagesUrl}?billId=${encodeURIComponent(billId)}`)
                 .then(response => {
                     if (!response.ok) {
                         throw new Error("Could not fetch images");
@@ -677,9 +677,9 @@
                 showPopup("Please enter Bill ID", false);
                 return;
             }
-
+            var Printurl = '@Url.Action("printBill", "Billing")';
             $.ajax({
-                url: '/Billing/printBill',
+                url: Printurl,
                 type: 'POST',
                 data: { billId, branchId },
                 xhrFields: {
@@ -773,7 +773,9 @@
 
         function updateModalImage() {
             if (imageList.length > 0 && currentImageIndex >= 0 && currentImageIndex < imageList.length) {
-                const imageUrl = `/Billing/GetBillImage?billId=${billId}&imageName=${encodeURIComponent(imageList[currentImageIndex])}`;
+                const imageBaseUrl = '@Url.Action("GetBillImage", "Billing")';
+                const imageName = encodeURIComponent(imageList[currentImageIndex]);
+                const imageUrl = `${imageBaseUrl}?billId=${encodeURIComponent(billId)}&imageName=${imageName}`;
                 document.getElementById('modalImage').src = imageUrl;
                
             }
