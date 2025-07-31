@@ -90,7 +90,7 @@
             <div class="card">
                 <div class="card-body dividerblack">
                     <div class="row gy-4">
-                        <div class="col-sm-1 col-md-1 col-lg-1"></div>
+                        <div class="col-sm-3 col-md-3 col-lg-3"></div>
                         <div class="col-sm-4 col-md-4 col-lg-4">
                             <div class="form-floating form-floating-outline mb-4">
                                 <input type="text" class="form-control" placeholder="BillID" id="billId" name="billId" value="@Model.BillId" required />
@@ -98,10 +98,20 @@
                             </div>
                         </div>
                         <div class="col-sm-4 col-md-4 col-lg-4">
-                            <button type="submit" class="btn btn-primary" name="buttonType" value="GetBill">GetBill</button>
+                            <button type="submit" class="btn btn-primaryellow" name="buttonType" value="GetBill">GetBill</button>
                         </div>
-
+                        <div class="col-sm-1 col-md-1 col-lg-1"></div>
                     </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+                    <div class="row" style="margin-top:30px">
+                        <div class="col-md-12 col-lg-0"></div>
+                        <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+                            <div class="card">
+                                <div class="card-body dividerblack">
                     <div class="row gy-4">
                         <div class="col-sm-1 col-md-1 col-lg-1"></div>
                         <div class="col-sm-4 col-md-4 col-lg-4">
@@ -141,7 +151,10 @@
                                 <label for="CloseDate" class="control-label">CloseDate</label>
                             </div>
                         </div>
-                        <div class="col-sm-4 col-md-4 col-lg-4">
+                    </div>
+                        <div class="row gy-4">
+                        <div class="col-sm-1 col-md-1 col-lg-1"></div>
+                        <div class="col-sm-8 col-md-8 col-lg-8">
                             <div class="form-floating form-floating-outline mb-4">
                         <div class="form-check form-check-inline">
                             <input class="form-check-input" type="radio" name="actionType" id="completelyClosing" value="CompletelyClosing">
@@ -160,38 +173,34 @@
 
                             </div>
                         </div>
-
+                        <div class="col-sm-1 col-md-1 col-lg-1"></div>
                         <div id="salesFields" style="display:none;">
                         <div class="row gy-4">
                             <div class="col-sm-1 col-md-1 col-lg-1"></div>
-                            <div class="col-sm-4 col-md-4 col-lg-4">
+                            <div class="col-sm-3 col-md-3 col-lg-3">
                                 <div class="form-floating form-floating-outline mb-4">
                                     <input type="text" class="form-control" placeholder="SalePayment" id="SalePayment" name="SalePayment" value="@ViewBag.SalePayment" />
                                     <label for="SalePayment" class="control-label">SalePayment</label>
                                 </div>
                             </div>
-                            <div class="col-sm-4 col-md-4 col-lg-4">
+                                <div class="col-sm-3 col-md-3 col-lg-3">
                                 <div class="form-floating form-floating-outline mb-4">
                                     <input type="date" class="form-control" placeholder="SaleDate" id="SaleDate" name="SaleDate" value="@ViewBag.SaleDate" />
                                     <label for="SaleDate" class="control-label">SaleDate</label>
                                 </div>
                             </div>
-                            <div class="col-sm-4 col-md-4 col-lg-4">
+                                <div class="col-sm-3 col-md-3 col-lg-3">
                                 <div class="form-floating form-floating-outline mb-4">
                                     <input type="text" class="form-control" placeholder="SaleRemark" id="SaleRemark" name="SaleRemark" value="@ViewBag.SaleRemark" />
                                     <label for="SaleRemark" class="control-label">SaleRemark</label>
                                 </div>
                             </div>
+                                <div class="col-sm-2 col-md-2 col-lg-2"></div>
                         </div>
                     </div>
 
                         <div class="col-sm-2 col-md-2 col-lg-2"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
+                    </div>                             
 
 
 
@@ -211,11 +220,11 @@
     </div>
 
 
-    <div class="row gy-4" style="margin-top:10px">
-        <div class="col-md-12 col-lg-1">
-        </div>
-        <div class="col-md-12 col-lg-10">
-            <div class="card">
+    <div class="row gy-4">
+                        <div class="col-md-12 col-lg-0"></div>
+                        <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+                            <div class="card">
+                                <div class="card-body dividerblack">
                 <div class="">
 
                     @if (Model.Viewpayment != null)
@@ -298,17 +307,25 @@
             </div>
         </div>
     </div>
-
-
-    <center>
-        <div class="row mt-4">
-            <div class="col-md-12">
-                <button type="submit" class="btn btn-success" name="buttonType" value="Save" onclick="return validateFields()">SavePayment</button>
-                <button type="submit" class="btn btn-warning" name="buttonType" value="DeletePaymentDetail" onclick="return validateFields()">DeletePaymentDetail</button>
-                <button type="submit" class="btn btn-danger" name="buttonType" value="DeletePayment" onclick="return validateFields()">DeletePayment</button>
+                    </div>
                
+                    <div class="row mt-4">
+                        <div class="col-sm-2 col-md-2 col-lg-2"></div>
+                        <div class=" col-sm-8 col-md-8 col-lg-8">
+                            <button type="submit" class="btn btn-success" name="buttonType" value="Save" onclick="return validateFields()">SavePayment</button>
+                            <button type="submit" class="btn btn-warning" name="buttonType" value="DeletePaymentDetail" onclick="return validateFields()">DeletePaymentDetail</button>
+                            <button type="submit" class="btn btn-danger" name="buttonType" value="DeletePayment" onclick="return validateFields()">DeletePayment</button>
+
+                        </div>
+                        <div class="col-sm-2 col-md-2 col-lg-2"></div>
+                    </div>
+                </div>
             </div>
         </div>
+    </div>
+
+    <center>
+       
     </center>
 
 

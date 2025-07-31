@@ -3,7 +3,7 @@
 @{
     ViewData["Title"] = "RepledgerMaster";
     Layout = "~/Views/Shared/_ContentNavbarLayout.cshtml";
- 
+
 }
 
 
@@ -108,24 +108,23 @@
                     <div class="row gy-4">
                         <div class="col-sm-1 col-md-1 col-lg-1"></div>
                         <div class="col-sm-4 col-md-4 col-lg-4">
-
                             <div class="form-floating form-floating-outline mb-4">
                                 <input type="tel" maxlength="10" asp-for="RepledgerPhoneNumber1" value="@Model.RepledgerPhoneNumber1" id="RepledgerPhoneNumber1" class="form-control" placeholder="Mobile Number1" required pattern="\d{10}" title="Mobile Number should must contain 10 Digit" oninput="allowOnlyDigits(this)" />
                                 <label asp-for="RepledgerPhoneNumber1" class="control-label">Mobile Number1</label>
                                 <span id="RepledgerPhoneNumber1Error" class="text-danger"></span>
                             </div>
-
+                        </div>
+                        <div class="col-sm-4 col-md-4 col-lg-4">
                             <div class="form-floating form-floating-outline mb-4">
                                 <input asp-for="RepledgerName" id="RepledgerName" class="form-control" placeholder="Repledger Name" value="@Model.RepledgerName" pattern="^[A-Za-z\s]+$" title="Repledger Name should contain only letters and spaces" />
                                 <label asp-for="RepledgerName" class="control-label">Repledger Name</label>
                                 <span id="RepledgerNameError" class="text-danger"></span>
                             </div>
                         </div>
-                       
-                        <div class="col-sm-1 col-md-1 col-lg-1">
+                        <div class="col-sm-1 col-md-1 col-lg-2">
                             <button type="submit" style="width:95px; height:50px;" value="Create" asp-action="GetRepledger" class="btn btn-primaryellow" onclick="return validateGet()">Get</button>
-
                         </div>
+                        <div class="col-sm-1 col-md-1 col-lg-1"></div>
                     </div>
 
                     <br />
@@ -153,9 +152,7 @@
                                 <span id="RepledgerAddressError" class="text-danger"></span>
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
-                      
+
                         <div class="col-sm-4 col-md-4 col-lg-4">
                             <div class="form-floating form-floating-outline mb-4">
                                 <input asp-for="City" class="form-control" placeholder="City" value="@Model.City" pattern="^[A-Za-z\s]+$" title="City Name should contain only letters and spaces" />
@@ -163,6 +160,10 @@
                                 <span id="CityError" class="text-danger"></span>
                             </div>
                         </div>
+                    </div>
+                    <div class="row">
+
+                       
 
                         <div class="col-sm-4 col-md-4 col-lg-4">
                             <div class="form-floating form-floating-outline mb-4">
@@ -170,11 +171,7 @@
                                 <label asp-for="State" class="control-label"></label>
                                 <span id="StateError" class="text-danger"></span>
                             </div>
-                        </div>
-
-                    </div>
-
-                    <div class="row">
+                        </div>                 
                         <div class="col-sm-4 col-md-4 col-lg-4">
                             <div class="form-floating form-floating-outline mb-4">
                                 <input asp-for="Country" class="form-control" placeholder="Country" value="@Model.Country" pattern="^[A-Za-z\s]+$" title="Country Name should contain only letters and spaces" />
@@ -183,27 +180,23 @@
                             </div>
                         </div>
                         <div class="col-sm-4 col-md-4 col-lg-4">
-
-                            <div class="form-floating form-floating-outline mb-4">
+                                                        <div class="form-floating form-floating-outline mb-4">
                                 <input asp-for="Pincode" class="form-control" placeholder="Pincode" value="@Model.Pincode" maxlength="6" pattern="^\d{6}$" title="Pincode Number should be in correct format" oninput="allowOnlyDigits(this)" />
                                 <label asp-for="Pincode" class="control-label"></label>
                                 <span id="PincodeError" class="text-danger"></span>
                             </div>
                         </div>
-                       
-
-
-                    </div>
+                                            </div>
 
                     <div class="row gy-4" style="margin-top:30px">
-                        <div class="col-sm-5 col-md-5 col-lg-5"> </div>
+                        <div class="col-sm-4 col-md-4 col-lg-4"> </div>
                         <div class="col-sm-1 col-md-1 col-lg-1">
                             <button type="submit" id="save" value="save" asp-action="AddRepledger" class="btn btn-success" onclick="return validateSave()">Save</button>
                         </div>
                         <div class="col-sm-3 col-md-3 col-lg-3">
                             <button type="submit" value="Create" asp-action="DeleteRepledger" class="btn btn-danger" onclick="return validateDelete()">Delete</button>
                         </div>
-                        <div class="col-sm-3 col-md-3 col-lg-3"> </div>
+                        <div class="col-sm-4 col-md-4 col-lg-4"> </div>
                     </div>
                 </div>
 

@@ -50,7 +50,7 @@
                             <span asp-validation-for="RepledgeID" class="text-danger"></span>
                         </div>
                     </div>
-                  
+
                     <div class="col-sm-2 col-md-2 col-lg-2">
                         <button style="height:50px;" class="btn-primaryellow" onclick="getRepledgeInfo()">Get Repledge Info</button>
                     </div>
@@ -104,47 +104,54 @@
                 <h3 class="centered text-white" style="font-family: 'Lucida Bright'; margin-bottom: 20px; text-align: center;">Buyer Info</h3>
 
                 <div class="row gy-4">
-                    <div class="col-sm-1 col-md-1 col-lg-1"></div>
-                    <div class="col-sm-3 col-md-3 col-lg-3">
+                    <div class="col-sm-3 col-md-3 col-lg-3"></div>
+                    <div class="col-sm-6 col-md-6 col-lg-6">
 
                         <div class="form-floating form-floating-outline mb-3">
-                            <div class="col-sm-4 col-md-4 col-lg-4">
 
-                                @{
-                                    var CustomerID = ((IEnumerable<StellarBillingSystem_skj.Models.RepledgerModel>)ViewData["repledgerid"])
-                                    .Select(m => new SelectListItem
+                            @{
+                                var CustomerID = ((IEnumerable<StellarBillingSystem_skj.Models.RepledgerModel>)ViewData["repledgerid"])
+                                .Select(m => new SelectListItem
             {
                 Value = m.RepledgerID.ToString(), // Assuming ProductID is of type int
                 Text = $"{m.RepledgerPhoneNumber1}-{m.RepledgerName}"
             });
+                            }
+
+                            <label>Repleger Number</label>
+                            <input type="text" id="productDropdownInput" class="form-control" placeholder="Repleger Number" onkeyup="filterDropdown(event, 'productDropdownInput', 'productDropdown')" onclick="showDropdown('productDropdown')">
+                            <span class="text-danger"></span>
+
+                            <ul id="productDropdown" class="list-group mt-2"
+                                style="display: none; position: absolute; top: 100%; left: 0; width: 100%; max-height: 200px; overflow-y: auto; background-color: white; border: 1px solid #ddd; border-radius: .25rem; box-shadow: 0 0 .5rem rgba(0, 0, 0, .1); z-index: 1000; padding: 0; margin: 0; list-style-type: none;">
+                                @foreach (var item in CustomerID)
+                                {
+                                    <li class="list-group-item" data-value="@item.Value" onclick="selectDropdownItem('productDropdownInput', 'BuyerName', '@item.Text', '@item.Value')"
+                                        style="padding: .5rem 1rem; cursor: pointer; background-color: white; border: none; list-style-type: none;">
+                                        @item.Text
+                                    </li>
                                 }
-
-                                <label>Repleger Number</label>
-                                <input type="text" id="productDropdownInput" class="form-control" placeholder="Repleger Number" onkeyup="filterDropdown(event, 'productDropdownInput', 'productDropdown')" onclick="showDropdown('productDropdown')">
-                                <span class="text-danger"></span>
-
-                                <ul id="productDropdown" class="list-group mt-2"
-                                    style="display: none; position: absolute; top: 100%; left: 0; width: 100%; max-height: 200px; overflow-y: auto; background-color: white; border: 1px solid #ddd; border-radius: .25rem; box-shadow: 0 0 .5rem rgba(0, 0, 0, .1); z-index: 1000; padding: 0; margin: 0; list-style-type: none;">
-                                    @foreach (var item in CustomerID)
-                                    {
-                                        <li class="list-group-item" data-value="@item.Value" onclick="selectDropdownItem('productDropdownInput', 'BuyerName', '@item.Text', '@item.Value')"
-                                            style="padding: .5rem 1rem; cursor: pointer; background-color: white; border: none; list-style-type: none;">
-                                            @item.Text
-                                        </li>
-                                    }
-                                </ul>
+                            </ul>
 
 
-                                <input type="hidden" name="BuyerName" id="BuyerName"  />
-
-                            </div>
+                            <input type="hidden" name="BuyerName" id="BuyerName" />
 
                         </div>
+
                     </div>
-                       
-                    </div>
-                    <div class="col-sm-1 col-md-1 col-lg-1"></div>
+                    <div class="col-sm-3 col-md-3 col-lg-3"></div>
                 </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row" style="margin-top:30px">
+    <div class="col-md-12 col-lg-0"></div>
+    <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+        <div class="card">
+            <div class="card-body dividerblack">
+
                 <div class="row gy-4">
                     <div class="col-sm-1 col-md-1 col-lg-1"></div>
                     <div class="col-sm-3 col-md-3 col-lg-3">
@@ -166,618 +173,626 @@
                             <label for="Tenure">Tenure</label>
                         </div>
                     </div>
-               
-                <div class="col-sm-3 col-md-3 col-lg-3">
-                    <div class="form-floating form-floating-outline mb-3">
-                        <input type="date" class="form-control" name="CloseDate" id="CloseDate" placeholder="CloseDate" />
-                        <label for="CloseDate">CloseDate</label>
-                    </div>
                 </div>
-                <div class="col-sm-3 col-md-3 col-lg-3">
-                    <div class="form-floating form-floating-outline mb-3">
-                        <input type="LoanHolderName" class="form-control" name="LoanHolderName" id="LoanHolderName" placeholder="LoanHolderName" />
-                        <label for="LoanHolderName">LoanHolderName</label>
-                    </div>
-                </div>
-                <div class="col-sm-3 col-md-3 col-lg-3">
-                    <div class="form-floating form-floating-outline mb-3">
-                        <input type="date" class="form-control" name="RepledgeDate" id="RepledgeDate" placeholder="RepledgeDate" />
-                        <label for="RepledgeDate">RepledgeDate</label>
-                    </div>
-                </div>
-
                 <div class="col-sm-1 col-md-1 col-lg-1"></div>
-                </div>
-                <br/>
                 <div class="row gy-4">
-                    <div class="col-sm-4 col-md-4 col-lg-4"> </div>
-                    <div class="col-sm-2 col-md-2 col-lg-2">
+                    <div class="col-sm-1 col-md-1 col-lg-1"></div>
+                    <div class="col-sm-3 col-md-3 col-lg-3">
+                        <div class="form-floating form-floating-outline mb-3">
+                            <input type="date" class="form-control" name="CloseDate" id="CloseDate" placeholder="CloseDate" />
+                            <label for="CloseDate">CloseDate</label>
+                        </div>
+                    </div>
+                    <div class="col-sm-3 col-md-3 col-lg-3">
+                        <div class="form-floating form-floating-outline mb-3">
+                            <input type="LoanHolderName" class="form-control" name="LoanHolderName" id="LoanHolderName" placeholder="LoanHolderName" />
+                            <label for="LoanHolderName">LoanHolderName</label>
+                        </div>
+                    </div>
+                    <div class="col-sm-3 col-md-3 col-lg-3">
+                        <div class="form-floating form-floating-outline mb-3">
+                            <input type="date" class="form-control" name="RepledgeDate" id="RepledgeDate" placeholder="RepledgeDate" />
+                            <label for="RepledgeDate">RepledgeDate</label>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-1 col-md-1 col-lg-1"></div>
+                </div>
+                <br />
+
+                <div class="row gy-4">
+                    <div class="col-sm-1 col-md-1 col-lg-1"> </div>
+                    <div class="col-sm-3 col-md-3 col-lg-3">
                         <button class="btn btn-success" onclick="saveRepledge()">Save Repledge</button>
                     </div>
-                            <div class="col-sm-3 col-md-3 col-lg-3">
+                    <div class="col-sm-3 col-md-3 col-lg-3">
                         <button class="btn btn-danger" onclick="deleteRepledge()">Delete Repledge</button>
                     </div>
                     <div class="col-sm-3 col-md-3 col-lg-3">
-                        <button class="btn btn-danger" onclick="closeRepledge()">Close Repledge</button>
+                        <button class="btn btn-close" onclick="closeRepledge()">Close Repledge</button>
                     </div>
-                    <div class="col-sm-3 col-md-3 col-lg-3"> </div>
-                </div>
+                    <div class="col-sm-1 col-md-1 col-lg-1"> </div>
 
-                <!-- Overlay -->
-                <div id="popupOverlay" style="display: none; position: fixed; top: 0; left: 0;
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Overlay -->
+<div id="popupOverlay" style="display: none; position: fixed; top: 0; left: 0;
      width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.3);
      z-index: 999;" onclick="handleOutsideClick(event)">
 
-                    <!-- Popup Message Box -->
-                    <div id="popupMessage" style="position: fixed; top: 50%; left: 50%;
+    <!-- Popup Message Box -->
+    <div id="popupMessage" style="position: fixed; top: 50%; left: 50%;
          transform: translate(-50%, -50%); background: white;
          padding: 30px; border: 1px solid black; border-radius: 10px;
          z-index: 1000;" onclick="event.stopPropagation()">
 
-                        <span id="popupMessageText"></span>
-                        <div class="mt-3 text-center">
-                            <button onclick="closePopup()" class="btn btn-outline-dark">OK</button>
-                        </div>
-                    </div>
-                </div>
+        <span id="popupMessageText"></span>
+        <div class="mt-3 text-center">
+            <button onclick="closePopup()" class="btn btn-outline-dark">OK</button>
+        </div>
+    </div>
+</div>
             </div>
 
 
-          
-            <script>
 
-                function getBasePath() {
-                    // Only apply when NOT on localhost
-                    if (window.location.hostname !== "localhost") {
-                        var segments = window.location.pathname.split('/');
-                        if (segments.length > 1 && segments[1]) {
-                            return '/' + segments[1];
-                        }
-                    }
-                    return '';
-                }
+<script>
 
-                function getUrl(relativePath) {
-                    return getBasePath() + relativePath;
-                }
+    function getBasePath() {
+        // Only apply when NOT on localhost
+        if (window.location.hostname !== "localhost") {
+            var segments = window.location.pathname.split('/');
+            if (segments.length > 1 && segments[1]) {
+                return '/' + segments[1];
+            }
+        }
+        return '';
+    }
 
-                let selectedArticles = {}; // { billID: Set(articleID) }
-                let articleNamesMap = {};  // { articleID: articleName }
-                let lastLoadedRepledgeID = null; // track previously loaded RepledgeID
-                let lastRepledgeUsedForArticles = null;
-                let shouldReloadOnClose = false;
-                let repledgeIsClosed = false;
-               let selectedArticleIDs = [];
+    function getUrl(relativePath) {
+        return getBasePath() + relativePath;
+    }
 
-
-                function showPopup(message, reload = false) {
-                    shouldReloadOnClose = reload;
-                    document.getElementById("popupMessageText").textContent = message;
-                    document.getElementById("popupOverlay").style.display = "block";
-                }
-
-                function closePopup() {
-                    document.getElementById("popupOverlay").style.display = "none";
-                    if (shouldReloadOnClose) {
-                        location.reload();
-                    }
-                }
-                function handleOutsideClick(event) {
-                    closePopup(); // closes if user clicks on overlay (outside popup)
-                }
+    let selectedArticles = {}; // { billID: Set(articleID) }
+    let articleNamesMap = {};  // { articleID: articleName }
+    let lastLoadedRepledgeID = null; // track previously loaded RepledgeID
+    let lastRepledgeUsedForArticles = null;
+    let shouldReloadOnClose = false;
+    let repledgeIsClosed = false;
+    let selectedArticleIDs = [];
 
 
-                function getBillArticles() {
-                    const billID = document.getElementById('BillID').value.trim();
-                    const repledgeID = document.getElementById("RepledgeID").value.trim();
+    function showPopup(message, reload = false) {
+        shouldReloadOnClose = reload;
+        document.getElementById("popupMessageText").textContent = message;
+        document.getElementById("popupOverlay").style.display = "block";
+    }
 
-                    if (!billID) {
-                        showPopup("Please enter a Bill ID.", false);
-                        return;
-                    }
-
-                    // ✅ Only initialize if billID not yet present
-                    if (!selectedArticles[billID]) {
-                        selectedArticles[billID] = new Set();
-                    }
-
-                    fetch(getUrl('/RepledgeMaster/GetArticlesAjax'), {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ BillID: billID })
-                    })
-                        .then(res => res.json())
-                        .then(data => {
-                            if (data.success === false) {
-                                showPopup(data.message || "Bill data not found.", true);
-                                // reload after 1.5 seconds
-                                return;
-                            }
-
-                            const articles = data.articles || [];
-                            if (articles.length > 0) {
-                                renderAvailableArticles(articles, billID, false); // ✅ shows new bill articles only
-                            } else {
-                                document.getElementById("articleList").innerHTML = "<em>No articles loaded</em>";
-                            }
-
-                            renderSelectedArticles(); // ✅ keeps all previous selected articles untouched
-                        })
-                        .catch(error => {
-                            console.error("Error loading bill articles:", error);
-                            showPopup("Error loading bill articles.");
-                        });
-                }
+    function closePopup() {
+        document.getElementById("popupOverlay").style.display = "none";
+        if (shouldReloadOnClose) {
+            location.reload();
+        }
+    }
+    function handleOutsideClick(event) {
+        closePopup(); // closes if user clicks on overlay (outside popup)
+    }
 
 
+    function getBillArticles() {
+        const billID = document.getElementById('BillID').value.trim();
+        const repledgeID = document.getElementById("RepledgeID").value.trim();
 
-                function getRepledgeInfo() {
-                    const repledgeID = document.getElementById('RepledgeID').value.trim();
+        if (!billID) {
+            showPopup("Please enter a Bill ID.", false);
+            return;
+        }
 
-                    if (!repledgeID) {
-                        showPopup("Please enter a Repledge ID.", false);
-                        return;
-                    }
+        // ✅ Only initialize if billID not yet present
+        if (!selectedArticles[billID]) {
+            selectedArticles[billID] = new Set();
+        }
 
-                    // ✅ Always clear article list when fetching repledge info
-                    document.getElementById("articleList").innerHTML = "<em>No articles loaded</em>";
-
-                    // 🟡 If repledge is new → full reset
-                    if (repledgeID !== lastLoadedRepledgeID) {
-                        selectedArticles = {};
-                        articleNamesMap = {};
-                        lastLoadedRepledgeID = repledgeID;
-
-                        document.getElementById("selected-articles-box").innerHTML = "<em>No articles selected</em>";
-                        document.getElementById("BuyerName").value = "";
-                        document.getElementById("TotalAmount").value = "";
-                        document.getElementById("Interest").value = "";
-                        document.getElementById("Tenure").value = "";
-                    }
-
-                    fetch(getUrl('/RepledgeMaster/GetArticlesAjax'), {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ RepledgeID: repledgeID }) // ✅ Only RepledgeID
-                    })
-                        .then(res => res.json())
-                        .then(data => {
-                            if (data.success === false) {
-                                showPopup(data.message || "Repledge data not found.", true);
-
-                                return;
-                            }
-
-                            // ✅ Load all selected articles from DB
-                            if (Array.isArray(data.selectedArticleIDs)) {
-                                data.selectedArticleIDs.forEach(item => {
-                                    const bID = item.billID;
-                                    const aID = item.articleID;
-                                    const aName = item.articleName;
-
-                                    if (!selectedArticles[bID]) selectedArticles[bID] = new Set();
-                                    selectedArticles[bID].add(aID);
-                                    articleNamesMap[aID] = aName;
-                                });
-                            }
-
-                            renderSelectedArticles();
-
-                            const buyer = data.buyerInfo;
-
-                        repledgeIsClosed = buyer?.isClosed === true;
-
-                        document.getElementById("productDropdownInput").value = buyer?.buyerName || "";
-                            document.getElementById("BuyerName").value = buyer?.buyerName || "";
-                            document.getElementById("TotalAmount").value = buyer?.totalAmount || "";
-                            document.getElementById("Interest").value = buyer?.interest || "";
-                            document.getElementById("Tenure").value = buyer?.tenure || "";
-                        document.getElementById("LoanHolderName").value = buyer?.loanHolderName || "";
-                        document.getElementById("RepledgeDate").value = buyer?.repledgeDate?.split("T")[0] || ""; // optional: remove time part
-                        document.getElementById("CloseDate").value = buyer?.closeDate?.split("T")[0] || "";
-
-
-                            // ✅ Set visible buyer name (from dropdown) by matching buyer ID
-                                const buyerID = buyer?.buyerName || ""; // This is actually the ID
-                                const dropdownItems = document.querySelectorAll("#productDropdown li");
-
-                                dropdownItems.forEach(item => {
-                                    if (item.getAttribute("data-value") === buyerID) {
-                                        document.getElementById("productDropdownInput").value = item.textContent.trim();
-                                    }
-                                });
-
-                                                        })
-                                                        .catch(error => {
-                                                            console.error("Error loading repledge info:", error);
-                                                            showPopup("Error loading repledge information.");
-                                                        });
-                                                }
-
-
-
-
-            function renderAvailableArticles(articles, billID, markSelected = true) {
-                const box = document.getElementById("articleList");
-                box.innerHTML = "";
-
-                if (!articles || articles.length === 0) {
-                    box.innerHTML = "<em>No articles found</em>";
+        fetch(getUrl('/RepledgeMaster/GetArticlesAjax'), {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ BillID: billID })
+        })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success === false) {
+                    showPopup(data.message || "Bill data not found.", true);
+                    // reload after 1.5 seconds
                     return;
                 }
 
-                selectedArticles[billID] = selectedArticles[billID] || new Set();
-
-                articles.forEach(article => {
-                    const aID = article.articleID;
-                    const aName = article.articleName;
-                    articleNamesMap[aID] = aName;
-
-                    const div = document.createElement("div");
-                    const checkbox = document.createElement("input");
-                    checkbox.type = "checkbox";
-                    checkbox.value = aID;
-                    checkbox.dataset.billid = billID;
-
-                    // ✅ Mark checkbox as checked if it’s already selected
-                    checkbox.checked = markSelected && selectedArticles[billID].has(aID);
-
-                    // ✅ If Repledge is closed, disable checkbox so user can’t select anything
-                    if (repledgeIsClosed) {
-                        checkbox.disabled = true;
-                        checkbox.title = "Cannot select articles. Repledge is already closed.";
-                    }
-
-                    // ✅ Only allow changing selection if not closed
-                    checkbox.onchange = () => {
-                        if (repledgeIsClosed) {
-                            checkbox.checked = false;
-                            showPopup("Cannot select articles. Repledge is closed.");
-                            return;
-                        }
-                        updateSelectedArticles(checkbox);
-                    };
-
-                    div.appendChild(checkbox);
-                    div.append(" " + aName);
-                    box.appendChild(div);
-                });
-            }
-
-
-
-
-
-                function renderSelectedArticles() {
-                    const box = document.getElementById("selected-articles-box");
-                    box.innerHTML = "";
-
-                    let hasSelection = false;
-
-                    for (const billID in selectedArticles) {
-                        if (!selectedArticles[billID] || selectedArticles[billID].size === 0) continue;
-
-                        selectedArticles[billID].forEach(articleID => {
-                            hasSelection = true;
-                            const articleName = articleNamesMap[articleID] || "(Unknown)";
-                            const div = document.createElement("div");
-                            div.textContent = ` ${billID} - ${articleName}`;
-                            box.appendChild(div);
-                        });
-                    }
-
-                    if (!hasSelection) {
-                        box.innerHTML = "<em>No articles selected</em>";
-                    }
+                const articles = data.articles || [];
+                if (articles.length > 0) {
+                    renderAvailableArticles(articles, billID, false); // ✅ shows new bill articles only
+                } else {
+                    document.getElementById("articleList").innerHTML = "<em>No articles loaded</em>";
                 }
 
-                function updateSelectedArticles(checkbox) {
-                    const billID = checkbox.dataset.billid;
-                    const articleID = checkbox.value;
-
-                    selectedArticles[billID] = selectedArticles[billID] || new Set();
-
-                    if (checkbox.checked) {
-                        selectedArticles[billID].add(articleID);
-                    } else {
-                        selectedArticles[billID].delete(articleID);
-                    }
-
-                    renderSelectedArticles();
-                }
-
-                function saveRepledge() {
-                    const billID = document.getElementById("BillID").value.trim();
-                    const repledgeID = document.getElementById("RepledgeID").value.trim();
-                    const buyerName = document.getElementById("BuyerName").value.trim();
-                    const totalAmount = document.getElementById("TotalAmount").value.trim();
-                    const interest = document.getElementById("Interest").value.trim();
-                    const tenure = document.getElementById("Tenure").value.trim();
-                    const loanHolderName = document.getElementById("LoanHolderName").value.trim();
-                    const repledgeDate = document.getElementById("RepledgeDate").value.trim();
-
-                    if (!repledgeID || !buyerName || !totalAmount || !interest || !tenure || !loanHolderName || !repledgeDate) {
-                        showPopup("Please fill in all the fields.");
-                        return;
-                    }
-
-                    const articlesToSave = [];
-
-                    for (const billID in selectedArticles) {
-                        selectedArticles[billID].forEach(articleID => {
-                            articlesToSave.push({ billID, articleID });
-                        });
-                    }
-
-                    if (articlesToSave.length === 0) {
-                        showPopup("No articles selected to save.");
-                        return;
-                    }
-
-                    const payload = {
-                        billID,
-                        repledgeID,
-                        buyerName,
-                        totalAmount,
-                        interest,
-                        tenure,
-                    loanHolderName,
-                    repledgeDate,
-                        articles: articlesToSave
-                    };
-
-                    fetch(getUrl("/RepledgeMaster/SaveRepledgeAjax"), {
-                        method: "POST",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify(payload)
-                    })
-                        .then(res => res.ok ? res.json() : res.text().then(text => { throw new Error(text); }))
-                        .then(data => {
-                            showPopup(data.message || "Repledge saved successfully.", true);
-
-                        })
-                        .catch(err => {
-                            console.error("Save failed:", err);
-                            showPopup("Error saving repledge.");
-                        });
-                }
-
-                function deleteRepledge() {
-                    const repledgeID = document.getElementById("RepledgeID").value.trim();
-
-                    if (!repledgeID) {
-                        showPopup("Please enter a Repledge ID to delete.");
-                        return;
-                    }
-
-                    fetch(getUrl("/RepledgeMaster/GetDeletAjax"), {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json"
-                        },
-                        body: JSON.stringify({
-                            RepledgeID: repledgeID
-                        })
-                    })
-                        .then(response => response.ok ? response.text() : Promise.reject("Server error"))
-                        .then(data => {
-                            showPopup("Repledge deleted successfully.", true);
-
-                        })
-                        .catch(error => {
-                            console.error("Delete failed:", error);
-                            showPopup("Failed to delete repledge.");
-                        });
-                }
-
-                function closeRepledge() {
-                    const repledgeID = document.getElementById("RepledgeID").value.trim();
-                const closeDate = document.getElementById("CloseDate").value.trim();
-
-
-
-                    if (!repledgeID) {
-                        showPopup("Please enter a Repledge ID to Close.");
-                        return;
-                    }
-
-                    if (!closeDate) {
-                                showPopup("Please select a Close Date.");
-                                return;
-                            }
-
-                    fetch(getUrl("/RepledgeMaster/CloseRepledgeAjax"), {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json"
-                        },
-                        body: JSON.stringify({
-                            RepledgeID: repledgeID,
-                            CloseDate: closeDate
-                        })
-                    })
-                        .then(response => response.ok ? response.text() : Promise.reject("Server error"))
-                        .then(data => {
-                            showPopup("Repledge Closed successfully.", true);
-
-                        })
-                        .catch(error => {
-                            console.error("Close failed:", error);
-                            showPopup("Failed to Close");
-                        });
-                }
-
-            </script>
-
-        <script>
-            let suppressInputEvent = false;
-
-            function filterDropdown(event, inputId, dropdownId) {
-                if (suppressInputEvent) return; // Prevent filtering if input event is suppressed
-
-                const input = document.getElementById(inputId);
-                const dropdown = document.getElementById(dropdownId);
-                const filter = input.value.toLowerCase();
-                const items = dropdown.querySelectorAll('li');
-
-                items.forEach(item => {
-                    const text = item.textContent.toLowerCase();
-                    item.style.display = text.includes(filter) ? '' : 'none';
-                });
-
-                if (filter) {
-                    dropdown.style.display = 'block'; // Show dropdown when filtering
-                }
-            }
-
-            function showDropdown(dropdownId) {
-                const dropdown = document.getElementById(dropdownId);
-                dropdown.style.display = 'block';
-            }
-
-            function selectDropdownItem(inputId, hiddenId, text, value) {
-                const input = document.getElementById(inputId);
-                const hidden = document.getElementById(hiddenId);
-                const dropdown = document.getElementById('productDropdown');
-
-                // Trim whitespace from the selected text
-                const trimmedText = text.trim();
-
-                // Set the selected value in the input and hidden input
-                input.value = trimmedText;
-                hidden.value = value;
-
-                // Hide the dropdown after selection
-                dropdown.style.display = 'none';
-
-                // Set the flag to suppress the input event momentarily
-                suppressInputEvent = true;
-
-                // Remove suppression after a short delay to allow normal input behavior again
-                setTimeout(() => {
-                    suppressInputEvent = false;
-                }, 200);
-            }
-
-            document.addEventListener('DOMContentLoaded', () => {
-                const input = document.getElementById('productDropdownInput');
-                const dropdown = document.getElementById('productDropdown');
-
-                let highlightedIndex = -1;
-
-                function getVisibleItems() {
-                    return Array.from(dropdown.querySelectorAll('li')).filter(item => item.style.display !== 'none');
-                }
-
-                input.addEventListener('input', (event) => {
-                    filterDropdown(event, 'productDropdownInput', 'productDropdown');
-                    highlightedIndex = -1; // Reset highlight when input changes
-                });
-
-                input.addEventListener('keydown', (event) => {
-                    const visibleItems = getVisibleItems();
-
-                    switch (event.key) {
-                        case 'ArrowDown':
-                            if (highlightedIndex < visibleItems.length - 1) {
-                                highlightedIndex++;
-                                updateHighlight(visibleItems);
-                                event.preventDefault(); // Prevent default behavior
-                            }
-                            break;
-                        case 'ArrowUp':
-                            if (highlightedIndex > 0) {
-                                highlightedIndex--;
-                                updateHighlight(visibleItems);
-                                event.preventDefault(); // Prevent default behavior
-                            }
-                            break;
-                        case 'Enter':
-                            if (highlightedIndex >= 0) {
-                                const item = visibleItems[highlightedIndex];
-                                selectDropdownItem('productDropdownInput', 'BuyerName', item.textContent, item.getAttribute('data-value'));
-                                highlightedIndex = -1;
-                                event.preventDefault(); // Prevent default behavior
-                            }
-                            break;
-                        case 'Escape':
-                            dropdown.style.display = 'none'; // Close dropdown on escape
-                            highlightedIndex = -1;
-                            break;
-                    }
-                });
-
-                function updateHighlight(visibleItems) {
-                    visibleItems.forEach((item, index) => {
-                        item.style.backgroundColor = (index === highlightedIndex) ? '#000000' : 'white';
-                        item.style.color = (index === highlightedIndex) ? 'white' : 'black'; // Ensure text color contrasts with background
-                    });
-                    visibleItems[highlightedIndex]?.scrollIntoView({ block: 'nearest' });
-                }
-
-                // Click event to close dropdown when clicking outside
-                document.addEventListener('click', (event) => {
-                    const target = event.target;
-                    if (!dropdown.contains(target) && target !== input) {
-                        dropdown.style.display = 'none';
-                    }
-                });
+                renderSelectedArticles(); // ✅ keeps all previous selected articles untouched
+            })
+            .catch(error => {
+                console.error("Error loading bill articles:", error);
+                showPopup("Error loading bill articles.");
             });
-        </script>
+    }
 
 
 
-           @*  <script>
-                function allowOnlyDigits(input) {
-                    input.value = input.value.replace(/[^0-9]/g, '');
+    function getRepledgeInfo() {
+        const repledgeID = document.getElementById('RepledgeID').value.trim();
+
+        if (!repledgeID) {
+            showPopup("Please enter a Repledge ID.", false);
+            return;
+        }
+
+        // ✅ Always clear article list when fetching repledge info
+        document.getElementById("articleList").innerHTML = "<em>No articles loaded</em>";
+
+        // 🟡 If repledge is new → full reset
+        if (repledgeID !== lastLoadedRepledgeID) {
+            selectedArticles = {};
+            articleNamesMap = {};
+            lastLoadedRepledgeID = repledgeID;
+
+            document.getElementById("selected-articles-box").innerHTML = "<em>No articles selected</em>";
+            document.getElementById("BuyerName").value = "";
+            document.getElementById("TotalAmount").value = "";
+            document.getElementById("Interest").value = "";
+            document.getElementById("Tenure").value = "";
+        }
+
+        fetch(getUrl('/RepledgeMaster/GetArticlesAjax'), {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ RepledgeID: repledgeID }) // ✅ Only RepledgeID
+        })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success === false) {
+                    showPopup(data.message || "Repledge data not found.", true);
+
+                    return;
                 }
+
+                // ✅ Load all selected articles from DB
+                if (Array.isArray(data.selectedArticleIDs)) {
+                    data.selectedArticleIDs.forEach(item => {
+                        const bID = item.billID;
+                        const aID = item.articleID;
+                        const aName = item.articleName;
+
+                        if (!selectedArticles[bID]) selectedArticles[bID] = new Set();
+                        selectedArticles[bID].add(aID);
+                        articleNamesMap[aID] = aName;
+                    });
+                }
+
+                renderSelectedArticles();
+
+                const buyer = data.buyerInfo;
+
+                repledgeIsClosed = buyer?.isClosed === true;
+
+                document.getElementById("productDropdownInput").value = buyer?.buyerName || "";
+                document.getElementById("BuyerName").value = buyer?.buyerName || "";
+                document.getElementById("TotalAmount").value = buyer?.totalAmount || "";
+                document.getElementById("Interest").value = buyer?.interest || "";
+                document.getElementById("Tenure").value = buyer?.tenure || "";
+                document.getElementById("LoanHolderName").value = buyer?.loanHolderName || "";
+                document.getElementById("RepledgeDate").value = buyer?.repledgeDate?.split("T")[0] || ""; // optional: remove time part
+                document.getElementById("CloseDate").value = buyer?.closeDate?.split("T")[0] || "";
+
+
+                // ✅ Set visible buyer name (from dropdown) by matching buyer ID
+                const buyerID = buyer?.buyerName || ""; // This is actually the ID
+                const dropdownItems = document.querySelectorAll("#productDropdown li");
+
+                dropdownItems.forEach(item => {
+                    if (item.getAttribute("data-value") === buyerID) {
+                        document.getElementById("productDropdownInput").value = item.textContent.trim();
+                    }
+                });
+
+            })
+            .catch(error => {
+                console.error("Error loading repledge info:", error);
+                showPopup("Error loading repledge information.");
+            });
+    }
+
+
+
+
+    function renderAvailableArticles(articles, billID, markSelected = true) {
+        const box = document.getElementById("articleList");
+        box.innerHTML = "";
+
+        if (!articles || articles.length === 0) {
+            box.innerHTML = "<em>No articles found</em>";
+            return;
+        }
+
+        selectedArticles[billID] = selectedArticles[billID] || new Set();
+
+        articles.forEach(article => {
+            const aID = article.articleID;
+            const aName = article.articleName;
+            articleNamesMap[aID] = aName;
+
+            const div = document.createElement("div");
+            const checkbox = document.createElement("input");
+            checkbox.type = "checkbox";
+            checkbox.value = aID;
+            checkbox.dataset.billid = billID;
+
+            // ✅ Mark checkbox as checked if it’s already selected
+            checkbox.checked = markSelected && selectedArticles[billID].has(aID);
+
+            // ✅ If Repledge is closed, disable checkbox so user can’t select anything
+            if (repledgeIsClosed) {
+                checkbox.disabled = true;
+                checkbox.title = "Cannot select articles. Repledge is already closed.";
+            }
+
+            // ✅ Only allow changing selection if not closed
+            checkbox.onchange = () => {
+                if (repledgeIsClosed) {
+                    checkbox.checked = false;
+                    showPopup("Cannot select articles. Repledge is closed.");
+                    return;
+                }
+                updateSelectedArticles(checkbox);
+            };
+
+            div.appendChild(checkbox);
+            div.append(" " + aName);
+            box.appendChild(div);
+        });
+    }
+
+
+
+
+
+    function renderSelectedArticles() {
+        const box = document.getElementById("selected-articles-box");
+        box.innerHTML = "";
+
+        let hasSelection = false;
+
+        for (const billID in selectedArticles) {
+            if (!selectedArticles[billID] || selectedArticles[billID].size === 0) continue;
+
+            selectedArticles[billID].forEach(articleID => {
+                hasSelection = true;
+                const articleName = articleNamesMap[articleID] || "(Unknown)";
+                const div = document.createElement("div");
+                div.textContent = ` ${billID} - ${articleName}`;
+                box.appendChild(div);
+            });
+        }
+
+        if (!hasSelection) {
+            box.innerHTML = "<em>No articles selected</em>";
+        }
+    }
+
+    function updateSelectedArticles(checkbox) {
+        const billID = checkbox.dataset.billid;
+        const articleID = checkbox.value;
+
+        selectedArticles[billID] = selectedArticles[billID] || new Set();
+
+        if (checkbox.checked) {
+            selectedArticles[billID].add(articleID);
+        } else {
+            selectedArticles[billID].delete(articleID);
+        }
+
+        renderSelectedArticles();
+    }
+
+    function saveRepledge() {
+        const billID = document.getElementById("BillID").value.trim();
+        const repledgeID = document.getElementById("RepledgeID").value.trim();
+        const buyerName = document.getElementById("BuyerName").value.trim();
+        const totalAmount = document.getElementById("TotalAmount").value.trim();
+        const interest = document.getElementById("Interest").value.trim();
+        const tenure = document.getElementById("Tenure").value.trim();
+        const loanHolderName = document.getElementById("LoanHolderName").value.trim();
+        const repledgeDate = document.getElementById("RepledgeDate").value.trim();
+
+        if (!repledgeID || !buyerName || !totalAmount || !interest || !tenure || !loanHolderName || !repledgeDate) {
+            showPopup("Please fill in all the fields.");
+            return;
+        }
+
+        const articlesToSave = [];
+
+        for (const billID in selectedArticles) {
+            selectedArticles[billID].forEach(articleID => {
+                articlesToSave.push({ billID, articleID });
+            });
+        }
+
+        if (articlesToSave.length === 0) {
+            showPopup("No articles selected to save.");
+            return;
+        }
+
+        const payload = {
+            billID,
+            repledgeID,
+            buyerName,
+            totalAmount,
+            interest,
+            tenure,
+            loanHolderName,
+            repledgeDate,
+            articles: articlesToSave
+        };
+
+        fetch(getUrl("/RepledgeMaster/SaveRepledgeAjax"), {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload)
+        })
+            .then(res => res.ok ? res.json() : res.text().then(text => { throw new Error(text); }))
+            .then(data => {
+                showPopup(data.message || "Repledge saved successfully.", true);
+
+            })
+            .catch(err => {
+                console.error("Save failed:", err);
+                showPopup("Error saving repledge.");
+            });
+    }
+
+    function deleteRepledge() {
+        const repledgeID = document.getElementById("RepledgeID").value.trim();
+
+        if (!repledgeID) {
+            showPopup("Please enter a Repledge ID to delete.");
+            return;
+        }
+
+        fetch(getUrl("/RepledgeMaster/GetDeletAjax"), {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                RepledgeID: repledgeID
+            })
+        })
+            .then(response => response.ok ? response.text() : Promise.reject("Server error"))
+            .then(data => {
+                showPopup("Repledge deleted successfully.", true);
+
+            })
+            .catch(error => {
+                console.error("Delete failed:", error);
+                showPopup("Failed to delete repledge.");
+            });
+    }
+
+    function closeRepledge() {
+        const repledgeID = document.getElementById("RepledgeID").value.trim();
+        const closeDate = document.getElementById("CloseDate").value.trim();
+
+
+
+        if (!repledgeID) {
+            showPopup("Please enter a Repledge ID to Close.");
+            return;
+        }
+
+        if (!closeDate) {
+            showPopup("Please select a Close Date.");
+            return;
+        }
+
+        fetch(getUrl("/RepledgeMaster/CloseRepledgeAjax"), {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                RepledgeID: repledgeID,
+                CloseDate: closeDate
+            })
+        })
+            .then(response => response.ok ? response.text() : Promise.reject("Server error"))
+            .then(data => {
+                showPopup("Repledge Closed successfully.", true);
+
+            })
+            .catch(error => {
+                console.error("Close failed:", error);
+                showPopup("Failed to Close");
+            });
+    }
+
+</script>
+
+<script>
+    let suppressInputEvent = false;
+
+    function filterDropdown(event, inputId, dropdownId) {
+        if (suppressInputEvent) return; // Prevent filtering if input event is suppressed
+
+        const input = document.getElementById(inputId);
+        const dropdown = document.getElementById(dropdownId);
+        const filter = input.value.toLowerCase();
+        const items = dropdown.querySelectorAll('li');
+
+        items.forEach(item => {
+            const text = item.textContent.toLowerCase();
+            item.style.display = text.includes(filter) ? '' : 'none';
+        });
+
+        if (filter) {
+            dropdown.style.display = 'block'; // Show dropdown when filtering
+        }
+    }
+
+    function showDropdown(dropdownId) {
+        const dropdown = document.getElementById(dropdownId);
+        dropdown.style.display = 'block';
+    }
+
+    function selectDropdownItem(inputId, hiddenId, text, value) {
+        const input = document.getElementById(inputId);
+        const hidden = document.getElementById(hiddenId);
+        const dropdown = document.getElementById('productDropdown');
+
+        // Trim whitespace from the selected text
+        const trimmedText = text.trim();
+
+        // Set the selected value in the input and hidden input
+        input.value = trimmedText;
+        hidden.value = value;
+
+        // Hide the dropdown after selection
+        dropdown.style.display = 'none';
+
+        // Set the flag to suppress the input event momentarily
+        suppressInputEvent = true;
+
+        // Remove suppression after a short delay to allow normal input behavior again
+        setTimeout(() => {
+            suppressInputEvent = false;
+        }, 200);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const input = document.getElementById('productDropdownInput');
+        const dropdown = document.getElementById('productDropdown');
+
+        let highlightedIndex = -1;
+
+        function getVisibleItems() {
+            return Array.from(dropdown.querySelectorAll('li')).filter(item => item.style.display !== 'none');
+        }
+
+        input.addEventListener('input', (event) => {
+            filterDropdown(event, 'productDropdownInput', 'productDropdown');
+            highlightedIndex = -1; // Reset highlight when input changes
+        });
+
+        input.addEventListener('keydown', (event) => {
+            const visibleItems = getVisibleItems();
+
+            switch (event.key) {
+                case 'ArrowDown':
+                    if (highlightedIndex < visibleItems.length - 1) {
+                        highlightedIndex++;
+                        updateHighlight(visibleItems);
+                        event.preventDefault(); // Prevent default behavior
+                    }
+                    break;
+                case 'ArrowUp':
+                    if (highlightedIndex > 0) {
+                        highlightedIndex--;
+                        updateHighlight(visibleItems);
+                        event.preventDefault(); // Prevent default behavior
+                    }
+                    break;
+                case 'Enter':
+                    if (highlightedIndex >= 0) {
+                        const item = visibleItems[highlightedIndex];
+                        selectDropdownItem('productDropdownInput', 'BuyerName', item.textContent, item.getAttribute('data-value'));
+                        highlightedIndex = -1;
+                        event.preventDefault(); // Prevent default behavior
+                    }
+                    break;
+                case 'Escape':
+                    dropdown.style.display = 'none'; // Close dropdown on escape
+                    highlightedIndex = -1;
+                    break;
+            }
+        });
+
+        function updateHighlight(visibleItems) {
+            visibleItems.forEach((item, index) => {
+                item.style.backgroundColor = (index === highlightedIndex) ? '#000000' : 'white';
+                item.style.color = (index === highlightedIndex) ? 'white' : 'black'; // Ensure text color contrasts with background
+            });
+            visibleItems[highlightedIndex]?.scrollIntoView({ block: 'nearest' });
+        }
+
+        // Click event to close dropdown when clicking outside
+        document.addEventListener('click', (event) => {
+            const target = event.target;
+            if (!dropdown.contains(target) && target !== input) {
+                dropdown.style.display = 'none';
+            }
+        });
+    });
+</script>
+
+
+
+@*  <script>
+            function allowOnlyDigits(input) {
+            input.value = input.value.replace(/[^0-9]/g, '');
+            }
             </script>
 
             <script>
-                const moneyInput = document.getElementById('TotalAmount');
-                const moneyError = document.getElementById('TotalAmountError');
+            const moneyInput = document.getElementById('TotalAmount');
+            const moneyError = document.getElementById('TotalAmountError');
 
-                // Function to format number in Indian format (e.g., 1,23,456.78)
-                function formatToIndianCurrency(value) {
-                    // Split the integer and decimal parts
-                    let parts = value.split('.');
-                    let integerPart = parts[0];
+            // Function to format number in Indian format (e.g., 1,23,456.78)
+            function formatToIndianCurrency(value) {
+            // Split the integer and decimal parts
+            let parts = value.split('.');
+            let integerPart = parts[0];
 
-                    // Apply Indian numbering system formatting for the integer part
-                    let lastThree = integerPart.substring(integerPart.length - 3);
-                    let otherNumbers = integerPart.substring(0, integerPart.length - 3);
+            // Apply Indian numbering system formatting for the integer part
+            let lastThree = integerPart.substring(integerPart.length - 3);
+            let otherNumbers = integerPart.substring(0, integerPart.length - 3);
 
-                    if (otherNumbers !== '') {
-                        lastThree = ',' + lastThree;
-                    }
+            if (otherNumbers !== '') {
+            lastThree = ',' + lastThree;
+            }
 
-                    let formattedInteger = otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ',') + lastThree;
+            let formattedInteger = otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ',') + lastThree;
 
-                    // Return formatted number with decimal part (if exists)
-                    return parts.length > 1 ? formattedInteger + '.' + parts[1].substring(0, 2) : formattedInteger;
-                }
+            // Return formatted number with decimal part (if exists)
+            return parts.length > 1 ? formattedInteger + '.' + parts[1].substring(0, 2) : formattedInteger;
+            }
 
-                moneyInput.addEventListener('input', function (e) {
-                    // Remove any characters that are not digits or periods
-                    let value = this.value.replace(/[^0-9.]/g, '');
+            moneyInput.addEventListener('input', function (e) {
+            // Remove any characters that are not digits or periods
+            let value = this.value.replace(/[^0-9.]/g, '');
 
-                    // Format the value to Indian currency format
-                    this.value = formatToIndianCurrency(value);
+            // Format the value to Indian currency format
+            this.value = formatToIndianCurrency(value);
 
-                    // Check if the format is valid (integer part only or with 1-2 decimal places)
-                    const indianMoneyFormat = /^\d{1,3}(,\d{2})*(\.\d{0,2})?$/;
+            // Check if the format is valid (integer part only or with 1-2 decimal places)
+            const indianMoneyFormat = /^\d{1,3}(,\d{2})*(\.\d{0,2})?$/;
 
-                    // Show or hide the error message
-                    if (!indianMoneyFormat.test(this.value)) {
-                        moneyError.style.display = 'inline';
-                    } else {
-                        moneyError.style.display = 'none';
-                    }
-                });
+            // Show or hide the error message
+            if (!indianMoneyFormat.test(this.value)) {
+            moneyError.style.display = 'inline';
+            } else {
+            moneyError.style.display = 'none';
+            }
+            });
 
 
             </script>
 
 
 
- *@
+            *@
