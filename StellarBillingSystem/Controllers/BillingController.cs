@@ -258,8 +258,6 @@ namespace StellarBillingSystem_skj.Controllers
                 //remove article
                 var articleIds = getbilldetails.Select(x => x.ArticleID).Distinct().ToList();
 
-              
-
                 // 1. Mark master and details as deleted
                 getbillmaster.IsDelete = true;
 
@@ -277,22 +275,18 @@ namespace StellarBillingSystem_skj.Controllers
 
                 }
 
-
-
                 // 3. Remove images
                 var checkimage = _billingsoftware.Shbillimagemodelskj
                     .Where(x => x.BillID == billId)
                     .ToList();
 
-                foreach (var image in checkimage)
-                {
-                    var serverPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", image.ImagePath.TrimStart('/'));
-                    if (System.IO.File.Exists(serverPath))
-                    {
-                        System.IO.File.Delete(serverPath);
-                    }
-                }
+                string rootPath = _configuration["UploadSettings:BillImagesPath"];
 
+                //Delete the Bill Directory. 
+                string uploadPath = Path.Combine(rootPath, billId.ToString());
+                if (Directory.Exists(uploadPath))
+                    Directory.Delete(uploadPath,true);
+               
                 _billingsoftware.Shbillimagemodelskj.RemoveRange(checkimage);
 
                 var billFolderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "BillImage", billId);
