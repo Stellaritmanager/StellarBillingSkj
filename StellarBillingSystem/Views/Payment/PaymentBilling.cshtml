@@ -5,7 +5,7 @@
 
 
 @{
-    ViewData["Title"] = "PaymentBilling";
+    ViewData["Title"] = "Payment Details";
     Layout = "~/Views/Shared/_ContentNavbarLayout.cshtml"; // Adjust layout path as needed
 }
 
@@ -228,7 +228,7 @@
                             </div>
                         </div>
                         <div class="col-sm-4 col-md-4 col-lg-4">
-                            <div class="form-floating form-floating-outline mb-4">
+                            <div class="form-floating form-floating-outline mb-4 custom-date-picker">
                                 <input type="date" class="form-control" placeholder="CloseDate" id="CloseDate" name="CloseDate" value="@ViewBag.CloseDate" />
                                 <label for="CloseDate" class="control-label">CloseDate</label>
                             </div>
