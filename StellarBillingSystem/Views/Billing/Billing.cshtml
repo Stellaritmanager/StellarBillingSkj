@@ -102,14 +102,15 @@
 
                         </div>
 
-
-
                         <div class="col-sm-4 col-md-4 col-lg-4">
-                            <label class="control-label">Bill Date</label>
-                            <input type="date" id="BillDate" class="form-control" value="@DateTime.Now.ToString("yyyy-MM-dd")" />
-                            <span class="text-danger"></span>
+                            <label>Bill Date</label>
+                            <div class="form-floating form-floating-outline mb-4 custom-date-picker">
+                               
+                                <input type="date" id="BillDate" class="form-control" placeholder="Bill Date" value="@DateTime.Now.ToString("yyyy-MM-dd")" />
+                                <label class="control-label">Bill Date</label>
+                             <span class="text-danger"></span>
                         </div>
-
+                        </div>
                         <div class="col-sm-2 col-md-2 col-lg-2" style="margin-top:30px">
                             <button style="background-color: #4fdd52; color: white; padding: 10px 10px; border: none; border-radius: 4px;" data-bs-toggle="modal" data-bs-target="#articleModal">Add Article</button>
                         </div>
