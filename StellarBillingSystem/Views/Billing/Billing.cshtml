@@ -321,13 +321,13 @@
     <!-- Overlay -->
     <div id="popupOverlay" style="display: none; position: fixed; top: 0; left: 0;
      width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.3);
-     z-index: 999;" onclick="handleOutsideClick(event)">
+     z-index: 1065;" onclick="handleOutsideClick(event)">
 
         <!-- Popup Message Box -->
         <div id="popupMessage" style="position: fixed; top: 50%; left: 50%;
          transform: translate(-50%, -50%); background: white;
          padding: 30px; border: 1px solid black; border-radius: 10px;
-         z-index: 1000;" onclick="event.stopPropagation()">
+         z-index: 1066;" onclick="event.stopPropagation()">
 
             <span id="popupMessageText"></span>
             <div class="mt-3 text-center">
@@ -335,9 +335,39 @@
             </div>
         </div>
     </div>
+    <script>
+    window.addEventListener("DOMContentLoaded", () => {
+        const popupOverlay = document.getElementById("popupOverlay");
+        if (popupOverlay) {
+            document.body.appendChild(popupOverlay); // move to bottom of <body>
+        }
+    });
+    </script>
+    <style>
+        #popupOverlay {
+        position: fixed;
+        top: 0; left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.3);
+        z-index: 3000 !important;
+    }
 
+    #popupMessage {
+        position: fixed;
+        top: 50%; left: 50%;
+        transform: translate(-50%, -50%);
+        background: white;
+        padding: 30px;
+        border: 1px solid black;
+        border-radius: 10px;
+        z-index: 3001 !important;
+    }
+
+    </style>
 
     <script>
+
         let articles = [];
         let billDetails = [];
         let filesList = [];        // [{ id, path?, file?, existing? }]
