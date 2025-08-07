@@ -202,6 +202,7 @@
                         </div>
                         <div class="col-sm-4 col-md-4 col-lg-4" style="margin-top:35px">
                             <input type="file" id="fileInput" name="Images" multiple accept="image/*" />
+                            <div id="fileCountLabel" class="form-text text-muted mt-1">No file chosen</div>
                             <input type="hidden" name="KeptImages" id="KeptImages" />
                             <button class="btn btn-primary" onclick="fetchBillImagesAndOpenModal()">
                                 View Images
@@ -823,6 +824,7 @@
 
 
             const fileInput = document.getElementById('fileInput');
+            const fileCountLabel = document.getElementById('fileCountLabel');
             const keptField = document.getElementById('KeptImages');
             const viewImagesBtn = document.getElementById('viewImagesBtn');
 
@@ -837,6 +839,8 @@
 
             fileInput.addEventListener('change', () => {
                 const invalidFiles = [];
+                let validFileCount = 0;
+
                 for (const file of fileInput.files) {
                     if (!file.type.startsWith('image/')) {
                         invalidFiles.push(file.name);
@@ -848,6 +852,7 @@
 
                     filesList.push({ id, file });
                     previewImages.push(imgURL);
+                    validFileCount++;
                 }
 
                 fileInput.value = ''; // Clear input for future changes
@@ -856,7 +861,19 @@
                     const msg = `Only image files are allowed. These files were rejected:\n\n${invalidFiles.join('\n')}`;
                     showPopup(msg);
                 }
+                if (validFileCount > 0) 
+                {
+                        fileCountLabel.textContent = `${validFileCount} image file(s) selected`;
+                    } else {
+                        fileCountLabel.textContent = `No image files selected`;
+                    }
 
+                    fileInput.value = ''; // Clear to allow selecting the same file again
+
+                    if (invalidFiles.length > 0) {
+                        const msg = `Only image files are allowed. These files were rejected:\n\n${invalidFiles.join('\n')}`;
+                        showPopup(msg);
+                    }
                 updateViewButtonVisibility();
             });
 
