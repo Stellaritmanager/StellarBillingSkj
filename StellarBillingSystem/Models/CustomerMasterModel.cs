@@ -32,7 +32,7 @@ public class CustomerMasterModel
     public int CustomerID { get => strCustomerID; set => strCustomerID = value; }
 
     [MaxLength(100)]
-    public string CustomerName { get => strCustomerName; set => strCustomerName = value; }
+    public string? CustomerName { get => strCustomerName; set => strCustomerName = value; }
 
     [MaxLength(50)]
     public string? DateofBirth { get => strDateofBirth; set => strDateofBirth = value; }
@@ -47,7 +47,7 @@ public class CustomerMasterModel
     public string? City { get => strCity; set => strCity = value; }
 
     [MaxLength(20)]
-    public string MobileNumber { get => strMobileNumber; set => strMobileNumber = value; }
+    public string? MobileNumber { get => strMobileNumber; set => strMobileNumber = value; }
 
     [MaxLength(30)]
     public string? LastUpdatedDate { get => strLastUpdatedDate; set => strLastUpdatedDate = value; }
@@ -60,14 +60,14 @@ public class CustomerMasterModel
     public string BranchID { get => branchID; set => branchID = value; }
 
     [MaxLength(50)]
-    public string Fathername { get => fathername; set => fathername = value; }
+    public string? Fathername { get => fathername; set => fathername = value; }
 
     [MaxLength(30)]
-    public string State { get => state; set => state = value; }
+    public string? State { get => state; set => state = value; }
 
     [MaxLength(30)]
     public string? Country { get => country; set => country = value; }
 
     [MaxLength(10)]
-    public string Pincode { get => pincode; set => pincode = value; }
+    public string? Pincode { get => pincode; set => pincode = value; }
 }
