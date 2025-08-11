@@ -1,29 +1,32 @@
 ﻿--LoanReport--
 
 insert into ShGenericReport values
-('LeeMobiles','LoanReport','csv','To get Loan Distributed','Select bh.BillID,sbm.BranchName,scm.CustomerName,scm.MobileNumber,bh.BillDate,bh.LoanValue,bh.NoOfItem,bh.OverallWeight as ''TotalGrams''
+('LeeMobiles','LoanReport','csv','To get Loan Distributed','Select bh.BillID,
+sbm.BranchName,scm.CustomerName,scm.MobileNumber,CONVERT(VARCHAR(10), CAST(bh.BillDate AS DATE), 103)  as ''BillDate'' ,FORMAT(bh.LoanValue,''N2'', ''en-IN'') as ''LoanAmount'',bh.NoOfItem,bh.OverallWeight as ''TotalGrams''
 from Shbillmasterskj bh
 inner join SHCustomerMaster scm on convert(int,scm.CustomerID) =bh.CustomerID  and bh.IsDelete=0
 inner join SHBranchMaster Sbm on sbm.BracnchID= bh.BranchID where 1=1
-','bh.BillDate','',0)
+','bh.BillDate',' order by bh.BillDate',0)
 
 
 --LoanDueReport---
 
 insert into ShGenericReport values
-('LeeMobiles','LoanDueReport','csv','To get Loan Distributed','Select bh.BillID,sbm.BranchName,scm.CustomerName,scm.MobileNumber,bh.BillDate,bh.LoanValue,isnull(spd.Balance,bh.LoanValue) as ''DueAmount''
-, DateDiff(DAY,bh.billDate,getdate()) as PastDueDays,bh.ClosingStatus as ''Status''
+('LeeMobiles','LoanDueReport','csv','To get Loan Distributed','Select bh.BillID,
+sbm.BranchName,scm.CustomerName,scm.MobileNumber,CONVERT(VARCHAR(10), CAST(bh.BillDate AS DATE), 103)  as ''BillDate'',FORMAT(bh.LoanValue,''N2'', ''en-IN'') as ''LoanAmount'',FORMAT(isnull(convert(bigint,spd.Balance),bh.LoanValue),''N2'', ''en-IN'')  as ''DueAmount''
+, DateDiff(DAY,bh.billDate,getdate()) as PastDueDays,Isnull(bh.ClosingStatus,''Active'') as ''Status''
 from Shbillmasterskj bh
 inner join SHCustomerMaster scm on convert(int,scm.CustomerID) =bh.CustomerID and bh.IsDelete=0
 inner join SHBranchMaster Sbm on sbm.BracnchID= bh.BranchID 
 left join SHPaymentMaster spd on spd.BillId = bh.BillID
 where 1=1 
-','bh.BillDate','',0)
+','bh.BillDate',' order by bh.BillDate',0)
 
 
 ---Payment Details Report----
 insert into ShGenericReport values
-('LeeMobiles','PaymentsReport','csv','To get payment details','Select sbm.BillID,sbr.BranchName,scm.CustomerName,scm.MobileNumber,bh.PaymentDate,bh.PaymentAmount,isnull(bh.PaymentMode,'''') as ''PaymentMode'',
+('LeeMobiles','PaymentsReport','csv','To get payment details','Select sbm.BillID,sbr.BranchName,
+scm.CustomerName,scm.MobileNumber,CONVERT(VARCHAR(10), CAST(bh.PaymentDate AS DATE), 103)  as ''PaymentDate'',FORMAT(convert(money,bh.PaymentAmount),''N2'', ''en-IN'') as ''PaymentAmount'',isnull(bh.PaymentMode,'''') as ''PaymentMode'',
 isnull(bh.PaymentTransactionNumber,'''') as ''TransactionNumber''
 from SHPaymentMaster spd
 inner join SHPaymentDetails bh on spd.PaymentId= bh.PaymentId and bh.IsDelete=0
@@ -31,19 +34,67 @@ inner join Shbillmasterskj sbm on sbm.BillID =spd.BillId
 inner join SHCustomerMaster scm on convert(int,scm.CustomerID) =sbm.CustomerID 
 inner join SHBranchMaster Sbr on sbr.BracnchID= bh.BranchID 
 where 1=1
-','bh.PaymentDate','',0)
+','bh.PaymentDate',' order by bh.PaymentDate',0)
 
 --Customer wise loan report--
 
 insert into ShGenericReport values
 ('LeeMobiles','CustomerWiseLoanReport','csv','To get Customer wise loan and payment details','
-select  scm.CustomerName, scm.MobileNumber, sum(isnull(bh.LoanValue,0.00)) as ''TotalLoanAmount'',
- (sum(isnull(bh.LoanValue,0.00))-sum(isnull(convert(money,shp.Balance),0.00))) as ''TotalPaid'',
-sum(isnull(convert(money,shp.Balance),0.00))as ''TotalBalance''
+select  scm.CustomerName, scm.MobileNumber,     FORMAT(sum(isnull(bh.LoanValue,0.00)),''N2'', ''en-IN'')  as ''TotalLoanAmount'',
+ FORMAT((sum(isnull(bh.LoanValue,0.00))-sum(isnull(convert(money,shp.Balance),0.00))),''N2'', ''en-IN'')  as ''TotalPaid'',
+FORMAT(sum(isnull(convert(money,shp.Balance),0.00)),''N2'', ''en-IN'') as ''TotalBalance''
  from SHCustomerMaster scm
 left join
 Shbillmasterskj bh on bh.CustomerID=scm.CustomerID and bh.IsDelete=0 
 left join
-SHPaymentMaster shp on shp.BillId =shp.BillId and bh.IsDelete=0 and shp.BranchID= bh.BranchID
+SHPaymentMaster shp on shp.BillId =bh.BillId and bh.IsDelete=0 and shp.BranchID= bh.BranchID
 where 1=1 
-','bh.BillDate',' Group by scm.CustomerName, scm.MobileNumber',0)
+','bh.BillDate',' Group by scm.CustomerName, scm.MobileNumber order by scm.CustomerName',0)
+
+
+--Repledge Details report---
+
+insert into ShGenericReport values
+('LeeMobiles','RepledgeReport','csv','To get RepledgeReport','
+ SELECT  
+    bh.RepledgeID,
+	CONVERT(VARCHAR(10), CAST(bh.RepledgeDate AS DATE), 103)  as ''RepledgeDate'',
+        STUFF((
+        SELECT '', '' + sp2.ArticleName + '' ('' + sra2.BillID + '')''
+        FROM Shrepledgeartcile sra2
+        INNER JOIN SHArticleMaster sp2 
+            ON sra2.ArticleID = sp2.ArticleID
+        WHERE sra2.RepledgeID = bh.RepledgeID
+        FOR XML PATH(''''), TYPE
+    ).value(''.'', ''NVARCHAR(MAX)''), 1, 2, '''') AS ArticleBillList,
+    spm.RepledgerName,
+    spm.RepledgerAddress,
+    spm.City,
+    spm.State,
+    FORMAT(bh.TotalAmount,''N2'', ''en-IN'') as ''LoanAmount'',
+    bh.Tenure,
+    bh.LoanHolderName,
+	Case (bh.isclosed) when 0 then ''Active''
+		when 1 then ''Closed'' end as ''Status''
+FROM Shrepledgeartcile sra
+INNER JOIN Shbuyerrepledge bh 
+    ON bh.RepledgeID = sra.RepledgeID 
+    AND bh.IsDelete = 0
+INNER JOIN Shrepledgermodel spm 
+    ON spm.RepledgerID = bh.BuyerName
+INNER JOIN SHArticleMaster sp 
+    ON sra.ArticleID = sp.ArticleID
+	where 1=1
+','bh.RepledgeDate',' 
+GROUP BY  
+    bh.RepledgeID,
+    spm.RepledgerName,
+    spm.RepledgerAddress,
+    spm.City,
+    spm.State,
+    bh.TotalAmount,
+    bh.Tenure,
+    bh.LoanHolderName,
+	bh.RepledgeDate,
+	bh.isClosed
+  order by bh.RepledgeDate',0)
