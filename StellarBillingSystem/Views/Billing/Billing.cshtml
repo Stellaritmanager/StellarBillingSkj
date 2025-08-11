@@ -73,6 +73,8 @@
                         <div class="col-sm-1 col-md-1 col-lg-1"> </div>
                         <div class="col-sm-4 col-md-4 col-lg-4">
 
+                            <div class="form-floating form-floating-outline mb-3">
+
                             @{
                                 var CustomerID = ((IEnumerable<CustomerMasterModel>)ViewData["customerid"])
                                 .Select(m => new SelectListItem
@@ -82,8 +84,9 @@
             });
                             }
 
-                            <label>Customer Number</label>
+                           
                             <input type="text" id="productDropdownInput" class="form-control" placeholder="Customer Number" onkeyup="filterDropdown(event, 'productDropdownInput', 'productDropdown')" onclick="showDropdown('productDropdown')">
+                                <label class="control-label">Customer Number</label>
                             <span class="text-danger"></span>
 
                             <ul id="productDropdown" class="list-group mt-2"
@@ -101,7 +104,7 @@
                             <input type="hidden" name="ProductID" id="productID" value="ProductID" />
 
                         </div>
-
+                        </div>
                         <div class="col-sm-4 col-md-4 col-lg-4">
                             <label>Bill Date</label>
                             <div class="form-floating form-floating-outline mb-4 custom-date-picker">
