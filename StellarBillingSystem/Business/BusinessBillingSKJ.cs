@@ -200,9 +200,7 @@ namespace StellarBillingSystem_skj.Business
         }
         public byte[] PrintBillDetails(DataTable billDetails, string BranchID)
         {
-            string templateName = BranchID == "Lee_Mobile"
-                ? "BillSKJTemplate Branch1.docx"
-                : "BillTemplate Branch2.docx";
+            string templateName = "BillSKJTemplate Branch1.docx";
 
             string templatePath = Path.Combine(templateName);
 
