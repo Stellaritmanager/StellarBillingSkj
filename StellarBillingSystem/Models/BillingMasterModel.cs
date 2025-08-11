@@ -31,7 +31,7 @@ namespace StellarBillingSystem.Models
         public string CustomerNumber { get => customerNumber; set => customerNumber = value; }
         public string? Totalprice { get => totalprice; set => totalprice = value; }
         public string? TotalDiscount { get => totalDiscount; set => totalDiscount = value; }
-        public string? NetPrice { get => netPrice; set => netPrice = value; }      
+        public string? NetPrice { get => netPrice; set => netPrice = value; }
         public bool IsDelete { get => isDelete; set => isDelete = value; }
         public string? Lastupdateduser { get => lastupdateduser; set => lastupdateduser = value; }
         public string? Lastupdateddate { get => lastupdateddate; set => lastupdateddate = value; }

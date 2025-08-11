@@ -4,7 +4,7 @@ namespace StellarBillingSystem_skj.Models
 {
     public class ArticleModel
     {
-        public ArticleModel() { }   
+        public ArticleModel() { }
 
         public int ArticleID { get; set; }
         [MaxLength(100)]
@@ -24,6 +24,6 @@ namespace StellarBillingSystem_skj.Models
 
         public bool IsDelete { get; set; }
 
-        public string? Remarks {  get; set; }
+        public string? Remarks { get; set; }
     }
 }

@@ -4,7 +4,7 @@
     {
         public RepledgeArtcileModel() { }
 
-       
+
         public int RepledgeArticleIDS { get; set; } // Auto-generated, not part of key
         public int ArticleID { get; set; }  // PK, FK to ArticleModel
         public string BillID { get; set; }     // PK, FK to BillMasterModelSKJ
@@ -15,8 +15,8 @@
         public string? LastUpdatedUser { get; set; }
         public string? LastUpdatedMachine { get; set; }
 
-        public bool IsDelete { get; set; }  
+        public bool IsDelete { get; set; }
 
-        
+
     }
 }

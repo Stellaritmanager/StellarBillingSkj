@@ -1,18 +1,17 @@
-﻿using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Mvc;
-using StellarBillingSystem.Context;
-using System.Security.Claims;
-using StellarBillingSystem.Models;
-using Newtonsoft.Json;
-using StellarBillingSystem.Business;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
+using StellarBillingSystem.Context;
+using StellarBillingSystem.Models;
 using StellarBillingSystem_skj.Business;
+using System.Security.Claims;
 
 namespace StellarBillingSystem.Controllers
 {
-    
+
     public class LoginAuthenticationController : Controller
     {
         private BillingContext _billingContext;
@@ -44,7 +43,7 @@ namespace StellarBillingSystem.Controllers
             Response.Headers["Expires"] = "0";
 
             SatffAdminBusinessClass Busbill = new SatffAdminBusinessClass(_billingContext, _configuration);
-          
+
             ViewData["branchid"] = Busbill.Getbranch();
             return View();
 
@@ -52,7 +51,7 @@ namespace StellarBillingSystem.Controllers
         }
 
 
-      
+
 
 
 
@@ -60,7 +59,7 @@ namespace StellarBillingSystem.Controllers
         {
 
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-           
+
 
             return RedirectToAction("Login", "LoginAuthentication");
         }
@@ -101,13 +100,13 @@ namespace StellarBillingSystem.Controllers
 
                     var branch = await _billingContext.SHStaffAdmin.FirstOrDefaultAsync(x => x.UserName == model.UserName);
 
-                    var rolldetail = Busreg.GetRoll(model.UserName, branch.BranchID);                   
+                    var rolldetail = Busreg.GetRoll(model.UserName, branch.BranchID);
 
 
                     TempData["UserName"] = model.UserName;
                     TempData["BranchID"] = branch.BranchID;
-                            
-                    
+
+
 
                     // Set TempData with the filtered roll details
                     TempData["RollAccess"] = JsonConvert.SerializeObject(rolldetail);
@@ -116,7 +115,7 @@ namespace StellarBillingSystem.Controllers
                     var user = Busreg.GetadminRT(model.UserName);
                     if (user != null)
                     {
-                        
+
                         return RedirectToAction("Administration", "LoginAuthentication");
 
                     }
@@ -133,7 +132,7 @@ namespace StellarBillingSystem.Controllers
                         return RedirectToAction("Index", "Home");
                     }
 
-                   
+
                 }
 
             }
@@ -158,7 +157,7 @@ namespace StellarBillingSystem.Controllers
                 return RedirectToAction("Login", "LoginAuthentication");
             }
 
-            TempData["UserName"] = userName; 
+            TempData["UserName"] = userName;
             return View();
         }
 
@@ -173,14 +172,14 @@ namespace StellarBillingSystem.Controllers
 
             SatffAdminBusinessClass Busreg = new SatffAdminBusinessClass(_billingContext, _configuration);
 
-          
+
             ViewData["branchid"] = Busreg.Getbranch();
 
 
 
             var rolldetail = Busreg.Getadmin(userName);
 
-            
+
 
             TempData["UserName"] = userName;
             TempData["BranchID"] = model.BranchID;
@@ -198,4 +197,4 @@ namespace StellarBillingSystem.Controllers
 
         }
     }
- }
+}

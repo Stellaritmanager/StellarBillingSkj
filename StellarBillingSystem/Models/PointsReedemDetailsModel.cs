@@ -1,11 +1,8 @@
-﻿using NonFactors.Mvc.Grid;
-using System;
-
-public class PointsReedemDetailsModel
+﻿public class PointsReedemDetailsModel
 {
-	public PointsReedemDetailsModel()
-	{
-	}
+    public PointsReedemDetailsModel()
+    {
+    }
 
 
     private String strCustomerID;

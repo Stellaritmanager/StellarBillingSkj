@@ -6,7 +6,7 @@
 
         private String strUsername;
         private String strEmail;
-        private String strPassword; 
+        private String strPassword;
         private String strLastUpdatedDate;
         private String strLastUpdatedUser;
         private String strLastUpdatedmachine;

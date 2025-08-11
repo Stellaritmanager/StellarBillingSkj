@@ -2,7 +2,7 @@
 {
     public class BillTableModel
     {
-        public BillTableModel() 
+        public BillTableModel()
         {
         }
         private string billID;
@@ -35,7 +35,7 @@
         public string Lastupdateduser { get => lastupdateduser; set => lastupdateduser = value; }
         public string Lastupdateddate { get => lastupdateddate; set => lastupdateddate = value; }
         public string Lastupdatedmachine { get => lastupdatedmachine; set => lastupdatedmachine = value; }
-       
+
         public string ProductName { get => productName; set => productName = value; }
         public string ProductID { get => productID; set => productID = value; }
         public string BranchID { get => branchID; set => branchID = value; }

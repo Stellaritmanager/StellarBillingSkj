@@ -1,13 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
-using StellarBillingSystem.Controllers;
-using System.Text.Json;
-using StellarBillingSystem_skj.Models;
 using Microsoft.EntityFrameworkCore;
 using StellarBillingSystem.Context;
-using Microsoft.CodeAnalysis.Operations;
+using StellarBillingSystem.Controllers;
 using System.Diagnostics;
-using Microsoft.AspNetCore.Authorization;
+using System.Text.Json;
 
 namespace StellarBillingSystem_skj.Controllers
 {
@@ -22,7 +20,7 @@ namespace StellarBillingSystem_skj.Controllers
 
         private readonly BillingContext _billingsoftware;
 
-        public CustomerMasterController(ILogger<HomeController> logger, IConfiguration config, IWebHostEnvironment env,BillingContext billingContext)
+        public CustomerMasterController(ILogger<HomeController> logger, IConfiguration config, IWebHostEnvironment env, BillingContext billingContext)
         {
             _logger = logger;
             _config = config;
@@ -98,12 +96,12 @@ namespace StellarBillingSystem_skj.Controllers
 
                 return View("CustomerMaster", mod);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Debug.WriteLine($"SaveCustomerImages error: {ex}");
                 throw;
             }
-         }
+        }
 
         public async Task<IActionResult> GetCustomer(CustomerMasterModel model)
         {
@@ -113,7 +111,7 @@ namespace StellarBillingSystem_skj.Controllers
                 TempData.Keep("BranchID");
             }
 
-            
+
             var customer = await _billingsoftware.SHCustomerMaster.FirstOrDefaultAsync(x => x.IsDelete == false && x.MobileNumber == model.MobileNumber && x.BranchID == model.BranchID);
 
             if (customer == null)
@@ -129,7 +127,7 @@ namespace StellarBillingSystem_skj.Controllers
                          && i.CustomerName == customer.CustomerName
                          && i.BranchID == customer.BranchID
                          && !i.IsDelete)
-                .Select(i => i.ImagePath)      
+                .Select(i => i.ImagePath)
                 .ToListAsync();
 
             // 3️⃣ pass the list to the view
@@ -140,11 +138,11 @@ namespace StellarBillingSystem_skj.Controllers
             return View("CustomerMaster", customer);
         }
 
-        
 
 
 
-        public async Task<IActionResult> DeleteCustomer( CustomerMasterModel model)
+
+        public async Task<IActionResult> DeleteCustomer(CustomerMasterModel model)
         {
             if (TempData["BranchID"] != null)
             {
@@ -152,7 +150,7 @@ namespace StellarBillingSystem_skj.Controllers
                 TempData.Keep("BranchID");
             }
 
-            var existingCustomer = await _billingsoftware.SHCustomerMaster.FirstOrDefaultAsync(x=>x.MobileNumber == model.MobileNumber && x.BranchID == model.BranchID);
+            var existingCustomer = await _billingsoftware.SHCustomerMaster.FirstOrDefaultAsync(x => x.MobileNumber == model.MobileNumber && x.BranchID == model.BranchID);
             if (existingCustomer == null)
             {
                 model = new CustomerMasterModel();
@@ -314,7 +312,7 @@ namespace StellarBillingSystem_skj.Controllers
 
 
 
-       
+
         public IActionResult CustomerMaster()
         {
             CustomerMasterModel obj = new CustomerMasterModel();

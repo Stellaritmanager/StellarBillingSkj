@@ -17,7 +17,7 @@
 
         public bool IsClosed { get; set; }
 
-        public string? CloseDate {  get; set; }
+        public string? CloseDate { get; set; }
 
         public string? LoanHolderName { get; set; }
 

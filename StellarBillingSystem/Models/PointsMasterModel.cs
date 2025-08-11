@@ -1,14 +1,12 @@
-﻿using System;
-
-public class PointsMasterModel
+﻿public class PointsMasterModel
 {
 
     public PointsMasterModel()
-	{
+    {
 
-	}
+    }
 
-	private String strPointsID;
+    private String strPointsID;
     private String strNetPrice;
     private String strNetpoints;
     private String strLastUpdatedDate;

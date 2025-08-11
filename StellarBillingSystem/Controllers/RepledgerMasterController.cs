@@ -25,7 +25,7 @@ namespace StellarBillingSystem_skj.Controllers
         public IActionResult RepledgerMaster()
         {
             RepledgerModel model = new RepledgerModel();
-            return View("RepledgerMaster",model);
+            return View("RepledgerMaster", model);
         }
 
 
@@ -76,7 +76,7 @@ namespace StellarBillingSystem_skj.Controllers
 
                 ViewBag.Message = "Saved Successfully";
 
-               
+
 
                 RepledgerModel mod = new RepledgerModel();
 
@@ -110,7 +110,7 @@ namespace StellarBillingSystem_skj.Controllers
 
         public async Task<IActionResult> DeleteRepledger(RepledgerModel model)
         {
-           
+
             var existingCustomer = await _billingsoftware.Shrepledgermodel.FirstOrDefaultAsync(x => (x.RepledgerPhoneNumber1 == model.RepledgerPhoneNumber1 || x.RepledgerName == model.RepledgerName) && x.IsDelete == false);
             if (existingCustomer == null)
             {
@@ -130,7 +130,7 @@ namespace StellarBillingSystem_skj.Controllers
             existingCustomer.LastUpdatedUser = User.Claims.First().Value.ToString();
             existingCustomer.LastUpdatedMachine = Request.HttpContext.Connection.RemoteIpAddress.ToString();
 
-           
+
             // ✅ Save all at once to avoid context confusion and SQL syntax issues
             _billingsoftware.SaveChanges();
 

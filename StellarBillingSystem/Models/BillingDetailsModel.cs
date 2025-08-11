@@ -26,7 +26,7 @@ namespace StellarBillingSystem.Models
 
 
         public string BillID { get => billID; set => billID = value; }
-       
+
         public string? Discount { get => discount; set => discount = value; }
         public string? Price { get => price; set => price = value; }
         public string? Quantity { get => quantity; set => quantity = value; }
@@ -42,7 +42,7 @@ namespace StellarBillingSystem.Models
         public string ProductID { get => productID; set => productID = value; }
         public string? BillDate { get => billDate; set => billDate = value; }
         public string? CustomerNumber { get => customerNumber; set => customerNumber = value; }
-       
+
         [MaxLength(20)]
         public string BranchID { get => branchID; set => branchID = value; }
         public long Id { get => id; set => id = value; }

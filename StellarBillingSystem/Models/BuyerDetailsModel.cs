@@ -10,19 +10,19 @@ namespace StellarBillingSystem_skj.Models
 
 
         [MaxLength(50)]
-        public string BuyerName { get; set;}
+        public string BuyerName { get; set; }
 
 
         [MaxLength(100)]
-        public string BuyerAddress { get; set;}
+        public string BuyerAddress { get; set; }
 
         [MaxLength(20)]
-        public string BuyerPhoneNumber { get; set;}
+        public string BuyerPhoneNumber { get; set; }
 
         [MaxLength(50)]
-        public string? LastUpdatedUser { get ; set; }
+        public string? LastUpdatedUser { get; set; }
         [MaxLength(50)]
-        public string? LastUpdatedmachine { get ; set ; }
+        public string? LastUpdatedmachine { get; set; }
         [MaxLength(50)]
         public string? LastUpdatedDate { get; set; }
     }

@@ -1,9 +1,9 @@
 ﻿
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using StellarBillingSystem.Business;
 using StellarBillingSystem.Context;
 using StellarBillingSystem.Models;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
 
 namespace StellarBillingSystem.Controllers
 {
@@ -21,7 +21,7 @@ namespace StellarBillingSystem.Controllers
         }
 
         [HttpPost]
-        public IActionResult GetReports(String inputValue,string fromDate,string toDate,string GroupBy)
+        public IActionResult GetReports(String inputValue, string fromDate, string toDate, string GroupBy)
         {
             BusinessClassBilling business = new BusinessClassBilling(_billingContext, _configuration);
             ViewData["reportid"] = business.GetReportId();
@@ -50,7 +50,7 @@ namespace StellarBillingSystem.Controllers
                 return View("Reports");
             }
 
-            var query = BusinessClassCommon.DataTableReport(_billingContext, reportQuery.ReportQuery, reportQuery.Datecolumn, fromDate, toDate,reportQuery.GroupBy, branchId);
+            var query = BusinessClassCommon.DataTableReport(_billingContext, reportQuery.ReportQuery, reportQuery.Datecolumn, fromDate, toDate, reportQuery.GroupBy, branchId);
 
 
 

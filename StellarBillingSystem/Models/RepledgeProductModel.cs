@@ -6,7 +6,7 @@ namespace StellarBillingSystem_skj.Models
     {
         public RepledgeProductModel() { }
 
-        public  string RepledgeID { get; set; }
+        public string RepledgeID { get; set; }
 
         public string BillID { get; set; }
 

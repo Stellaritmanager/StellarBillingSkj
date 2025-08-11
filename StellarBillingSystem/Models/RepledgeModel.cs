@@ -26,11 +26,11 @@ namespace StellarBillingSystem_skj.Models
         public string? LastUpdatedUser { get; set; }
         public string? LastUpdatedMachine { get; set; }
 
-        public bool IsClosed {  get; set; }
+        public bool IsClosed { get; set; }
 
-        public string? CloseDate {  get; set; }
+        public string? CloseDate { get; set; }
 
-        public string? RepledgeDate { get; set;}
+        public string? RepledgeDate { get; set; }
 
         public string? LoanHolderName { get; set; }
     }

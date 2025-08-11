@@ -6,9 +6,9 @@ namespace StellarBillingSystem_skj.Models
     {
         public BillIDCombinationModel() { }
 
-         public string CombinationValue {  get; set; }
-         public string IncrementValue { get; set; }
-         public string BranchID { get; set; }
+        public string CombinationValue { get; set; }
+        public string IncrementValue { get; set; }
+        public string BranchID { get; set; }
 
 
         [MaxLength(50)]

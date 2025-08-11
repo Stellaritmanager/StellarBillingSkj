@@ -1,32 +1,26 @@
-﻿using DocumentFormat.OpenXml.Drawing.Charts;
-using DocumentFormat.OpenXml.Office2016.Drawing.ChartDrawing;
-using Humanizer.Localisation;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.CodeAnalysis.Operations;
-using Microsoft.EntityFrameworkCore;
 using StellarBillingSystem.Context;
 using StellarBillingSystem_skj.Business;
 using StellarBillingSystem_skj.Models;
-using System.Linq;
 
 
 [Authorize]
 [Route("[controller]/[action]")]
 public class RepledgeMasterController : Controller
 {
-        private BillingContext _billingsoftware;
-        private readonly IConfiguration _configuration;
+    private BillingContext _billingsoftware;
+    private readonly IConfiguration _configuration;
 
 
-        public RepledgeMasterController(BillingContext billingsoftware, IConfiguration configuration)
-        {
-            _billingsoftware = billingsoftware;
-            _configuration = configuration;
-        }
+    public RepledgeMasterController(BillingContext billingsoftware, IConfiguration configuration)
+    {
+        _billingsoftware = billingsoftware;
+        _configuration = configuration;
+    }
 
-        public IActionResult RepledgeMaster()
-        { 
+    public IActionResult RepledgeMaster()
+    {
 
         RepledgeViewModel obj = new RepledgeViewModel();
 
@@ -34,7 +28,7 @@ public class RepledgeMasterController : Controller
         ViewData["repledgerid"] = Busbill.getrepledgerID();
 
         return View(obj);
-        }
+    }
 
 
 
@@ -62,7 +56,7 @@ public class RepledgeMasterController : Controller
             articles = (from d in _billingsoftware.Shbilldetailsskj
                         join a in _billingsoftware.SHArticleMaster on d.ArticleID equals a.ArticleID
                         where d.BillID == model.BillID && d.BranchID == branchID && d.IsDelete == false
-                           && !pledgedArticleIds.Contains(a.ArticleID ) 
+                           && !pledgedArticleIds.Contains(a.ArticleID)
                         select new
                         {
                             articleID = a.ArticleID,
@@ -153,7 +147,7 @@ public class RepledgeMasterController : Controller
         }
     }
 
-    
+
 
     [HttpPost]
     public IActionResult CloseRepledgeAjax([FromBody] RepledgeViewModel model)
@@ -171,7 +165,7 @@ public class RepledgeMasterController : Controller
             {
                 checkrepledge.IsClosed = true;
                 checkrepledge.CloseDate = model.CloseDate;
-                
+
 
                 _billingsoftware.SaveChanges();
                 return Json(new { success = true, message = "Repledge Closed Successfully" });
@@ -272,7 +266,7 @@ public class RepledgeMasterController : Controller
             {
             return Json(new { message = "Cannot Save Check RepledgeID" });
             }*/
-        
+
 
         if (buyer == null)
         {
@@ -328,8 +322,8 @@ public class RepledgeMasterController : Controller
 
 
     [HttpPost]
-        public IActionResult SaveRepledge(RepledgeViewModel model)
-        {
+    public IActionResult SaveRepledge(RepledgeViewModel model)
+    {
 
         if (TempData["BranchID"] != null)
         {
@@ -406,6 +400,6 @@ public class RepledgeMasterController : Controller
         _billingsoftware.SaveChanges();
         ViewBag.Message = "Payment Saved Successfully";
         return RedirectToAction("RepledgeMaster");
-        }
     }
+}
 

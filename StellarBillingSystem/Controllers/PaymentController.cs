@@ -1,14 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.CodeAnalysis.Operations;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using Newtonsoft.Json;
-using StellarBillingSystem.Business;
 using StellarBillingSystem.Context;
 using StellarBillingSystem.Models;
 using StellarBillingSystem_skj.Business;
-using StellarBillingSystem_skj.Models;
 using System.Globalization;
 using System.Web;
 
@@ -76,7 +71,7 @@ namespace StellarBillingSystem_skj.Controllers
             else
             {
                 @ViewBag.Balance = billValue;  // Default to 0 if Balance is null
-              //  ViewBag.Message = "NotFound";
+                                               //  ViewBag.Message = "NotFound";
             }
 
 
@@ -86,7 +81,7 @@ namespace StellarBillingSystem_skj.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> PaymentAction(PaymentTableViewModel model, string selectedSlotId,string buttonType, string billId, string branchID, string billDate, string billValue,string CloseBy,string CloseDate,string SalePayment,string SaleDate,string SaleRemark,string completelyClosing,string topUp,string sales,string ClosingStatus)
+        public async Task<IActionResult> PaymentAction(PaymentTableViewModel model, string selectedSlotId, string buttonType, string billId, string branchID, string billDate, string billValue, string CloseBy, string CloseDate, string SalePayment, string SaleDate, string SaleRemark, string completelyClosing, string topUp, string sales, string ClosingStatus)
         {
 
             BusinessBillingSKJ business = new BusinessBillingSKJ(_billingsoftware, _configuration);
@@ -134,7 +129,7 @@ namespace StellarBillingSystem_skj.Controllers
                 return View("PaymentBilling", model);
             }
 
-          
+
 
             if (buttonType == "GetBill")
             {
@@ -224,7 +219,7 @@ namespace StellarBillingSystem_skj.Controllers
                 TempData["BranchID"] = model.BranchID;
 
                 ViewBag.Balance = model.StrBillvalue;
-                 ViewBag.Total = obj.StrBillvalue;
+                ViewBag.Total = obj.StrBillvalue;
                 ViewBag.CloseBy = obj.closedBy;
                 ViewBag.CloseDate = obj.ClosedDate;
                 ViewBag.SalePayment = obj.SalePayment;
@@ -324,7 +319,7 @@ namespace StellarBillingSystem_skj.Controllers
 
                     var getbillvalue = await _billingsoftware.Shbillmasterskj.Where(x => x.BillID == billId && x.BranchID == model.BranchID).FirstOrDefaultAsync();
                     if (getbillvalue != null)
-                       ViewBag.Total =getbillvalue.TotalRepayValue.ToString();
+                        ViewBag.Total = getbillvalue.TotalRepayValue.ToString();
                     billValue = ViewBag.Total;
 
                     var resultdel = UpdatePaymentDetails(billId, model.BranchID, formattedBillDate, billValue);
@@ -383,12 +378,12 @@ namespace StellarBillingSystem_skj.Controllers
             if (buttonType == "Save")
             {
 
-              /*  if(model.Viewpayment==null && model.Viewpayment.Any())
-                {
-                        ViewBag.Message = "Add Payment Cannot be Empty";
+                /*  if(model.Viewpayment==null && model.Viewpayment.Any())
+                  {
+                          ViewBag.Message = "Add Payment Cannot be Empty";
 
-                        return View("PaymentBilling", model);  
-                }*/
+                          return View("PaymentBilling", model);  
+                  }*/
 
                 double totalpayamount = 0.0;
                 if (model.Viewpayment != null && model.Viewpayment.Any())
@@ -401,10 +396,10 @@ namespace StellarBillingSystem_skj.Controllers
                                 totalpayamount += amt;
                         }
                     }
-                
 
-                    
-                
+
+
+
                     foreach (var objdetail in model.Viewpayment)
                     {
                         var obpaydet = _billingsoftware.SHPaymentDetails
@@ -520,7 +515,7 @@ namespace StellarBillingSystem_skj.Controllers
                     updpayment.ClosingStatus = ClosingStatus;
 
                     _billingsoftware.SaveChanges();
-                   
+
                 }
 
                 ViewBag.Message = "Payment Saved Successfully";
@@ -543,7 +538,7 @@ namespace StellarBillingSystem_skj.Controllers
                 if (exbill != null)
                 {
                     BusinessBillingSKJ obj = new BusinessBillingSKJ(_billingsoftware, _configuration);
-                  
+
                     PaymentDetailsModel objNewPayment = new PaymentDetailsModel
                     {
                         PaymentDiscription = obj.GeneratePaymentDescriptionreport(paymentid),
@@ -569,7 +564,7 @@ namespace StellarBillingSystem_skj.Controllers
                     _billingsoftware.SaveChanges();
 
                     ViewBag.Total = exbill.TotalRepayValue.ToString();
-                    billValue=ViewBag.Total;
+                    billValue = ViewBag.Total;
 
                     var result = UpdatePaymentDetails(billId, model.BranchID, formattedBillDate, billValue);
                 }
@@ -586,7 +581,7 @@ namespace StellarBillingSystem_skj.Controllers
 
 
 
-            public IActionResult Index()
+        public IActionResult Index()
         {
             return View();
         }

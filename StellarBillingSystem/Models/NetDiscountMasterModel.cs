@@ -1,10 +1,8 @@
-﻿using System;
-
-public class NetDiscountMasterModel
+﻿public class NetDiscountMasterModel
 {
-	public NetDiscountMasterModel()
-	{
-	}
+    public NetDiscountMasterModel()
+    {
+    }
 
     private string netID;
     private String strNetDiscount;

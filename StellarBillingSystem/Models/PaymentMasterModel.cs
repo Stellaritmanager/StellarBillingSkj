@@ -1,12 +1,10 @@
-﻿using System.Drawing.Printing;
-
-namespace StellarBillingSystem.Models
+﻿namespace StellarBillingSystem.Models
 {
     public class PaymentMasterModel
     {
 
-        public PaymentMasterModel() 
-        { 
+        public PaymentMasterModel()
+        {
         }
         private String strBillId;
         private String strPaymentId;

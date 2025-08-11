@@ -1,34 +1,13 @@
-﻿
-using DocumentFormat.OpenXml.Bibliography;
-using DocumentFormat.OpenXml.InkML;
-using DocumentFormat.OpenXml.Office2021.Excel.RichDataWebImage;
-using DocumentFormat.OpenXml.Spreadsheet;
-using Humanizer;
-using DocumentFormat.OpenXml.Wordprocessing;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.CodeAnalysis.Operations;
-using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-using NuGet.Protocol;
 using StellarBillingSystem.Business;
 using StellarBillingSystem.Context;
 using StellarBillingSystem.Models;
 using System.Data;
 using System.Globalization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Web;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using Microsoft.AspNetCore.Components.Forms;
-using SkiaSharp;
-using Newtonsoft.Json;
-using Microsoft.EntityFrameworkCore.Metadata;
-using System.Globalization;
-using Microsoft.AspNetCore.Http;
-using System.Runtime.ConstrainedExecution;
 
 
 namespace StellarBillingSystem.Controllers
@@ -3023,7 +3002,7 @@ namespace StellarBillingSystem.Controllers
             if (buttonType == "Payment")
             {
 
-                var checkbillexist = await _billingsoftware.SHbillmaster.FirstOrDefaultAsync(x => x.BillID == model.BillID  && x.IsDelete == false);
+                var checkbillexist = await _billingsoftware.SHbillmaster.FirstOrDefaultAsync(x => x.BillID == model.BillID && x.IsDelete == false);
 
                 if (checkbillexist == null)
                 {

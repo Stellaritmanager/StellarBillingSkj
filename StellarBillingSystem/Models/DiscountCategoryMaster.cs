@@ -1,10 +1,8 @@
-﻿using System;
-
-public class DiscountCategoryMasterModel
+﻿public class DiscountCategoryMasterModel
 {
-	public DiscountCategoryMasterModel()
-	{
-	}
+    public DiscountCategoryMasterModel()
+    {
+    }
 
     private String strCategoryID;
     private String strDiscountPrice;

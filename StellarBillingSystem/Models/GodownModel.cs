@@ -1,13 +1,11 @@
-﻿using System;
-
-public class GodownModel
+﻿public class GodownModel
 {
-	public GodownModel()
-	{
-	}
+    public GodownModel()
+    {
+    }
 
-	private String strProductID;
-	private String strNumberofStocks;
+    private String strProductID;
+    private String strNumberofStocks;
     private String strDatefofPurchase;
     private String strSupplierInformation;
     private bool strIsDelete;
@@ -18,8 +16,8 @@ public class GodownModel
 
     public string ProductID { get => strProductID; set => strProductID = value; }
     public string? NumberofStocks { get => strNumberofStocks; set => strNumberofStocks = value; }
-   
-   
+
+
     public string? LastUpdatedUser { get => strLastUpdatedUser; set => strLastUpdatedUser = value; }
     public string? LastUpdatedmachine { get => strLastUpdatedmachine; set => strLastUpdatedmachine = value; }
     public string? DatefofPurchase { get => strDatefofPurchase; set => strDatefofPurchase = value; }

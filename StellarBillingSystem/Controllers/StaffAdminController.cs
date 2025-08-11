@@ -91,7 +91,7 @@ namespace StellarBillingSystem_skj.Controllers
                 TempData.Keep("BranchID");
             }
 
-            SatffAdminBusinessClass Busbill = new SatffAdminBusinessClass(_billingsoftware,_configuration);
+            SatffAdminBusinessClass Busbill = new SatffAdminBusinessClass(_billingsoftware, _configuration);
             ViewData["rollid"] = Busbill.RollAccessType(model.BranchID);
             ViewData["branchid"] = Busbill.Getbranch();
 

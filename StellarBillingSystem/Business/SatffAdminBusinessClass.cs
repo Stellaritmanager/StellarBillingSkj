@@ -136,7 +136,7 @@ namespace StellarBillingSystem_skj.Business
         {
             var adminRT = (
                         from pr in _billingContext.SHStaffAdmin
-                       // join ram in _billingContext.SHrollaccess on pr.StaffID equals ram.StaffID
+                            // join ram in _billingContext.SHrollaccess on pr.StaffID equals ram.StaffID
                         join rol in _billingContext.SHrollType on pr.RolltypeID equals rol.RollID
                         where pr.IsDelete == false && pr.UserName == Username && (rol.RollName == "Admin" || rol.RollName == "Manager") && rol.IsDelete == false
                         select new StaffAdminModel

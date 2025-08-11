@@ -1,21 +1,20 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 public class CustomerMasterModel
 {
-	public CustomerMasterModel()
-	{
-	}
+    public CustomerMasterModel()
+    {
+    }
 
-	private int strCustomerID;
-	private String strCustomerName;
-	private String strDateofBirth;
-	private String strGender;
-	private String strAddress;
-	private String strCity;
-	private String strMobileNumber;
-	
+    private int strCustomerID;
+    private String strCustomerName;
+    private String strDateofBirth;
+    private String strGender;
+    private String strAddress;
+    private String strCity;
+    private String strMobileNumber;
+
     private bool strIsDelete;
     private String strLastUpdatedDate;
     private String strLastUpdatedUser;

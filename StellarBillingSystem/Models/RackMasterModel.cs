@@ -1,6 +1,4 @@
-﻿using System;
-
-public class RackMasterModel
+﻿public class RackMasterModel
 {
     public RackMasterModel()
     {

@@ -3,7 +3,7 @@
     public class ReedemHistoryModel
     {
 
-        public ReedemHistoryModel() 
+        public ReedemHistoryModel()
         {
         }
 
@@ -32,5 +32,5 @@
         public string BranchID { get => branchID; set => branchID = value; }
     }
 
-   
+
 }

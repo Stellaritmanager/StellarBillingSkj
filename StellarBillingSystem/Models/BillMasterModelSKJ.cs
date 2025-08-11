@@ -46,9 +46,9 @@ namespace StellarBillingSystem_skj.Models
 
         public string? TotalvalueinWords { get; set; }
 
-        public string? ClosingStatus {  get; set; }
+        public string? ClosingStatus { get; set; }
 
-        public string? SalePayment {  get; set; }
+        public string? SalePayment { get; set; }
         public string? SaleDate { get; set; }
         public string? SaleRemark { get; set; }
 

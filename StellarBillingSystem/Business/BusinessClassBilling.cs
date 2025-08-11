@@ -1,8 +1,4 @@
-﻿
-using DocumentFormat.OpenXml.InkML;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.Operations;
+﻿using Microsoft.CodeAnalysis;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using StellarBillingSystem.Context;
@@ -421,7 +417,7 @@ namespace StellarBillingSystem.Business
 
         public List<String> GetRoll(string userid, string BranchID)
         {
-          
+
             var query = from sm in _billingContext.SHScreenMaster
                         join rac in _billingContext.SHRoleaccessModel on sm.ScreenName equals rac.ScreenID
                         join ram in _billingContext.SHrollaccess on rac.RollID equals ram.RollID

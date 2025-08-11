@@ -1,7 +1,7 @@
-﻿using StellarBillingSystem.Context;
-using StellarBillingSystem.Models;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using StellarBillingSystem.Context;
+using StellarBillingSystem.Models;
 
 namespace StellarBillingSystem.Controllers
 {
@@ -16,7 +16,7 @@ namespace StellarBillingSystem.Controllers
         }
         public IActionResult Error()
         {
-           //Record error from context session
+            //Record error from context session
             WebErrorsModel webErrors = new WebErrorsModel();
             webErrors.ErrDateTime = DateTime.Now.ToString();
             webErrors.ErrodDesc = HttpContext.Session.GetString("ErrorMessage").ToString();
@@ -27,7 +27,7 @@ namespace StellarBillingSystem.Controllers
             //Saving error into database
             _billingContext.SHWebErrors.Add(webErrors);
             _billingContext.SaveChangesAsync();
-            
+
             return View(webErrors);
         }
     }

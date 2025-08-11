@@ -1,10 +1,8 @@
-﻿using DocumentFormat.OpenXml.Presentation;
-
-namespace StellarBillingSystem.Models
+﻿namespace StellarBillingSystem.Models
 {
     public class PaymentDetailsModel
     {
-       public PaymentDetailsModel() 
+        public PaymentDetailsModel()
         {
         }
 

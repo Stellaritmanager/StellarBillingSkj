@@ -1,11 +1,8 @@
-﻿using StellarBillingSystem.Context;
-using StellarBillingSystem.Models;
+﻿using Spire.Doc;
+using StellarBillingSystem.Context;
+using StellarBillingSystem_skj.Models;
 using System.Data;
 using Xceed.Words.NET;
-using Spire.Doc;
-using System.IO;
-using Spire.Pdf;
-using StellarBillingSystem_skj.Models;
 
 namespace StellarBillingSystem_skj.Business
 {
@@ -107,7 +104,7 @@ namespace StellarBillingSystem_skj.Business
                     dblBalance = dblBalance + Double.Parse(strpayment);
             }
 
-            decimal billamount = billing.Shbillmasterskj.Where(x => x.BillID == pBillID  && x.BranchID == strBranchid).Select(x => x.TotalRepayValue).FirstOrDefault();
+            decimal billamount = billing.Shbillmasterskj.Where(x => x.BillID == pBillID && x.BranchID == strBranchid).Select(x => x.TotalRepayValue).FirstOrDefault();
 
             if (billamount != null)
                 dblBalance = (double)(billamount - Convert.ToDecimal(dblBalance));
@@ -133,7 +130,7 @@ namespace StellarBillingSystem_skj.Business
             using (var document = DocX.Load(filePath))
             {
                 // Replace placeholders with dynamic data
-               
+
                 document.ReplaceText("<<billno>>", pbillData.Rows[0]["BillID"].ToString());
                 document.ReplaceText("<<billdate>>", pbillData.Rows[0]["BillDate"].ToString());
                 document.ReplaceText("<<totalrepay>>", pbillData.Rows[0]["TotalRepayValue"].ToString());
@@ -179,7 +176,7 @@ namespace StellarBillingSystem_skj.Business
 
                 for (int emptycount = 1; emptycount <= 6; emptycount++)
                 {
-                   
+
                     document.ReplaceText("<<articlename" + emptycount.ToString() + ">>", string.Empty);
                     document.ReplaceText("<<qty" + emptycount.ToString() + ">>", string.Empty);
                     document.ReplaceText("<<goldtype" + emptycount.ToString() + ">>", string.Empty);

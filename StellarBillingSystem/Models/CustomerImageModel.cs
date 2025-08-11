@@ -7,12 +7,12 @@ namespace StellarBillingSystem_skj.Models
         public CustomerImageModel() { }
 
         public int ImageID { get; set; }
-       
-        
+
+
         [MaxLength(100)]
         public string CustomerName { get; set; }
         [MaxLength(20)]
-        public string MobileNumber { get; set ; }
+        public string MobileNumber { get; set; }
         [MaxLength(100)]
         public string BranchID { get; set; }
         [MaxLength(100)]
@@ -26,8 +26,8 @@ namespace StellarBillingSystem_skj.Models
         [MaxLength(50)]
         public string? LastUpdatedMachine { get; set; }
         public bool IsPrimary { get; set; }
-       
-        public bool IsDelete { get ; set; }
+
+        public bool IsDelete { get; set; }
 
     }
 }

@@ -29,7 +29,7 @@
         private string cGSTPercentageAmt;
         private string sGSTPercentageAmt;
         private string barCode;
-       
+
 
 
         public string BillID { get => billID; set => billID = value; }
@@ -47,7 +47,7 @@
         public string Lastupdateduser { get => lastupdateduser; set => lastupdateduser = value; }
         public string Lastupdateddate { get => lastupdateddate; set => lastupdateddate = value; }
         public string Lastupdatedmachine { get => lastupdatedmachine; set => lastupdatedmachine = value; }
-       
+
         public BillingMasterModel MasterModel { get => masterModel; set => masterModel = value; }
         public BillingDetailsModel DetailModel { get => detailModel; set => detailModel = value; }
         public List<BillingDetailsModel> Viewbillproductlist { get => viewbillproductlist; set => viewbillproductlist = value; }
