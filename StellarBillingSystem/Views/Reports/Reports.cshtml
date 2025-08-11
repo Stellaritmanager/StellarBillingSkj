@@ -258,7 +258,7 @@
                                             <br />
                                             <center>
 
-                                                <button class="btn btn-primarywhite" onclick="exportToExcel()">Export to Excel</button>
+                                            <button class="btn btn-primarywhite" onclick="exportToCSV()">Export to Excel</button>
                                             </center>
                                         </div>
                                     </div>
@@ -295,6 +295,42 @@
                                     alert('Export to Excel failed. Please try again.' + error);
                                 }
                             }
+                        function exportToCSV() {
+                            try {
+                                // Select the table element
+                                var table = document.getElementById('dataTable');
+                                var csvContent = "";
+
+                                // Loop through each row of the table
+                                for (var i = 0; i < table.rows.length; i++) {
+                                    var rowData = [];
+                                    var cells = table.rows[i].cells;
+
+                                    for (var j = 0; j < cells.length; j++) {
+                                        // Escape double quotes and commas in the cell value
+                                        var cellText = cells[j].innerText.replace(/"/g, '""');
+                                        rowData.push('"' + cellText + '"');
+                                    }
+
+                                    csvContent += rowData.join(",") + "\n";
+                                }
+
+                                // Create a Blob from the CSV content
+                                var blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+
+                                // Trigger the file download using FileSaver.js or a manual anchor click
+                                var link = document.createElement("a");
+                                var url = URL.createObjectURL(blob);
+                                link.setAttribute("href", url);
+                                link.setAttribute("download", "table_data.csv");
+                                document.body.appendChild(link);
+                                link.click();
+                                document.body.removeChild(link);
+                            } catch (error) {
+                                console.error('Export to CSV failed:', error);
+                                alert('Export to CSV failed. Please try again. ' + error);
+                            }
+                        }
                         </script>
                         <!-- Include ExcelJS library -->
                         <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.4.0/exceljs.min.js"></script>

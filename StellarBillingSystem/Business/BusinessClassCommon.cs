@@ -122,12 +122,12 @@ namespace StellarBillingSystem.Business
             }
             else if (Todate!=null)
             {
-                sqlQuery = sqlQuery + Datecolumn + " <= '" + Todate +"'";
+                sqlQuery = sqlQuery + " and " + Datecolumn + " <= '" + Todate +"'";
             }
 
             if (pbranchID !=null && pbranchID !=string.Empty)
             {
-                sqlQuery = sqlQuery + " and bh.BracnchID ='" + pbranchID + "' "; 
+                sqlQuery = sqlQuery + " and bh.BranchID ='" + pbranchID + "' "; 
             }
           
            if(GroupBy!= string.Empty)
