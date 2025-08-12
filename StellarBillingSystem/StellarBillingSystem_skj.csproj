@@ -45,4 +45,10 @@
     <Folder Include="Views\Error\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="BillSKJTemplate Branch1.docx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

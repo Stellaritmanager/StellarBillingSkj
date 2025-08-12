@@ -161,7 +161,10 @@ namespace StellarBillingSystem.Controllers
             return View();
         }
 
-
+        public IActionResult Error()
+        {
+            return View();
+        }
 
         public IActionResult RedirectToReports(string DashBoard = null, string fromDate = null, string toDate = null, string GroupBy = null)
         {

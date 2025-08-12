@@ -60,7 +60,7 @@ if (!app.Environment.IsDevelopment())
 
 app.UseSession();
 
-app.UseMiddleware<ErrorHandlingMiddleware>();
+app.UseMiddleware<GlobalErrorHandlingMiddleware>();
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
