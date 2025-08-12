@@ -761,9 +761,9 @@
 
         function printBill() {
             const billId = $('#BillID').val().trim();
-            const branchId = $('#BranchID').val().trim();
+          //  const branchId = $('#BranchID').val().trim();
 
-            if (!billId || !branchId) {
+            if (!billId) {
                 showPopup("Please enter Bill ID", false);
                 return;
             }
@@ -771,7 +771,7 @@
             $.ajax({
                 url: Printurl,
                 type: 'POST',
-                data: { billId, branchId },
+                data: { billId },
                 xhrFields: {
                     responseType: 'blob'
                 },

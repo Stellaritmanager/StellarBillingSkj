@@ -345,9 +345,9 @@ namespace StellarBillingSystem_skj.Controllers
 
         [HttpPost]
 
-        public async Task<IActionResult> printBill([FromForm] string billId, [FromForm] string branchId)
-
+        public async Task<IActionResult> printBill([FromForm] string billId)
         {
+            var branchId = HttpContext.Session.GetString("BranchID");
             BusinessBillingSKJ Busbill = new BusinessBillingSKJ(_billingsoftware, _configuration);
             ViewData["customerid"] = Busbill.getCustomerID(branchId);
             var goldTypes = Busbill.getGoldtype(branchId);

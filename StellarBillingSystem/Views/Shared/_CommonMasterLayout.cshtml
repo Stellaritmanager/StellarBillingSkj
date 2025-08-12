@@ -67,10 +67,10 @@
             }
 
             function logoutUser() {
-                fetch('/LoginAuthentication/Logout', { method: 'POST' }) // log out on server
+                fetch('LoginAuthentication/Logout', { method: 'POST' }) // log out on server
                     .finally(() => {
                         window.open('', '_self').close(); // try to close the tab
-                        window.location.href = '/LoginAuthentication/Login'; // fallback
+                        window.location.href = 'LoginAuthentication/Login'; // fallback
                     });
             }
 
