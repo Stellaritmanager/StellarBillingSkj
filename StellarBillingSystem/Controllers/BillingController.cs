@@ -38,12 +38,12 @@ namespace StellarBillingSystem_skj.Controllers
 
                 string BranchID = null;
 
-                if (TempData["BranchID"] != null)
+                string branchId = HttpContext.Session.GetString("BranchID");
+                if (!string.IsNullOrEmpty(branchId))
                 {
-                    BranchID = TempData["BranchID"].ToString();
-                    TempData.Keep("BranchID");
+                    BranchID = branchId;
                 }
-                
+
                 BusinessBillingSKJ Busbill = new BusinessBillingSKJ(_billingsoftware, _configuration);
                 ViewData["customerid"] = Busbill.getCustomerID(BranchID);
                 var goldTypes = Busbill.getGoldtype(BranchID);
@@ -77,11 +77,13 @@ namespace StellarBillingSystem_skj.Controllers
                 var existingBill = _billingsoftware.Shbillmasterskj
                     .FirstOrDefault(b => b.BillID == billMaster.BillID);
 
+                string branchId = HttpContext.Session.GetString("BranchID");
+
                 // ✅ Read configured upload path (via DI or IConfiguration)
                 string rootPath = _configuration["UploadSettings:BillImagesPath"]; // Example: C:\MyUploads\BillImages
 
                 // ✅ Ensure bill-specific folder exists
-                string uploadPath = Path.Combine(rootPath, TempData["BranchID"].ToString(), billMaster.BillID.ToString());
+                string uploadPath = Path.Combine(rootPath, branchId, billMaster.BillID.ToString());
                 TempData.Keep("BranchID");
 
                 if (!Directory.Exists(uploadPath))
@@ -309,7 +311,8 @@ namespace StellarBillingSystem_skj.Controllers
         {
             if (string.IsNullOrEmpty(billId) || string.IsNullOrEmpty(imageName))
                 return NotFound();
-            var branchId = HttpContext.Session.GetString("BranchID");
+
+            string branchId = HttpContext.Session.GetString("BranchID");
 
             var root = _configuration["UploadSettings:BillImagesPath"];
 
@@ -326,7 +329,7 @@ namespace StellarBillingSystem_skj.Controllers
         public IActionResult GetBillImages(string billId)
         {
             var root = _configuration["UploadSettings:BillImagesPath"];
-            var branchId = HttpContext.Session.GetString("BranchID");
+            string branchId = HttpContext.Session.GetString("BranchID");
             var dir = Path.Combine(root, branchId, billId);
            
 

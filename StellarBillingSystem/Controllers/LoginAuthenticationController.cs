@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authentication;
+﻿using DocumentFormat.OpenXml.Spreadsheet;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -105,6 +106,8 @@ namespace StellarBillingSystem.Controllers
                     TempData["UserName"] = model.UserName;
                     TempData["BranchID"] = branch.BranchID;
 
+                    // Store BranchID in Session
+                    HttpContext.Session.SetString("BranchID", branch.BranchID.ToString());
 
 
                     // Set TempData with the filtered roll details
@@ -182,6 +185,8 @@ namespace StellarBillingSystem.Controllers
 
             TempData["UserName"] = userName;
             TempData["BranchID"] = model.BranchID;
+            // Store BranchID in Session
+            HttpContext.Session.SetString("BranchID", model.BranchID.ToString());
 
             var branchinitial = Busreg.Getbranchinitial(model.BranchID);
             TempData["BranchInitail"] = branchinitial.BranchInitial;

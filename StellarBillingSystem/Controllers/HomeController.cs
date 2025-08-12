@@ -29,12 +29,10 @@ namespace StellarBillingSystem.Controllers
         {
 
             string branchId = string.Empty; ;
-            if (TempData["BranchID"] != null)
-            {
-                branchId = TempData["BranchID"].ToString();
-                TempData.Keep("BranchID");
-            }
+        
 
+            branchId = HttpContext.Session.GetString("BranchID");
+          
 
 
             string salesMessage = GetSalesComparison();
@@ -77,11 +75,8 @@ namespace StellarBillingSystem.Controllers
         {
             string branchId = string.Empty;
 
-            if (TempData["BranchID"] != null)
-            {
-                branchId = TempData["BranchID"].ToString();
-                TempData.Keep("BranchID");
-            }
+            branchId = HttpContext.Session.GetString("BranchID");
+           
 
             string result = string.Empty;
 
@@ -103,18 +98,10 @@ namespace StellarBillingSystem.Controllers
         private decimal GetDailySales()
         {
 
-
             string branchId = string.Empty;
 
-            if (TempData["BranchID"] != null)
-            {
-                branchId = TempData["BranchID"].ToString();
-                TempData.Keep("BranchID");
-            }
-
+            branchId = HttpContext.Session.GetString("BranchID");
             decimal result = 0;
-
-
 
             string connectionString = _configuration.GetConnectionString("BillingDBConnection");
 
@@ -138,14 +125,9 @@ namespace StellarBillingSystem.Controllers
         private decimal GetDailyPayments()
         {
 
-
             string branchId = string.Empty;
 
-            if (TempData["BranchID"] != null)
-            {
-                branchId = TempData["BranchID"].ToString();
-                TempData.Keep("BranchID");
-            }
+            branchId = HttpContext.Session.GetString("BranchID");
 
             decimal result = 0;
 
@@ -194,12 +176,9 @@ namespace StellarBillingSystem.Controllers
             ViewBag.DailyPayments = dailyPayments.ToString("F2");
 
 
-            string branchId = string.Empty; ;
-            if (TempData["BranchID"] != null)
-            {
-                branchId = TempData["BranchID"].ToString();
-                TempData.Keep("BranchID");
-            }
+            string branchId = string.Empty;
+
+            branchId = HttpContext.Session.GetString("BranchID");
 
             BusinessClassBilling business = new BusinessClassBilling(_billingContext, _configuration);
             ViewData["reportid"] = business.GetReportId();

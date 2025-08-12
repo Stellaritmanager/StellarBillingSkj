@@ -23,11 +23,13 @@ namespace StellarBillingSystem_skj.Controllers
         public async Task<IActionResult> CategoryMaster()
         {
             CategoryMasterModel model = new CategoryMasterModel();
-            if (TempData["BranchID"] != null)
+           
+            string branchId = HttpContext.Session.GetString("BranchID");
+            if (!string.IsNullOrEmpty(branchId))
             {
-                model.BranchID = TempData["BranchID"].ToString();
-                TempData.Keep("BranchID");
+                model.BranchID = branchId;
             }
+
             ViewData["Categorydata"] = await AdditionalCategoryMasterFun(model.BranchID);
 
             return View("CategoryMaster", model);
@@ -55,11 +57,12 @@ namespace StellarBillingSystem_skj.Controllers
         {
 
 
-            if (TempData["BranchID"] != null)
+            string branchId = HttpContext.Session.GetString("BranchID");
+            if (!string.IsNullOrEmpty(branchId))
             {
-                model.BranchID = TempData["BranchID"].ToString();
-                TempData.Keep("BranchID");
+                model.BranchID=branchId;
             }
+
 
             if (buttonType == "Get")
             {
@@ -97,12 +100,10 @@ namespace StellarBillingSystem_skj.Controllers
             SatffAdminBusinessClass staffbus = new SatffAdminBusinessClass(_billingsoftware, _configuration);
 
 
-
-
-            if (TempData["BranchID"] != null)
+            string branchId = HttpContext.Session.GetString("BranchID");
+            if (!string.IsNullOrEmpty(branchId))
             {
-                model.BranchID = TempData["BranchID"].ToString();
-                TempData.Keep("BranchID");
+                model.BranchID = branchId;
             }
 
 

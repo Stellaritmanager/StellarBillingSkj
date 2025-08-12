@@ -86,13 +86,11 @@ namespace StellarBillingSystem_skj.Controllers
 
             BusinessBillingSKJ business = new BusinessBillingSKJ(_billingsoftware, _configuration);
 
-
-            if (TempData["BranchID"] != null)
+            string branchId = HttpContext.Session.GetString("BranchID");
+            if (!string.IsNullOrEmpty(branchId))
             {
-                model.BranchID = TempData["BranchID"].ToString();
-                TempData.Keep("BranchID");
+                model.BranchID= branchId;
             }
-
 
             string formattedBillDate = billDate;
 

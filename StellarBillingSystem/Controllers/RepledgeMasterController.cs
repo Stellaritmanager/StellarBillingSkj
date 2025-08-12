@@ -38,6 +38,9 @@ public class RepledgeMasterController : Controller
         string branchID = TempData["BranchID"]?.ToString();
         TempData.Keep("BranchID");
 
+        branchID = HttpContext.Session.GetString("BranchID");
+        
+
         BusinessBillingSKJ Busbill = new BusinessBillingSKJ(_billingsoftware, _configuration);
         ViewData["repledgerid"] = Busbill.getrepledgerID();
 
@@ -120,6 +123,8 @@ public class RepledgeMasterController : Controller
         var branchID = TempData["BranchID"]?.ToString();
         TempData.Keep("BranchID");
 
+        branchID= HttpContext.Session.GetString("BranchID");
+
         BusinessBillingSKJ Busbill = new BusinessBillingSKJ(_billingsoftware, _configuration);
         ViewData["repledgerid"] = Busbill.getrepledgerID();
 
@@ -154,6 +159,8 @@ public class RepledgeMasterController : Controller
     {
         var branchID = TempData["BranchID"]?.ToString();
         TempData.Keep("BranchID");
+
+        branchID=HttpContext.Session.GetString("BranchID");
 
         BusinessBillingSKJ Busbill = new BusinessBillingSKJ(_billingsoftware, _configuration);
         ViewData["repledgerid"] = Busbill.getrepledgerID();
@@ -254,6 +261,8 @@ public class RepledgeMasterController : Controller
         var branchID = TempData["BranchID"]?.ToString();
         TempData.Keep("BranchID");
 
+        branchID= HttpContext.Session.GetString("BranchID");
+
         BusinessBillingSKJ Busbill = new BusinessBillingSKJ(_billingsoftware, _configuration);
         ViewData["repledgerid"] = Busbill.getrepledgerID();
 
@@ -330,6 +339,12 @@ public class RepledgeMasterController : Controller
             model.BranchID = TempData["BranchID"].ToString();
             TempData.Keep("BranchID");
         }
+        else
+        {
+            model.BranchID= HttpContext.Session.GetString("BranchID");
+        }
+
+        
 
         var checkdatabuyer = _billingsoftware.Shbuyerrepledge.FirstOrDefault(x => x.RepledgeID == model.RepledgeID);
 

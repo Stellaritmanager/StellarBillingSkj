@@ -36,10 +36,10 @@ namespace StellarBillingSystem_skj.Controllers
             try
             {
 
-                if (TempData["BranchID"] != null)
+                string branchId = HttpContext.Session.GetString("BranchID");
+                if (!string.IsNullOrEmpty(branchId))
                 {
-                    model.BranchID = TempData["BranchID"].ToString();
-                    TempData.Keep("BranchID");
+                    model.BranchID= branchId;
                 }
 
 
@@ -105,12 +105,11 @@ namespace StellarBillingSystem_skj.Controllers
 
         public async Task<IActionResult> GetCustomer(CustomerMasterModel model)
         {
-            if (TempData["BranchID"] != null)
+            string branchId = HttpContext.Session.GetString("BranchID");
+            if (!string.IsNullOrEmpty(branchId))
             {
-                model.BranchID = TempData["BranchID"].ToString();
-                TempData.Keep("BranchID");
+                model.BranchID = branchId;
             }
-
 
             var customer = await _billingsoftware.SHCustomerMaster.FirstOrDefaultAsync(x => x.IsDelete == false && x.MobileNumber == model.MobileNumber && x.BranchID == model.BranchID);
 
@@ -144,10 +143,10 @@ namespace StellarBillingSystem_skj.Controllers
 
         public async Task<IActionResult> DeleteCustomer(CustomerMasterModel model)
         {
-            if (TempData["BranchID"] != null)
+            string branchId = HttpContext.Session.GetString("BranchID");
+            if (!string.IsNullOrEmpty(branchId))
             {
-                model.BranchID = TempData["BranchID"].ToString();
-                TempData.Keep("BranchID");
+                model.BranchID = branchId;
             }
 
             var existingCustomer = await _billingsoftware.SHCustomerMaster.FirstOrDefaultAsync(x => x.MobileNumber == model.MobileNumber && x.BranchID == model.BranchID);

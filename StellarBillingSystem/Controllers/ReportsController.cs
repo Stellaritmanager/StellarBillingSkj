@@ -32,6 +32,11 @@ namespace StellarBillingSystem.Controllers
                 branchId = TempData["BranchID"].ToString();
                 TempData.Keep("BranchID");
             }
+            else
+            {
+                branchId=HttpContext.Session.GetString("BranchID");
+            }
+
 
             var reportQuery = (from rep in _billingContext.ShGenericReport
                                where (rep.ReportName == inputValue)
