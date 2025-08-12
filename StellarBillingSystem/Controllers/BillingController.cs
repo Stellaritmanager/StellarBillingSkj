@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.Operations;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using StellarBillingSystem.Business;
@@ -42,7 +43,7 @@ namespace StellarBillingSystem_skj.Controllers
                     BranchID = TempData["BranchID"].ToString();
                     TempData.Keep("BranchID");
                 }
-
+                
                 BusinessBillingSKJ Busbill = new BusinessBillingSKJ(_billingsoftware, _configuration);
                 ViewData["customerid"] = Busbill.getCustomerID(BranchID);
                 var goldTypes = Busbill.getGoldtype(BranchID);
@@ -80,7 +81,9 @@ namespace StellarBillingSystem_skj.Controllers
                 string rootPath = _configuration["UploadSettings:BillImagesPath"]; // Example: C:\MyUploads\BillImages
 
                 // ✅ Ensure bill-specific folder exists
-                string uploadPath = Path.Combine(rootPath, billMaster.BillID.ToString());
+                string uploadPath = Path.Combine(rootPath, TempData["BranchID"].ToString(), billMaster.BillID.ToString());
+                TempData.Keep("BranchID");
+
                 if (!Directory.Exists(uploadPath))
                     Directory.CreateDirectory(uploadPath);
 
@@ -172,6 +175,8 @@ namespace StellarBillingSystem_skj.Controllers
         {
             try
             {
+                HttpContext.Session.SetString("BranchID", TempData["BranchID"].ToString());
+
                 var billMaster = _billingsoftware.Shbillmasterskj
                     .FirstOrDefault(b => b.BillID == billId && b.IsDelete == false);
 
@@ -304,10 +309,12 @@ namespace StellarBillingSystem_skj.Controllers
         {
             if (string.IsNullOrEmpty(billId) || string.IsNullOrEmpty(imageName))
                 return NotFound();
+            var branchId = HttpContext.Session.GetString("BranchID");
 
             var root = _configuration["UploadSettings:BillImagesPath"];
 
-            var imagePath = Path.Combine(root, billId, imageName);
+            var imagePath = Path.Combine(root, branchId, billId, imageName);
+
 
             if (!System.IO.File.Exists(imagePath))
                 return NotFound();
@@ -319,7 +326,9 @@ namespace StellarBillingSystem_skj.Controllers
         public IActionResult GetBillImages(string billId)
         {
             var root = _configuration["UploadSettings:BillImagesPath"];
-            var dir = Path.Combine(root, billId);
+            var branchId = HttpContext.Session.GetString("BranchID");
+            var dir = Path.Combine(root, branchId, billId);
+           
 
             if (!Directory.Exists(dir))
                 return NotFound();

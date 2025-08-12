@@ -35,13 +35,13 @@ builder.Services.AddAuthentication(
         options.LoginPath = "/LoginAuthentication/Login";
         options.LogoutPath = "/LoginAuthentication/Logout";
         options.Cookie.HttpOnly = true;
-        options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
+        options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
         options.SlidingExpiration = true;
     });
 
 builder.Services.AddSession(options =>
 {
-    options.IdleTimeout = TimeSpan.FromMinutes(60);
+    options.IdleTimeout = TimeSpan.FromMinutes(5);
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
 });
