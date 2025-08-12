@@ -175,7 +175,7 @@ namespace StellarBillingSystem_skj.Controllers
         {
             try
             {
-                HttpContext.Session.SetString("BranchID", TempData["BranchID"].ToString());
+              //  HttpContext.Session.SetString("BranchID", TempData["BranchID"].ToString());
 
                 var billMaster = _billingsoftware.Shbillmasterskj
                     .FirstOrDefault(b => b.BillID == billId && b.IsDelete == false);

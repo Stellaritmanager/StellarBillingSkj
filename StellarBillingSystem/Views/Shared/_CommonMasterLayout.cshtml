@@ -48,13 +48,39 @@
 
   <!-- Vendor Scripts -->
   @RenderSection("VendorScripts", required: false)
+   
 
 
   
 
   <!-- Main JS-->
   <script src='~/js/main.js'></script>
+    <script>
+        (function () {
+            let idleTime = 0;
+            const idleLimit = 5 * 60 * 1000; // 5 minutes in milliseconds
+            let idleTimer;
 
+            function resetTimer() {
+                clearTimeout(idleTimer);
+                idleTimer = setTimeout(logoutUser, idleLimit);
+            }
+
+            function logoutUser() {
+                fetch('/LoginAuthentication/Logout', { method: 'POST' }) // log out on server
+                    .finally(() => {
+                        window.open('', '_self').close(); // try to close the tab
+                        window.location.href = '/LoginAuthentication/Login'; // fallback
+                    });
+            }
+
+            window.onload = resetTimer;
+            document.onmousemove = resetTimer;
+            document.onkeypress = resetTimer;
+            document.onscroll = resetTimer;
+            document.onclick = resetTimer;
+        })();
+    </script>
   <!-- Page Scripts-->
   @RenderSection("PageScripts", required: false)
 

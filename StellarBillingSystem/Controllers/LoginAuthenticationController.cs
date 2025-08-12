@@ -59,8 +59,7 @@ namespace StellarBillingSystem.Controllers
         {
 
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-
-
+            HttpContext.Session.Clear();
             return RedirectToAction("Login", "LoginAuthentication");
         }
 
